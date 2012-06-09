@@ -75,11 +75,14 @@ patlist = {
     };
 
 subjlist = cat(1,ctrllist,patlist);
+%subjlist = ctrllist;
+%subjlist = patlist;
 
 %load distinfo.mat
 load chanlist.mat
 
 meanmat = zeros(5,91,91);
+meanspectra = zeros(91,513);
 
 for s = 1:length(subjlist)
     basename = subjlist{s};
@@ -87,79 +90,85 @@ for s = 1:length(subjlist)
     
     %computeic(basename);
     
+    specinfo = load([filepath basename 'spectra.mat']);
     
-    load([filepath basename 'icohfdr.mat']);
-    [sortedchan,sortidx] = sort({chanlocs.labels});
-
-    if ~strcmp(chanlist,cell2mat(sortedchan))
-        error('Channel names do not match!');
-    end
+    figure;
+    plot(specinfo.freqs,specinfo.spectra');
+    set(gca,'XLim',[0 45]);
+    saveas(gcf,sprintf('figures/%sspectra.jpg',basename));
+    close(gcf);
     
-    for f = 1:size(matrix,1)
-        icohmat = squeeze(matrix(f,sortidx,sortidx));
-        pvals = squeeze(pval(f,sortidx,sortidx));
-        chanlocs = chanlocs(sortidx);
-        
-        meanmat(f,:,:) = squeeze(meanmat(f,:,:)) + icohmat;
-        
-%         
-%         tmp_pvals = pvals(logical(triu(ones(size(pvals)),1)));
-%         tmp_coh = icohmat(logical(triu(ones(size(icohmat)),1)));
-%         
-%         [~, p_masked]= fdr(tmp_pvals,alpha);
-%         tmp_pvals(~p_masked) = 1;
-%         tmp_coh(tmp_pvals >= alpha) = 0;
-%         
-%         icohmat = zeros(size(icohmat));
-%         icohmat(logical(triu(ones(size(icohmat)),1))) = tmp_coh;
-%         icohmat = triu(icohmat,1)+triu(icohmat,1)';
-%         
-%         matrix(f,:,:) = icohmat;
-%         if f == 3
-%             plotgraph2(icohmat,chanlocs,degree(f,:),weight(f,:),0.9);
-%             saveas(gcf,sprintf('figures/%s_%d.fig', basename, f));
-%             close(gcf);
-%         end
+    meanspectra = meanspectra + specinfo.spectra;
+    
+    %     load([filepath basename 'icohfdr.mat']);
+    %     [sortedchan,sortidx] = sort({chanlocs.labels});
+    %
+    %     if ~strcmp(chanlist,cell2mat(sortedchan))
+    %         error('Channel names do not match!');
+    %     end
+    %
+    %     for f = 1:size(matrix,1)
+    %         icohmat = squeeze(matrix(f,sortidx,sortidx));
+    %         pvals = squeeze(pval(f,sortidx,sortidx));
+    %         chanlocs = chanlocs(sortidx);
+    %
+    %         meanmat(f,:,:) = squeeze(meanmat(f,:,:)) + icohmat;
+    %
+    %
+    %         tmp_pvals = pvals(logical(triu(ones(size(pvals)),1)));
+    %         tmp_coh = icohmat(logical(triu(ones(size(icohmat)),1)));
+    %
+    %         [~, p_masked]= fdr(tmp_pvals,alpha);
+    %         tmp_pvals(~p_masked) = 1;
+    %         tmp_coh(tmp_pvals >= alpha) = 0;
+    %
+    %         icohmat = zeros(size(icohmat));
+    %         icohmat(logical(triu(ones(size(icohmat)),1))) = tmp_coh;
+    %         icohmat = triu(icohmat,1)+triu(icohmat,1)';
+    %
+    %         matrix(f,:,:) = icohmat;
+    %         if f == 3
+    %             plotgraph2(icohmat,chanlocs,degree(f,:),weight(f,:),0.9);
+    %             saveas(gcf,sprintf('figures/%s_%d.fig', basename, f));
+    %             close(gcf);
+    %         end
+    %     end
+    %
+    %     save([filepath basename 'icohfdr.mat'],'matrix','pval','chanlocs');
+    % end
+    %         tvals = 0:0.05:0.3;
+    %         for t = 1:length(tvals)
+    %             icohmat = applythresh(icohmat,tvals(t));
+    %
+    %             [Ci, Q] = modularity_louvain_und(icohmat);
+    %             mod(s,f,t) = Q;
+    % %            bet(s,f,t) = mean(nonzeros(betweenness_wei(1./icohmat)));
+    %
+    %             dist(s,f,t) = 0;
+    %             for m = 1:max(Ci)
+    %                 distmat = chandist(Ci == m,Ci == m) .* (icohmat(Ci == m,Ci == m) > 0);
+    %                 dist(s,f,t) = dist(s,f,t) + mean(distmat(logical(triu(ones(size(distmat)),1))));
+    %             end
+    %             dist(s,f,t) = dist(s,f,t) / max(Ci);
+    %
+    % %             maxci(s,f,t) = max(Ci);
+    % %             clust(s,f,t) = mean(clustering_coef_wu(icohmat)); %clustering coeffcient
+    % %             charp(s,f,t) = charpath(distance_wei(1./icohmat)); %characteristic path length with weights
+    %        end
+    %
+%     if s > length(ctrllist)
+%         grp(s,1) = 2;
+%     else
+%         grp(s,1) = 1;
 %     end
-%     
-%     save([filepath basename 'icohfdr.mat'],'matrix','pval','chanlocs');
-% end
-%         tvals = 0:0.05:0.3;
-%         for t = 1:length(tvals)
-%             icohmat = applythresh(icohmat,tvals(t));
-%             
-%             [Ci, Q] = modularity_louvain_und(icohmat);
-%             mod(s,f,t) = Q;
-% %            bet(s,f,t) = mean(nonzeros(betweenness_wei(1./icohmat)));
-%             
-%             dist(s,f,t) = 0;
-%             for m = 1:max(Ci)
-%                 distmat = chandist(Ci == m,Ci == m) .* (icohmat(Ci == m,Ci == m) > 0);
-%                 dist(s,f,t) = dist(s,f,t) + mean(distmat(logical(triu(ones(size(distmat)),1))));
-%             end
-%             dist(s,f,t) = dist(s,f,t) / max(Ci);
-%             
-% %             maxci(s,f,t) = max(Ci);
-% %             clust(s,f,t) = mean(clustering_coef_wu(icohmat)); %clustering coeffcient
-% %             charp(s,f,t) = charpath(distance_wei(1./icohmat)); %characteristic path length with weights
-%        end
-%         
-%         if s > length(ctrllist)
-%             grp(s,1) = 2;
-%         else
-%             grp(s,1) = 1;
-%         end
-%         
-    end
+    
 end
 
-meanmat = meanmat ./ length(subjlist);
-matrix = meanmat;
-save meanmat.mat matrix chanlocs
+%meanmat = meanmat ./ length(subjlist);
+%matrix = meanmat;
+%save meanmat.mat matrix chanlocs
+
+spectra = meanspectra ./ length(subjlist);
+save('meanspectra.mat','spectra','specinfo.freqs');
 
 % save batch.mat grp tvals mod dist %bet maxci clust charp
-
-% function matrix = applythresh(matrix,thresh)
-% 
-% matrix(matrix < thresh) = 0;
-% end
