@@ -8,6 +8,10 @@ end
 %%%%% VISUAL FEATURES
 % range of line widths
 lwrange = [0.1 6];
+fontname = 'Gill Sans';
+fontsize = 16;
+fontweight = 'bold';
+
 % percentage of top weights to plot
 % range of point sizes
 ptrange = [50 1000];
@@ -27,7 +31,7 @@ plotqt = quantile(nonzeros(matrix),plotqt);
 matrix(matrix < plotqt) = 0;
 
 %re-calculate modules after deleting edges below plotqt
-minfo = modularity_louvain_und(matrix);
+%minfo = modularity_louvain_und(matrix);
 
 % plot figure
 figure('Color','white','Name',mfilename);
@@ -37,13 +41,13 @@ cmap = colormap;
 
 % assign all modules with only one vertex the same colour
 num_mod = length(unique(minfo));
-for m = 1:num_mod
-    midx = (minfo == m);
-    if sum(midx) == 1
-        minfo(midx) = num_mod+1;
-    end
-end
-num_mod = max(minfo);
+% for m = 1:num_mod
+%     midx = (minfo == m);
+%     if sum(midx) == 1
+%         minfo(midx) = num_mod+1;
+%     end
+% end
+% num_mod = max(minfo);
 
 vcol = cmap(round((minfo/num_mod)*size(cmap,1)),:);
 
@@ -85,7 +89,8 @@ for r = 1:size(matrix,1)
 end
 
 for c = 1:length(chanlocs)
-    text(chanlocs(c).X,chanlocs(c).Y,chanlocs(c).Z+0.5,chanlocs(c).labels);
+    text(chanlocs(c).X,chanlocs(c).Y,chanlocs(c).Z+0.5,chanlocs(c).labels,...
+    'FontName',fontname,'FontWeight',fontweight,'FontSize',fontsize);
 end
 
 figpos = get(gcf,'Position');

@@ -58,7 +58,7 @@ patlist = {
     % 'p0511V2_restingstate'
     % 'p0511_restingstate'
     'p0611_restingstate'    1   10
-    'p0710V2_restingstate'  0   5
+    'p0710V2_restingstate'  1   14
     'p0711_restingstate'    1   15
     'p0811_restingstate'    1   10
     'p0911_restingstate'    1   10
