@@ -6,15 +6,19 @@ plotqt = 0.90;
 end
 
 %%%%% VISUAL FEATURES
-% range of line widths
-lwrange = [0.1 6];
+
+% text attributes
 fontname = 'Gill Sans';
 fontsize = 16;
 fontweight = 'bold';
 
-% percentage of top weights to plot
+% range of line widths
+lwrange = [1 3];
+
 % range of point sizes
-ptrange = [50 1000];
+ptrange = [50 500];
+
+%%%%%%
 
 minfo = modularity_louvain_und(matrix);
 origmatrix = matrix;
@@ -36,7 +40,7 @@ matrix(matrix < plotqt) = 0;
 % plot figure
 figure('Color','white','Name',mfilename);
 
-colormap(hsv);
+colormap(winter);
 cmap = colormap;
 
 % assign all modules with only one vertex the same colour
@@ -88,10 +92,10 @@ for r = 1:size(matrix,1)
     end
 end
 
-for c = 1:length(chanlocs)
-    text(chanlocs(c).X,chanlocs(c).Y,chanlocs(c).Z+0.5,chanlocs(c).labels,...
-    'FontName',fontname,'FontWeight',fontweight,'FontSize',fontsize);
-end
+% for c = 1:length(chanlocs)
+%     text(chanlocs(c).X,chanlocs(c).Y,chanlocs(c).Z+0.5,chanlocs(c).labels,...
+%     'FontName',fontname,'FontWeight',fontweight,'FontSize',fontsize);
+% end
 
 figpos = get(gcf,'Position');
 set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*2 figpos(4)*2]);
