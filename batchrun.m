@@ -9,35 +9,35 @@ ctrllist = {
     
     %     'jenny_restingstate'
     %     %'SaltyWater_restingstate'
-    'NW_restingstate'  2  25
-    'p37_restingstate'  2  25
-    'p38_restingstate'  2  25
-    'p40_restingstate'  2  25
-    'p41_restingstate'  2  25
-    'p42_restingstate'  2  25
-    'p43_restingstate'  2  25
-    'p44_restingstate'  2  25
-    'p45_restingstate'  2  25
-    'p46_restingstate'  2  25
-    'p47_restingstate'  2  25
-    'p48_restingstate'  2  25
-    'p49_restingstate'  2  25
+    'NW_restingstate'  3  25
+    'p37_restingstate'  3  25
+    'p38_restingstate'  3  25
+    'p40_restingstate'  3  25
+    'p41_restingstate'  3  25
+    'p42_restingstate'  3  25
+    'p43_restingstate'  3  25
+    'p44_restingstate'  3  25
+    'p45_restingstate'  3  25
+    'p46_restingstate'  3  25
+    'p47_restingstate'  3  25
+    'p48_restingstate'  3  25
+    'p49_restingstate'  3  25
     % 'p50_restingstate'
-    'subj01_restingstate'  2    25
-    'subj02_restingstate'  2    25
-    'VS_restingstate'  2  25
-    'SS_restingstate'  2  25
-    'SB_restingstate'  2  25
-    'ML_restingstate'  2  25
-    'MC_restingstate'  2  25
-    'JS_restingstate'  2  25
+    'subj01_restingstate'  3    25
+    'subj02_restingstate'  3    25
+    'VS_restingstate'  3  25
+    'SS_restingstate'  3  25
+    'SB_restingstate'  3  25
+    'ML_restingstate'  3  25
+    'MC_restingstate'  3  25
+    'JS_restingstate'  3  25
     % 'FD_restingstate'
-    'ET_restingstate'  2  25
-    'EP_restingstate'  2  25
+    'ET_restingstate'  3  25
+    'EP_restingstate'  3  25
     % 'CS_restingstate'
-    'CL_restingstate'  2  25
-    'CD_restingstate'  2  25
-    'AC_restingstate'  2  25
+    'CL_restingstate'  3  25
+    'CD_restingstate'  3  25
+    'AC_restingstate'  3  25
     };
 
 patlist = {
@@ -45,9 +45,9 @@ patlist = {
     % patients
     
     'p0112_restingstate'	1   9
-    'p0211V2_restingstate'	1   16
+    'p0211V2_restingstate'	2   16
     %'p0211_restingstate1'
-    'p0211_restingstate2'   1   14
+    'p0211_restingstate2'   2   14
     'p0311V2_restingstate'  0   8
     %'p0311_restingstate1'
     'p0311_restingstate2'   0   7
@@ -57,16 +57,16 @@ patlist = {
     'p0510V2_restingstate'  0   7
     % 'p0511V2_restingstate'
     % 'p0511_restingstate'
-    'p0611_restingstate'    1   10
+    'p0611_restingstate'    2   10
     'p0710V2_restingstate'  1   14
-    'p0711_restingstate'    1   15
+    'p0711_restingstate'    2   15
     'p0811_restingstate'    1   10
     'p0911_restingstate'    1   10
     'p1011_restingstate'    1   7
     'p1311_restingstate'    0   8
-    'p1511_restingstate'    1   10
+    'p1511_restingstate'    2   10
     'p1611_restingstate'    0   7
-    'p1711_restingstate'    1   19
+    'p1711_restingstate'    2   19
     'p1811_restingstate'    1   12
     'p1911_restingstate'    1   9
     'p2011_restingstate'    1   8
@@ -79,7 +79,7 @@ subjlist = cat(1,ctrllist,patlist);
 %subjlist = patlist;
 
 %load distinfo.mat
-load chanlist.mat
+%load chanlist.mat
 
 meanmat = zeros(5,91,91);
 meanspectra = zeros(91,513);
@@ -108,17 +108,20 @@ for s = 1:size(subjlist,1)
     
     load([filepath basename 'icohfdr.mat']);
     
-    [sortedchan,sortidx] = sort({chanlocs.labels});
-    chanlocs = chanlocs(sortidx);
+%     [sortedchan,sortidx] = sort({chanlocs.labels});
+%     chanlocs = chanlocs(sortidx);
     chandist = ichandist(chanlocs);
     
-    if ~strcmp(chanlist,cell2mat(sortedchan))
-        error('Channel names do not match!');
-    end
+%     if ~strcmp(chanlist,cell2mat(sortedchan))
+%         error('Channel names do not match!');
+%     end
     
     for f = 1:size(matrix,1)
-        icohmat = squeeze(matrix(f,sortidx,sortidx));
-        pvals = squeeze(pval(f,sortidx,sortidx));
+        icohmat = squeeze(matrix(f,:,:));
+        pvals = squeeze(pval(f,:,:));
+
+%         icohmat = squeeze(matrix(f,sortidx,sortidx));
+%         pvals = squeeze(pval(f,sortidx,sortidx));
         
         
         %meanmat(f,:,:) = squeeze(meanmat(f,:,:)) + icohmat;
@@ -127,20 +130,21 @@ for s = 1:size(subjlist,1)
         for t = 1:length(tvals)
             %icohmat = applythresh(icohmat,tvals(t));
             
-            [Ci, Q] = modularity_louvain_und(icohmat);
-            mod(s,f,t) = Q;
-            bet(s,f,t) = mean(nonzeros(betweenness_wei(1./icohmat)));
-            
-            dist(s,f,t) = 0;
-            for m = 1:max(Ci)
-                distmat = chandist(Ci == m,Ci == m);% .* (icohmat(Ci == m,Ci == m) > 0);
-                dist(s,f,t) = dist(s,f,t) + mean(mean(distmat));
-            end
-            dist(s,f,t) = dist(s,f,t) / max(Ci);
-            
-            maxci(s,f,t) = max(Ci);
-            clust(s,f,t) = mean(clustering_coef_wu(icohmat)); %clustering coeffcient
-            charp(s,f,t) = charpath(distance_wei(1./icohmat)); %characteristic path length with weights
+%             [Ci, Q] = modularity_louvain_und(icohmat);
+%             mod(s,f,t) = Q;
+%             bet(s,f,t) = mean(nonzeros(betweenness_wei(1./icohmat)));
+%             
+%             dist(s,f,t) = 0;
+%             for m = 1:max(Ci)
+%                 distmat = chandist(Ci == m,Ci == m);% .* (icohmat(Ci == m,Ci == m) > 0);
+%                 dist(s,f,t) = dist(s,f,t) + mean(mean(distmat));
+%             end
+%             dist(s,f,t) = dist(s,f,t) / max(Ci);
+%             
+%             maxci(s,f,t) = max(Ci);
+%             clust(s,f,t) = mean(clustering_coef_wu(icohmat)); %clustering coeffcient
+            %characteristic path length and efficiency with weights
+            [charp(s,f,t) eff(s,f,t)] = charpath(distance_wei(1./icohmat));
         end
     end
     grp(s,1) = subjlist{s,2};
@@ -154,4 +158,4 @@ end
 %spectra = meanspectra ./ length(subjlist);
 %save('meanspectra.mat','spectra','bandpower','grp');
 
-save batch.mat grp tvals mod dist bet maxci clust charp
+save batch.mat grp tvals charp eff %mod dist bet maxci clust
