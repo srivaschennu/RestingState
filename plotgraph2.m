@@ -2,7 +2,7 @@ function plotgraph2(matrix,chanlocs,degdist,wtdist,plotqt)
 
 %%%%% PLOT PARAMETERS
 if ~exist('plotqt','var') || isempty(plotqt)
-plotqt = 0.90;
+    plotqt = 0.90;
 end
 
 %%%%% VISUAL FEATURES
@@ -26,6 +26,8 @@ origmatrix = matrix;
 %calculate z-scores of weights and weighted node degrees
 wtdist = wtdist(wtdist > 0);
 vsize = (mean(matrix,1) - min(degdist))/(max(degdist) - min(degdist));
+vsize(vsize < 0) = 0;
+
 matrix = (matrix - min(wtdist))/(max(wtdist) - min(wtdist));
 matrix(matrix < 0) = 0;
 %wtdist = (wtdist - min(wtdist))/(max(wtdist) - min(wtdist));
@@ -60,20 +62,18 @@ hScat = scatter3(cell2mat({chanlocs.X}), cell2mat({chanlocs.Y}), cell2mat({chanl
 hAnnotation = get(hScat,'Annotation');
 hLegendEntry = get(hAnnotation,'LegendInformation');
 set(hLegendEntry,'IconDisplayStyle','off')
-                
+
 set(gca,'Visible','off','DataAspectRatioMode','manual');
 view(-90,90);
 
 for r = 1:size(matrix,1)
     for c = 1:size(matrix,2)
-        if matrix(r,c) > 0
+        if r < c && matrix(r,c) > 0
             if minfo(r) == minfo(c)
                 ecol = cmap(round((minfo(r)/num_mod)*size(cmap,1)),:);
                 hLine = line([chanlocs(r).X chanlocs(c).X],[chanlocs(r).Y chanlocs(c).Y],...
                     [chanlocs(r).Z chanlocs(c).Z],'Color',ecol,'LineWidth',...
                     lwrange(1)+(matrix(r,c)*(lwrange(2)-lwrange(1))),'LineStyle','-');
-                
-                
             else
                 hLine = line([chanlocs(r).X chanlocs(c).X],[chanlocs(r).Y chanlocs(c).Y],...
                     [chanlocs(r).Z chanlocs(c).Z],'Color',[0 0 0],'LineWidth',...
