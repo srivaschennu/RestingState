@@ -16,11 +16,12 @@ fontweight = 'bold';
 lwrange = [1 3];
 
 % range of point sizes
-ptrange = [50 500];
+ptrange = [50 300];
 
 %%%%%%
 
-minfo = modularity_louvain_und(matrix);
+%minfo = modularity_louvain_und(matrix);
+minfo = ones(1,length(chanlocs));
 origmatrix = matrix;
 
 %calculate z-scores of weights and weighted node degrees
@@ -37,23 +38,24 @@ plotqt = quantile(nonzeros(matrix),plotqt);
 matrix(matrix < plotqt) = 0;
 
 %re-calculate modules after deleting edges below plotqt
-%minfo = modularity_louvain_und(matrix);
+minfo = modularity_louvain_und(matrix);
 
 % plot figure
 figure('Color','white','Name',mfilename);
 
-colormap(winter);
+colormap(hsv);
 cmap = colormap;
 
 % assign all modules with only one vertex the same colour
 num_mod = length(unique(minfo));
-% for m = 1:num_mod
-%     midx = (minfo == m);
-%     if sum(midx) == 1
-%         minfo(midx) = num_mod+1;
-%     end
-% end
-% num_mod = max(minfo);
+for m = 1:num_mod
+    midx = (minfo == m);
+    if sum(midx) == 1
+        minfo(midx) = num_mod+1;
+        vsize(midx) = 0;
+    end
+end
+num_mod = max(minfo);
 
 vcol = cmap(round((minfo/num_mod)*size(cmap,1)),:);
 

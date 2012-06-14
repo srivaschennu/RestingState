@@ -1,10 +1,12 @@
 function plotebar(measure,grp,ylbl,ylim)
 
-numgrp = 4;
+numgrp = 3;
+%grp(grp == 2) = 1;
+%grp(grp == 3) = 2;
 
 grp(grp == 1) = 0;
-grp(grp == 2) = 0;
-grp(grp == 3) = 1;
+grp(grp == 2) = 1;
+% grp(grp == 3) = 1;
 numgrp = 2;
 
 alpha = 0.01;
@@ -37,12 +39,13 @@ figpos = get(gcf,'Position');
 set(gcf,'Position',[figpos(1) figpos(2) 1280 800]);
 
 hstruct = barweb(bardata,errdata, [], {'delta','theta','alpha','beta','gamma'}, ...
-    [], [], [], [], [], {'VS','MCS-','MCS+','Control'}, 1, []);
+    [], [], [], [], [], {'VS','MCS','Control'}, 1, []);
 set(gca,'YLim',ylim,'FontName','Gill Sans','FontSize',48,'FontWeight','bold');
 xlabel('Frequency bands','FontName','Gill Sans','FontSize',48,'FontWeight','bold');
 ylabel(ylbl,'FontName','Gill Sans','FontSize',48,'FontWeight','bold');
 set(hstruct.legend,'FontSize',48,'Location','NorthEast');
-%legend(hstruct.legend,'off');
+legend(hstruct.legend,'off');
+box off
 
 for f = 1:5
     for p = 1:size(pairlist{f},1)
