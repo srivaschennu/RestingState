@@ -1,15 +1,18 @@
 function plotebar(measure,grp,ylbl,ylim)
 
-numgrp = 3;
-%grp(grp == 2) = 1;
-%grp(grp == 3) = 2;
+
+% grp(grp == 2) = 1;
+% grp(grp == 3) = 2;
+% numgrp = 3;
+% grplist = {'VS','MCS','Control'};
 
 grp(grp == 1) = 0;
-grp(grp == 2) = 1;
-% grp(grp == 3) = 1;
+grp(grp == 2) = 0;
+grp(grp == 3) = 1;
 numgrp = 2;
+grplist = {'Patient','Control'};
 
-alpha = 0.01;
+alpha = 0.05;
 
 bardata = zeros(5,numgrp);
 errdata = zeros(5,numgrp);
@@ -39,7 +42,7 @@ figpos = get(gcf,'Position');
 set(gcf,'Position',[figpos(1) figpos(2) 1280 800]);
 
 hstruct = barweb(bardata,errdata, [], {'delta','theta','alpha','beta','gamma'}, ...
-    [], [], [], [], [], {'VS','MCS','Control'}, 1, []);
+    [], [], [], [], [], grplist, 1, []);
 set(gca,'YLim',ylim,'FontName','Gill Sans','FontSize',48,'FontWeight','bold');
 xlabel('Frequency bands','FontName','Gill Sans','FontSize',48,'FontWeight','bold');
 ylabel(ylbl,'FontName','Gill Sans','FontSize',48,'FontWeight','bold');
