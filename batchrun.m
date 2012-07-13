@@ -1,10 +1,11 @@
 function batchrun
 
 subjlist = {
-    'p0212_restingstate'
-    'p0312_restingstate'
-    %'p0512_restingstate' %bad
-    'p1811v2_restingstate'
+    'p0110_restingstate'
+    'p0210_restingstate'
+    'p0310_restingstate'
+    'p0410_restingstate'
+    'p0610_restingstate'
     };
 
 for s = 1:length(subjlist)
@@ -12,15 +13,15 @@ for s = 1:length(subjlist)
     
     fprintf('Processing %s.\n',basename);
     
-    %dataimport(basename);
-    %epochdata(basename);
+%     dataimport(basename);
+%     epochdata(basename);
     
-    % rejartifacts2([basename '_epochs'],1,4);
+%    rejartifacts2([basename '_epochs'],1,4);
     
-    % computeic([basename '_epochs']);
+    computeic([basename '_epochs']);
     
     %rejectic(basename);
     %rejartifacts2(basename,2,1);
     
-    calcspectra(basename);
+    % calcspectra(basename);
 end
