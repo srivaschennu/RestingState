@@ -17,4 +17,6 @@ ylabel('Power (dB)','FontSize',fontsize,'FontName',fontname,'FontWeight','bold')
 for f = 1:size(specinfo.freqlist,1)
     line([specinfo.freqlist(f,1) specinfo.freqlist(f,1)],ylim,'LineWidth',1,...
         'LineStyle','-.','Color','black');
+    line([specinfo.freqlist(f,2) specinfo.freqlist(f,2)],ylim,'LineWidth',1,...
+        'LineStyle','-.','Color','black');
 end

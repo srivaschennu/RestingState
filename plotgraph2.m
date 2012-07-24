@@ -1,4 +1,13 @@
-function plotgraph2(matrix,chanlocs,degdist,wtdist,plotqt)
+function plotgraph2(basename,bandidx,plotqt)
+
+loadpaths
+
+load([filepath basename 'icohfdr.mat']);
+matrix = squeeze(matrix(bandidx,:,:));
+
+load('distinfo.mat');
+degdist = degree(3,:);
+wtdist = weight(3,:);
 
 %%%%% PLOT PARAMETERS
 if ~exist('plotqt','var') || isempty(plotqt)
