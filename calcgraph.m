@@ -76,6 +76,21 @@ patlist = {
     'p1811v2_restingstate'  2   15
     };
 
+fmrilist = {
+    'p0211_restingstate';
+    'p1711_restingstate';
+    'p0112_restingstate';
+    'p0711_restingstate';
+    'p0211V2_restingstate';
+    'p0311_restingstate';
+    'p0911_restingstate';
+    'p1311_restingstate';
+    'p1611_restingstate';
+    'p1911_restingstate';
+    'p2011_restingstate';
+    'p0312_restingstate';
+    };
+    
 subjlist = cat(1,ctrllist,patlist);
 %subjlist = ctrllist;
 %subjlist = patlist;
