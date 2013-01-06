@@ -77,23 +77,24 @@ patlist = {
     };
 
 fmrilist = {
-    'p0211_restingstate';
-    'p1711_restingstate';
-    'p0112_restingstate';
-    'p0711_restingstate';
-    'p0211V2_restingstate';
-    'p0311_restingstate';
-    'p0911_restingstate';
-    'p1311_restingstate';
-    'p1611_restingstate';
-    'p1911_restingstate';
-    'p2011_restingstate';
-    'p0312_restingstate';
+    'p0211_restingstate2'   2   14
+    'p1711_restingstate'    2   19
+    'p0112_restingstate'	1   9
+    'p0711_restingstate'    2   15
+    'p0211V2_restingstate'	2   16
+    'p0311_restingstate2'   0   7
+    'p0911_restingstate'    1   10
+    'p1311_restingstate'    0   8
+    'p1611_restingstate'    0   7
+    'p1911_restingstate'    1   9
+    'p2011_restingstate'    1   8
+    'p0312_restingstate'    1   8
     };
     
-subjlist = cat(1,ctrllist,patlist);
+%subjlist = cat(1,ctrllist,patlist);
 %subjlist = ctrllist;
 %subjlist = patlist;
+subjlist = fmrilist;
 
 %load distinfo.mat
 load chanlist.mat
