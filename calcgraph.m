@@ -107,6 +107,7 @@ bet = zeros(size(subjlist,1),5,91);
 clust = zeros(size(subjlist,1),5,91);
 modi = zeros(size(subjlist,1),5,91);
 
+bigmat = zeros(length(subjlist),5,91,91);
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
     fprintf('Processing %s.\n',basename);
@@ -126,12 +127,15 @@ for s = 1:size(subjlist,1)
 %     [sortedchan,sortidx] = sort({chanlocs.labels});
 %     chanlocs = chanlocs(sortidx);
 %     
-    chandist = ichandist(chanlocs);
+%    chandist = ichandist(chanlocs);
 % %     chandist = chandist/max(chandist(:));
 %     
 %         if ~strcmp(chanlist,cell2mat(sortedchan))
 %             error('Channel names do not match!');
 %         end
+    
+
+    bigchanlocs{s} = chanlocs;
     
     for f = 1:size(matrix,1)
                 icohmat = squeeze(matrix(f,:,:));
@@ -140,7 +144,7 @@ for s = 1:size(subjlist,1)
 %         icohmat = squeeze(matrix(f,sortidx,sortidx));
 %         pvals = squeeze(pval(f,sortidx,sortidx));
         
-        % bigmat(s,f,:,:) = icohmat;
+        bigmat(s,f,:,:) = icohmat;
         %icohmat = applythresh(icohmat,0.2);
         
         %meanmat(f,:,:) = squeeze(meanmat(f,:,:)) + icohmat;
@@ -154,32 +158,32 @@ for s = 1:size(subjlist,1)
 %             zscore(chandist(logical(triu(ones(size(chandist)),1)))) ) ));
 
 
-        [~, bstart] = min(abs(specinfo.freqs-specinfo.freqlist(f,1)));
-        [~, bstop] = min(abs(specinfo.freqs-specinfo.freqlist(f,2)));
-        bandpower(s,f) = max(mean(specinfo.spectra(:,bstart:bstop),2));
-
-        tvals = 0;%0:0.05:0.3;
-        for t = 1:length(tvals)
-            %icohmat = applythresh(icohmat,tvals(t));
-            
-                        [Ci, Q] = modularity_louvain_und(icohmat);
-                        mod(s,f,t) = Q;
-                        modi(s,f,:) = Ci;
-                        bet(s,f,:) = betweenness_wei(1./icohmat);
-                        meanbet(s,f) = mean(nonzeros(bet(s,f,:)));
-            
-                        dist(s,f,t) = 0;
-                        for m = 1:max(Ci)
-                            distmat = chandist(Ci == m,Ci == m);% .* (icohmat(Ci == m,Ci == m) > 0);
-                            dist(s,f,t) = dist(s,f,t) + mean(mean(distmat));
-                        end
-                        dist(s,f,t) = dist(s,f,t) / max(Ci);
-            
-                        maxci(s,f,t) = max(Ci);
-                        clust(s,f,:) = clustering_coef_wu(icohmat); %clustering coeffcient
-            %characteristic path length and efficiency with weights
-                        [charp(s,f,t) eff(s,f,t)] = charpath(distance_wei(1./icohmat));
-        end
+%         [~, bstart] = min(abs(specinfo.freqs-specinfo.freqlist(f,1)));
+%         [~, bstop] = min(abs(specinfo.freqs-specinfo.freqlist(f,2)));
+%         bandpower(s,f) = max(mean(specinfo.spectra(:,bstart:bstop),2));
+% 
+%         tvals = 0;%0:0.05:0.3;
+%         for t = 1:length(tvals)
+%             %icohmat = applythresh(icohmat,tvals(t));
+%             
+%                         [Ci, Q] = modularity_louvain_und(icohmat);
+%                         mod(s,f,t) = Q;
+%                         modi(s,f,:) = Ci;
+%                         bet(s,f,:) = betweenness_wei(1./icohmat);
+%                         meanbet(s,f) = mean(nonzeros(bet(s,f,:)));
+%             
+%                         dist(s,f,t) = 0;
+%                         for m = 1:max(Ci)
+%                             distmat = chandist(Ci == m,Ci == m);% .* (icohmat(Ci == m,Ci == m) > 0);
+%                             dist(s,f,t) = dist(s,f,t) + mean(mean(distmat));
+%                         end
+%                         dist(s,f,t) = dist(s,f,t) / max(Ci);
+%             
+%                         maxci(s,f,t) = max(Ci);
+%                         clust(s,f,:) = clustering_coef_wu(icohmat); %clustering coeffcient
+%             %characteristic path length and efficiency with weights
+%                         [charp(s,f,t) eff(s,f,t)] = charpath(distance_wei(1./icohmat));
+%         end
     end
     grp(s,1) = subjlist{s,2};
     
@@ -192,5 +196,5 @@ end
 %spectra = meanspectra ./ length(subjlist);
 %save('meanspectra.mat','spectra','bandpower','grp');
 
-save batch.mat grp bandpower clust modi bet meanbet tvals charp eff mod dist maxci %wdcorr %chanlocs
-% save bigmat.mat bigmat grp chanlocs
+%save batch.mat grp bandpower clust modi bet meanbet tvals charp eff mod dist maxci %wdcorr %chanlocs
+save bigmat.mat bigmat grp subjlist bigchanlocs
