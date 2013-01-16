@@ -106,21 +106,22 @@ load chanlist.mat
 bet = zeros(size(subjlist,1),5,91);
 clust = zeros(size(subjlist,1),5,91);
 modi = zeros(size(subjlist,1),5,91);
+bandpower = zeros(size(subjlist,1),5,91);
 
 bigmat = zeros(length(subjlist),5,91,91);
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
     fprintf('Processing %s.\n',basename);
     
-        specinfo = load([filepath basename 'spectra.mat']);
+    specinfo{s} = load([filepath basename 'spectra.mat']);
     
     %     figure;
-    %     plot(specinfo.freqs,specinfo.spectra');
+    %     plot(specinfo{s}.freqs,specinfo{s}.spectra');
     %     set(gca,'XLim',[0 45]);
     %     saveas(gcf,sprintf('figures/%sspectra.jpg',basename));
     %     close(gcf);
     
-    %     meanspectra = meanspectra + specinfo.spectra;
+    %     meanspectra = meanspectra + specinfo{s}.spectra;
     
     load([filepath basename 'icohfdr.mat']);
     
@@ -158,9 +159,9 @@ for s = 1:size(subjlist,1)
 %             zscore(chandist(logical(triu(ones(size(chandist)),1)))) ) ));
 
 
-%         [~, bstart] = min(abs(specinfo.freqs-specinfo.freqlist(f,1)));
-%         [~, bstop] = min(abs(specinfo.freqs-specinfo.freqlist(f,2)));
-%         bandpower(s,f) = max(mean(specinfo.spectra(:,bstart:bstop),2));
+        [~, bstart] = min(abs(specinfo{s}.freqs-specinfo{s}.freqlist(f,1)));
+        [~, bstop] = min(abs(specinfo{s}.freqs-specinfo{s}.freqlist(f,2)));
+        bandpower(s,f,:) = max(mean(specinfo{s}.spectra(:,bstart:bstop),2));
 % 
 %         tvals = 0;%0:0.05:0.3;
 %         for t = 1:length(tvals)
@@ -197,4 +198,5 @@ end
 %save('meanspectra.mat','spectra','bandpower','grp');
 
 %save batch.mat grp bandpower clust modi bet meanbet tvals charp eff mod dist maxci %wdcorr %chanlocs
-save bigmat.mat bigmat grp subjlist bigchanlocs
+%save bigmat.mat bigmat grp subjlist bigchanlocs
+save bandpower.mat bandpower specinfo
