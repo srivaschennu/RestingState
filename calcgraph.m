@@ -161,7 +161,7 @@ for s = 1:size(subjlist,1)
 
         [~, bstart] = min(abs(specinfo{s}.freqs-specinfo{s}.freqlist(f,1)));
         [~, bstop] = min(abs(specinfo{s}.freqs-specinfo{s}.freqlist(f,2)));
-        bandpower(s,f,:) = max(mean(specinfo{s}.spectra(:,bstart:bstop),2));
+        bandpower(s,f,:) = mean(specinfo{s}.spectra(:,bstart:bstop),2);
 % 
 %         tvals = 0;%0:0.05:0.3;
 %         for t = 1:length(tvals)
