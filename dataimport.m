@@ -28,6 +28,16 @@ EEG = eeg_checkset(EEG);
 
 %%%% PREPROCESSING
 
+% RENAME 10/20 CHANNELS
+load([chanlocpath chanlocmat]);
+for c = 1:length(idx1020)
+    chanidx = strcmp(sprintf('E%d',idx1020(c)),{EEG.chanlocs.labels});
+    if sum(chanidx) == 1
+        fprintf('Replaced %s with %s.\n',EEG.chanlocs(chanidx).labels,name1020{c});
+        EEG.chanlocs(chanidx).labels = name1020{c};
+    end
+end
+
 % KEEP ONLY 10/20 CHANNELS
 %[~,~,chanidx] = intersect(name1020,{EEG.chanlocs.labels});
 %EEG = pop_select(EEG,'channel',chanidx);
