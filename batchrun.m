@@ -19,12 +19,12 @@ for s = 1:length(subjlist)
     
     fprintf('Processing %s.\n',basename);
     
-    dataimport(basename);
-    epochdata(basename);
+%     dataimport(basename);
+%     epochdata(basename);
     
 %    rejartifacts2([basename '_epochs'],1,4);
     
-%     computeic([basename '_epochs']);
+    computeic([basename '_epochs']);
     
     %rejectic(basename);
     %rejartifacts2(basename,2,1);

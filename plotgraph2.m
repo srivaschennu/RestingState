@@ -1,6 +1,6 @@
 function plotgraph2(basename,bandidx,plotqt)
 
-loadpaths
+filepath = '/Users/chennu/Data/RestingState/';
 
 load([filepath basename 'icohfdr.mat']);
 matrix = squeeze(matrix(bandidx,:,:));
