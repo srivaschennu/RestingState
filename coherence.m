@@ -9,7 +9,7 @@ alpha = 0.05;
 namelist = {
     
 % %     controls
-% 
+%
 % 'jenny_restingstate'
 % %'SaltyWater_restingstate'
 % 'NW_restingstate'
@@ -41,10 +41,10 @@ namelist = {
 % 'CL_restingstate'
 % 'CD_restingstate'
 % 'AC_restingstate'
-% 
+%
 % %
 % % patients
-% 
+%
 % 'p0112_restingstate'
 % 'p0211V2_restingstate'
 % 'p0211_restingstate1'
@@ -73,10 +73,17 @@ namelist = {
 % 'p2011_restingstate'
 % % % 'p2111_restingstate'
 
-'p0212_restingstate'
-'p0312_restingstate'
-%'p0512_restingstate' %bad
-'p1811v2_restingstate'
+% 'p0212_restingstate'
+% 'p0312_restingstate'
+% %'p0512_restingstate' %bad
+% 'p1811v2_restingstate'
+
+'p0512_restingstate'
+'p1511v2_restingstate'
+'p71v3_restingstate'
+'p0712_restingstate'
+'p1012_restingstate'
+'p1311v2_restingstate'
 };
 
 
@@ -85,40 +92,40 @@ for subjidx = 1:size(namelist)
     basename = namelist{subjidx};
     
     load([filepath basename 'spectra.mat']);
-    load([filepath basename 'icohboot.mat']);
-
-%     EEG = pop_loadset('filename',[basename '.set'],'filepath',filepath);
-% 
-%     chanlocs = EEG.chanlocs;
-%     specdata = load([filepath basename 'spectra.mat']);
-%     freqlist=specdata.freqlist;
-% 
-% 
-%     matrix=zeros(size(freqlist,1),EEG.nbchan,EEG.nbchan); % size(freqlist,1) lines ; EEG.nbchan columns ; EEG.nbchan time this table
-%     pval=zeros(size(freqlist,1),EEG.nbchan,EEG.nbchan);
-% 
-%     % matrixcoherence of each pair of electrodes
-%     for chann1=1:91
-%         for chann2=1:91
-%             if chann1 < chann2
-%                 [cohall cohbootall freqsout] = calcicoh(EEG,chann1,chann2);
-% 
-%                 for fidx = 1:size(freqlist,1)
-%                     [matrix(fidx,chann1,chann2) pval(fidx,chann1,chann2)] = ...
-%                         bandcoh(freqlist(fidx,1),freqlist(fidx,2),cohall,cohbootall,freqsout);
-%                 end
-%             elseif chann1 > chann2
-%                 matrix(:,chann1,chann2)=-(matrix(:,chann2,chann1));
-%                 pval(:,chann1,chann2) = pval(:,chann2,chann1);
-% 
-%             end
-%         end
-% 
-%         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%         save([filepath basename 'icohboot.mat'],'matrix','pval','chanlocs');
-%         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%     end
-%     
+%    load([filepath basename 'icohboot.mat']);
+    
+    EEG = pop_loadset('filename',[basename '.set'],'filepath',filepath);
+    
+    chanlocs = EEG.chanlocs;
+    specdata = load([filepath basename 'spectra.mat']);
+    freqlist=specdata.freqlist;
+    
+    
+    matrix=zeros(size(freqlist,1),EEG.nbchan,EEG.nbchan); % size(freqlist,1) lines ; EEG.nbchan columns ; EEG.nbchan time this table
+    pval=zeros(size(freqlist,1),EEG.nbchan,EEG.nbchan);
+    
+    % matrixcoherence of each pair of electrodes
+    for chann1=1:EEG.nbchan
+        for chann2=1:EEG.nbchan
+            if chann1 < chann2
+                [cohall cohbootall freqsout] = calcicoh(EEG,chann1,chann2);
+                
+                for fidx = 1:size(freqlist,1)
+                    [matrix(fidx,chann1,chann2) pval(fidx,chann1,chann2)] = ...
+                        bandcoh(freqlist(fidx,1),freqlist(fidx,2),cohall,cohbootall,freqsout);
+                end
+            elseif chann1 > chann2
+                matrix(:,chann1,chann2)=-(matrix(:,chann2,chann1));
+                pval(:,chann1,chann2) = pval(:,chann2,chann1);
+                
+            end
+        end
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        save([filepath basename 'icohboot.mat'],'matrix','pval','chanlocs');
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    end
+    
     
     %%% FDR correction
     for f = 1:size(freqlist,1)
@@ -174,16 +181,16 @@ end
 
 % for subjidx = 1:size(namelist)
 %     basename = namelist{subjidx};
-%     
+%
 %     load(['C:\Users\Eleonore\Documents\MATLAB\RSpcohicoh\icoh\' basename 'icohboot.mat']);
 %     specdata = load(['C:\Users\Eleonore\Documents\MATLAB\RSspectra\' basename 'spectra.mat']);
 %     freqlist=specdata.freqlist;
-%     
+%
 %     mat=zeros(size(freqlist,1),91,91);
-%     
+%
 %     for fidx = 1:size(freqlist,1)
 %         mat(fidx,:,:)=abs(matrix(fidx,:,:));
 %     end
-%     
+%
 %     save([basename 'icohbootabs.mat'],'mat','chanlocs');
 % end
