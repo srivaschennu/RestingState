@@ -89,8 +89,14 @@ fmrilist = {
     'p1911_restingstate'    1   9
     'p2011_restingstate'    1   8
     'p0312_restingstate'    1   8
+    'p0512_restingstate'    0   0
+    'p1511v2_restingstate'  0   0
+    'p71v3_restingstate'    0   0
+    'p0712_restingstate'    0   0
+    'p1012_restingstate'    0   0
+    'p1311v2_restingstate'  0   0
     };
-    
+
 %subjlist = cat(1,ctrllist,patlist);
 %subjlist = ctrllist;
 %subjlist = patlist;
@@ -100,7 +106,7 @@ subjlist = fmrilist;
 load chanlist.mat
 
 % meanmat = zeros(5,91,91);
-% 
+%
 % meanspectra = zeros(91,513);
 
 bet = zeros(size(subjlist,1),5,91);
@@ -109,6 +115,9 @@ modi = zeros(size(subjlist,1),5,91);
 bandpower = zeros(size(subjlist,1),5,91);
 
 bigmat = zeros(length(subjlist),5,91,91);
+degree = zeros(5,length(subjlist)*91);
+weight = zeros(5,length(subjlist)*91*91);
+
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
     fprintf('Processing %s.\n',basename);
@@ -125,68 +134,71 @@ for s = 1:size(subjlist,1)
     
     load([filepath basename 'icohfdr.mat']);
     
-%     [sortedchan,sortidx] = sort({chanlocs.labels});
-%     chanlocs = chanlocs(sortidx);
-%     
-%    chandist = ichandist(chanlocs);
-% %     chandist = chandist/max(chandist(:));
-%     
-%         if ~strcmp(chanlist,cell2mat(sortedchan))
-%             error('Channel names do not match!');
-%         end
+    %     [sortedchan,sortidx] = sort({chanlocs.labels});
+    %     chanlocs = chanlocs(sortidx);
+    %
+    %    chandist = ichandist(chanlocs);
+    % %     chandist = chandist/max(chandist(:));
+    %
+    %         if ~strcmp(chanlist,cell2mat(sortedchan))
+    %             error('Channel names do not match!');
+    %         end
     
-
+    
     bigchanlocs{s} = chanlocs;
     
     for f = 1:size(matrix,1)
-                icohmat = squeeze(matrix(f,:,:));
-                pvals = squeeze(pval(f,:,:));
+        icohmat = squeeze(matrix(f,:,:));
+        pvals = squeeze(pval(f,:,:));
         
-%         icohmat = squeeze(matrix(f,sortidx,sortidx));
-%         pvals = squeeze(pval(f,sortidx,sortidx));
+        %         icohmat = squeeze(matrix(f,sortidx,sortidx));
+        %         pvals = squeeze(pval(f,sortidx,sortidx));
         
         bigmat(s,f,:,:) = icohmat;
+        degree(f,(s-1)*91+1:s*91) = mean(icohmat,1);
+        weight(f,(s-1)*91*91+1:s*91*91) = icohmat(:)';
+        
         %icohmat = applythresh(icohmat,0.2);
         
         %meanmat(f,:,:) = squeeze(meanmat(f,:,:)) + icohmat;
         
-%                 cc = corrcoef([abs(zscore(icohmat(logical(triu(ones(size(icohmat)),1))))) ...
-%                 abs(zscore(chandist(logical(triu(ones(size(chandist)),1))))) ]);
-%                 wdcorr(s,f) = cc(1,2);
+        %                 cc = corrcoef([abs(zscore(icohmat(logical(triu(ones(size(icohmat)),1))))) ...
+        %                 abs(zscore(chandist(logical(triu(ones(size(chandist)),1))))) ]);
+        %                 wdcorr(s,f) = cc(1,2);
         
         
-%         wdcorr(s,f) = mean(mean( abs( zscore(icohmat(logical(triu(ones(size(icohmat)),1)))) .* ...
-%             zscore(chandist(logical(triu(ones(size(chandist)),1)))) ) ));
-
-
+        %         wdcorr(s,f) = mean(mean( abs( zscore(icohmat(logical(triu(ones(size(icohmat)),1)))) .* ...
+        %             zscore(chandist(logical(triu(ones(size(chandist)),1)))) ) ));
+        
+        
         [~, bstart] = min(abs(specinfo{s}.freqs-specinfo{s}.freqlist(f,1)));
         [~, bstop] = min(abs(specinfo{s}.freqs-specinfo{s}.freqlist(f,2)));
         bandpower(s,f,:) = mean(specinfo{s}.spectra(:,bstart:bstop),2);
-% 
-%         tvals = 0;%0:0.05:0.3;
-%         for t = 1:length(tvals)
-%             %icohmat = applythresh(icohmat,tvals(t));
-%             
-%                         [Ci, Q] = modularity_louvain_und(icohmat);
-%                         mod(s,f,t) = Q;
-%                         modi(s,f,:) = Ci;
-%                         bet(s,f,:) = betweenness_wei(1./icohmat);
-%                         meanbet(s,f) = mean(nonzeros(bet(s,f,:)));
-%             
-%                         dist(s,f,t) = 0;
-%                         for m = 1:max(Ci)
-%                             distmat = chandist(Ci == m,Ci == m);% .* (icohmat(Ci == m,Ci == m) > 0);
-%                             dist(s,f,t) = dist(s,f,t) + mean(mean(distmat));
-%                         end
-%                         dist(s,f,t) = dist(s,f,t) / max(Ci);
-%             
-%                         maxci(s,f,t) = max(Ci);
-%                         clust(s,f,:) = clustering_coef_wu(icohmat); %clustering coeffcient
-%             %characteristic path length and efficiency with weights
-%                         [charp(s,f,t) eff(s,f,t)] = charpath(distance_wei(1./icohmat));
-%         end
+        %
+        %         tvals = 0;%0:0.05:0.3;
+        %         for t = 1:length(tvals)
+        %             %icohmat = applythresh(icohmat,tvals(t));
+        %
+        %                         [Ci, Q] = modularity_louvain_und(icohmat);
+        %                         mod(s,f,t) = Q;
+        %                         modi(s,f,:) = Ci;
+        %                         bet(s,f,:) = betweenness_wei(1./icohmat);
+        %                         meanbet(s,f) = mean(nonzeros(bet(s,f,:)));
+        %
+        %                         dist(s,f,t) = 0;
+        %                         for m = 1:max(Ci)
+        %                             distmat = chandist(Ci == m,Ci == m);% .* (icohmat(Ci == m,Ci == m) > 0);
+        %                             dist(s,f,t) = dist(s,f,t) + mean(mean(distmat));
+        %                         end
+        %                         dist(s,f,t) = dist(s,f,t) / max(Ci);
+        %
+        %                         maxci(s,f,t) = max(Ci);
+        %                         clust(s,f,:) = clustering_coef_wu(icohmat); %clustering coeffcient
+        %             %characteristic path length and efficiency with weights
+        %                         [charp(s,f,t) eff(s,f,t)] = charpath(distance_wei(1./icohmat));
+        %         end
     end
-    grp(s,1) = subjlist{s,2};
+    %grp(s,1) = subjlist{s,2};
     
 end
 
@@ -198,5 +210,6 @@ end
 %save('meanspectra.mat','spectra','bandpower','grp');
 
 %save batch.mat grp bandpower clust modi bet meanbet tvals charp eff mod dist maxci %wdcorr %chanlocs
-%save bigmat.mat bigmat grp subjlist bigchanlocs
-save bandpower.mat bandpower specinfo
+save bigmatfmri.mat bigmat subjlist bigchanlocs
+save bandpowerfmri.mat bandpower specinfo
+save distinfofmri.mat degree weight
