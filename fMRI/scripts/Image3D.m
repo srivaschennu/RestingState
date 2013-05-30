@@ -1,0 +1,1 @@
+ scatter3(networks(:,2),networks(:,3),networks(:,4));
