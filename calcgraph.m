@@ -81,7 +81,7 @@ fmrilist = {
     'p1711_restingstate'    2   19
     'p0112_restingstate'	1   9
     'p0711_restingstate'    2   15
-    'p0211V2_restingstate'	2   16
+%    'p0211V2_restingstate'	2   16
     'p0311_restingstate2'   0   7
     'p0911_restingstate'    1   10
     'p1311_restingstate'    0   8
@@ -94,7 +94,7 @@ fmrilist = {
     'p71v3_restingstate'    0   0
     'p0712_restingstate'    0   0
     'p1012_restingstate'    0   0
-    'p1311v2_restingstate'  0   0
+%    'p1311v2_restingstate'  0   0
     };
 
 %subjlist = cat(1,ctrllist,patlist);

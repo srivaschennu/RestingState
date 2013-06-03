@@ -78,18 +78,29 @@ namelist = {
 % %'p0512_restingstate' %bad
 % 'p1811v2_restingstate'
 
-'p0512_restingstate'
-'p1511v2_restingstate'
-'p71v3_restingstate'
-'p0712_restingstate'
-'p1012_restingstate'
-'p1311v2_restingstate'
+    'p0211_restingstate2'   2   14
+    'p1711_restingstate'    2   19
+    'p0112_restingstate'	1   9
+    'p0711_restingstate'    2   15
+    'p0311_restingstate2'   0   7
+    'p0911_restingstate'    1   10
+    'p1311_restingstate'    0   8
+    'p1611_restingstate'    0   7
+    'p1911_restingstate'    1   9
+    'p2011_restingstate'    1   8
+    'p0312_restingstate'    1   8
+    'p0512_restingstate'    0   0
+    'p1511v2_restingstate'  0   0
+    'p71v3_restingstate'    0   0
+    'p0712_restingstate'    0   0
+    'p1012_restingstate'    0   0
+
 };
 
 
 
-for subjidx = 1:size(namelist)
-    basename = namelist{subjidx};
+for subjidx = 1:size(namelist,1)
+    basename = namelist{subjidx,1};
     
     load([filepath basename 'spectra.mat']);
 %    load([filepath basename 'icohboot.mat']);
@@ -108,7 +119,7 @@ for subjidx = 1:size(namelist)
     for chann1=1:EEG.nbchan
         for chann2=1:EEG.nbchan
             if chann1 < chann2
-                [cohall cohbootall freqsout] = calcicoh(EEG,chann1,chann2);
+                [cohall cohbootall freqsout] = calcpcoh(EEG,chann1,chann2);
                 
                 for fidx = 1:size(freqlist,1)
                     [matrix(fidx,chann1,chann2) pval(fidx,chann1,chann2)] = ...
@@ -122,7 +133,7 @@ for subjidx = 1:size(namelist)
         end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        save([filepath basename 'icohboot.mat'],'matrix','pval','chanlocs');
+        save([filepath basename 'pcohboot.mat'],'matrix','pval','chanlocs');
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     end
     
@@ -150,7 +161,7 @@ for subjidx = 1:size(namelist)
         matrix(f,:,:) = coh;
         pval(f,:,:) = pvals;
     end
-    save([filepath basename 'icohfdr.mat'],'matrix','pval','chanlocs');
+    save([filepath basename 'pcohfdr.mat'],'matrix','pval','chanlocs');
     
 end
 
