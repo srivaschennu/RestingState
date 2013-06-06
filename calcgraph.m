@@ -148,26 +148,26 @@ for s = 1:size(subjlist,1)
     bigchanlocs{s} = chanlocs;
     
     for f = 1:size(matrix,1)
-        icohmat = squeeze(matrix(f,:,:));
+        cohmat = squeeze(matrix(f,:,:));
         pvals = squeeze(pval(f,:,:));
         
-        %         icohmat = squeeze(matrix(f,sortidx,sortidx));
+        %         cohmat = squeeze(matrix(f,sortidx,sortidx));
         %         pvals = squeeze(pval(f,sortidx,sortidx));
         
-        bigmat(s,f,:,:) = icohmat;
-        degree(f,(s-1)*91+1:s*91) = mean(icohmat,1);
-        weight(f,(s-1)*91*91+1:s*91*91) = icohmat(:)';
+        bigmat(s,f,:,:) = cohmat;
+        degree(f,(s-1)*91+1:s*91) = mean(cohmat,1);
+        weight(f,(s-1)*91*91+1:s*91*91) = cohmat(:)';
         
-        %icohmat = applythresh(icohmat,0.2);
+        %cohmat = applythresh(cohmat,0.2);
         
-        %meanmat(f,:,:) = squeeze(meanmat(f,:,:)) + icohmat;
+        %meanmat(f,:,:) = squeeze(meanmat(f,:,:)) + cohmat;
         
-        %                 cc = corrcoef([abs(zscore(icohmat(logical(triu(ones(size(icohmat)),1))))) ...
+        %                 cc = corrcoef([abs(zscore(cohmat(logical(triu(ones(size(cohmat)),1))))) ...
         %                 abs(zscore(chandist(logical(triu(ones(size(chandist)),1))))) ]);
         %                 wdcorr(s,f) = cc(1,2);
         
         
-        %         wdcorr(s,f) = mean(mean( abs( zscore(icohmat(logical(triu(ones(size(icohmat)),1)))) .* ...
+        %         wdcorr(s,f) = mean(mean( abs( zscore(cohmat(logical(triu(ones(size(cohmat)),1)))) .* ...
         %             zscore(chandist(logical(triu(ones(size(chandist)),1)))) ) ));
         
         
@@ -177,25 +177,25 @@ for s = 1:size(subjlist,1)
         %
         %         tvals = 0;%0:0.05:0.3;
         %         for t = 1:length(tvals)
-        %             %icohmat = applythresh(icohmat,tvals(t));
+        %             %cohmat = applythresh(cohmat,tvals(t));
         %
-        %                         [Ci, Q] = modularity_louvain_und(icohmat);
+        %                         [Ci, Q] = modularity_louvain_und(cohmat);
         %                         mod(s,f,t) = Q;
         %                         modi(s,f,:) = Ci;
-        %                         bet(s,f,:) = betweenness_wei(1./icohmat);
+        %                         bet(s,f,:) = betweenness_wei(1./cohmat);
         %                         meanbet(s,f) = mean(nonzeros(bet(s,f,:)));
         %
         %                         dist(s,f,t) = 0;
         %                         for m = 1:max(Ci)
-        %                             distmat = chandist(Ci == m,Ci == m);% .* (icohmat(Ci == m,Ci == m) > 0);
+        %                             distmat = chandist(Ci == m,Ci == m);% .* (cohmat(Ci == m,Ci == m) > 0);
         %                             dist(s,f,t) = dist(s,f,t) + mean(mean(distmat));
         %                         end
         %                         dist(s,f,t) = dist(s,f,t) / max(Ci);
         %
         %                         maxci(s,f,t) = max(Ci);
-        %                         clust(s,f,:) = clustering_coef_wu(icohmat); %clustering coeffcient
+        %                         clust(s,f,:) = clustering_coef_wu(cohmat); %clustering coeffcient
         %             %characteristic path length and efficiency with weights
-        %                         [charp(s,f,t) eff(s,f,t)] = charpath(distance_wei(1./icohmat));
+        %                         [charp(s,f,t) eff(s,f,t)] = charpath(distance_wei(1./cohmat));
         %         end
     end
     %grp(s,1) = subjlist{s,2};
@@ -211,5 +211,5 @@ end
 
 %save batch.mat grp bandpower clust modi bet meanbet tvals charp eff mod dist maxci %wdcorr %chanlocs
 save bigmatfmri.mat bigmat subjlist bigchanlocs
-save bandpowerfmri.mat bandpower specinfo
-save distinfofmri.mat degree weight
+% save bandpowerfmri.mat bandpower specinfo
+% save distinfofmri.mat degree weight

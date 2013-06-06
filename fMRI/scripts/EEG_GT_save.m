@@ -1,13 +1,13 @@
 % IG 14/01/2013 Calculate GT measures for EEG
 clear all
-Homedir = fullfile('C:','Users','Ithabi','Documents');
-Resultsdir = [Homedir filesep 'results\'];
+Homedir = '/Users/chennu/Work/RestingState/fMRI/'
+Resultsdir = [Homedir filesep 'results/'];
 load([Resultsdir 'bigmatfmri'])
 GraphFile = [Resultsdir 'EEG_GraphData.mat'];%[Homedir filesep 'results\graphdata.mat'];
 load(GraphFile)
 for ifreq = 1:5
     ifreq
-    for isubj = 12:size(bigmat,1)
+    for isubj = 1:size(bigmat,1)
         isubj
         netwcor(:,:) = bigmat(isubj,ifreq,:,:);
         
