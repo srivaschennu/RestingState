@@ -119,7 +119,7 @@ for subjidx = 1:size(namelist,1)
     for chann1=1:EEG.nbchan
         for chann2=1:EEG.nbchan
             if chann1 < chann2
-                [cohall cohbootall freqsout] = calcpcoh(EEG,chann1,chann2);
+                [cohall, cohbootall, freqsout] = calcpli(EEG,chann1,chann2);
                 
                 for fidx = 1:size(freqlist,1)
                     [matrix(fidx,chann1,chann2) pval(fidx,chann1,chann2)] = ...
@@ -133,7 +133,7 @@ for subjidx = 1:size(namelist,1)
         end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        save([filepath basename 'pcohboot.mat'],'matrix','pval','chanlocs');
+        save([filepath basename 'pliboot.mat'],'matrix','pval','chanlocs');
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     end
     
@@ -161,7 +161,7 @@ for subjidx = 1:size(namelist,1)
         matrix(f,:,:) = coh;
         pval(f,:,:) = pvals;
     end
-    save([filepath basename 'pcohfdr.mat'],'matrix','pval','chanlocs');
+    save([filepath basename 'plifdr.mat'],'matrix','pval','chanlocs');
     
 end
 
