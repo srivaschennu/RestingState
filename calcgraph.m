@@ -44,19 +44,13 @@ patlist = {
     %
     % patients
     
-    'p0112_restingstate'	1   9
-    'p0211V2_restingstate'	2   16
-    %'p0211_restingstate1'
+    'p0211_restingstate1'   2   14
     'p0211_restingstate2'   2   14
-    'p0311V2_restingstate'  0   8
-    %'p0311_restingstate1'
+    'p0311_restingstate1'   0   7
     'p0311_restingstate2'   0   7
-    % 'p0411V2_restingstate'
     'p0411_restingstate1'   0   7
-    % 'p0411_restingstate2'
-    'p0510V2_restingstate'  0   7
-    % 'p0511V2_restingstate'
-    % 'p0511_restingstate'
+    'p0411_restingstate2'   0   7
+    'p0511_restingstate'    1   10
     'p0611_restingstate'    2   10
     'p0710V2_restingstate'  1   14
     'p0711_restingstate'    2   15
@@ -66,14 +60,41 @@ patlist = {
     'p1311_restingstate'    0   8
     'p1511_restingstate'    2   10
     'p1611_restingstate'    0   7
+    'p0510V2_restingstate'  0   7
     'p1711_restingstate'    2   19
     'p1811_restingstate'    1   12
+    'p0411V2_restingstate'  1   8
     'p1911_restingstate'    1   9
     'p2011_restingstate'    1   8
-    % 'p2111_restingstate'
+    'p2111_restingstate'    1   10
+    'p0311V2_restingstate'  0   8
+    'p0211V2_restingstate'	2   16
+    'p0511V2_restingstate'  1   10
+    'p0112_restingstate'	1   9
     'p0212_restingstate'    1   12
     'p0312_restingstate'    1   8
+    'p0512_restingstate'    1   8
     'p1811v2_restingstate'  2   15
+    'p0612_restingstate'    0   8
+    'p1511v2_restingstate'  1   10
+    'p71v3_restingstate'    0   8
+    'p0712_restingstate'    0   7
+    'p0812_restingstate'    1   8
+    'p1012_restingstate'    2   13
+%     'p1311v2_restingstate'
+    'p0113_restingstate'    0   7
+    'p0213_restingstate'    2   18
+    'p0612v2_restingstate'  0   7
+    'p0611v2_restingstate'  1   11
+%     'p0313_restingstate'    
+%     'p0512v2_restingstate'
+
+    %'p0912_restingstate' severely disabled
+
+    %'p66v4_restingstate' %no data
+    %'p0412_restingstate' %no data
+    %'p0712v2_restingstate' %no data
+    %'p0812v2_restingstate'  0   0 %no data
     };
 
 fmrilist = {
@@ -132,7 +153,7 @@ for s = 1:size(subjlist,1)
     
     %     meanspectra = meanspectra + specinfo{s}.spectra;
     
-    load([filepath basename 'icohfdr.mat']);
+    load([filepath basename 'plifdr.mat']);
     
     %     [sortedchan,sortidx] = sort({chanlocs.labels});
     %     chanlocs = chanlocs(sortidx);
@@ -210,6 +231,6 @@ end
 %save('meanspectra.mat','spectra','bandpower','grp');
 
 %save batch.mat grp bandpower clust modi bet meanbet tvals charp eff mod dist maxci %wdcorr %chanlocs
-save bigmatfmri.mat bigmat subjlist bigchanlocs
+save bigmat.mat bigmat subjlist bigchanlocs
 % save bandpowerfmri.mat bandpower specinfo
 % save distinfofmri.mat degree weight
