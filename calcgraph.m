@@ -45,11 +45,11 @@ patlist = {
     % patients
     
     'p0211_restingstate1'   2   14
-    'p0211_restingstate2'   2   14
+    %p0211_restingstate2'   2   14 duplicate
     'p0311_restingstate1'   0   7
-    'p0311_restingstate2'   0   7
+    %'p0311_restingstate2'   0   7 duplicate
     'p0411_restingstate1'   0   7
-    'p0411_restingstate2'   0   7
+    %'p0411_restingstate2'   0   7 duplicate
     'p0511_restingstate'    1   10
     'p0611_restingstate'    2   10
     'p0710V2_restingstate'  1   14
@@ -81,13 +81,13 @@ patlist = {
     'p0712_restingstate'    0   7
     'p0812_restingstate'    1   8
     'p1012_restingstate'    2   13
-%     'p1311v2_restingstate'
+    'p1311v2_restingstate'  0   8
     'p0113_restingstate'    0   7
     'p0213_restingstate'    2   18
     'p0612v2_restingstate'  0   7
     'p0611v2_restingstate'  1   11
-%     'p0313_restingstate'    
-%     'p0512v2_restingstate'
+    'p0313_restingstate'    0   7
+    'p0512v2_restingstate'  0   8
 
     %'p0912_restingstate' severely disabled
 
