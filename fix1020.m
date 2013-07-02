@@ -61,3 +61,17 @@ for c = 1:length(idx1020)
 end
 
 save(['/Users/chennu/Data/RestingState/' basename 'icohfdr.mat'],'-struct','EEG');
+
+fprintf(['Loading /Users/chennu/Data/RestingState/' basename 'spectra.mat\n']);
+EEG = load(['/Users/chennu/Data/RestingState/' basename 'spectra.mat']);
+% RENAME 10/20 CHANNELS
+load([chanlocpath chanlocmat]);
+for c = 1:length(idx1020)
+    chanidx = strcmp(sprintf('E%d',idx1020(c)),{EEG.chann.labels});
+    if sum(chanidx) == 1
+        fprintf('Replaced %s with %s.\n',EEG.chann(chanidx).labels,name1020{c});
+        EEG.chann(chanidx).labels = name1020{c};
+    end
+end
+
+save(['/Users/chennu/Data/RestingState/' basename 'spectra.mat'],'-struct','EEG');

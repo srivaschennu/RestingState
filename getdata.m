@@ -5,8 +5,8 @@ loadsubj
 
 %subjlist = cat(1,ctrllist,patlist);
 %subjlist = ctrllist;
-subjlist = patlist;
-% subjlist = fmrilist;
+% subjlist = patlist;
+subjlist = fmrilist;
 
 allcoh = zeros(length(subjlist),5,91,91);
 degree = zeros(5,length(subjlist)*91);
@@ -18,9 +18,23 @@ load chanlist.mat
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
     fprintf('Processing %s.\n',basename);
-        
+
     specinfo = load([filepath basename 'spectra.mat']);
-    specinfo.spectra = 10.^(specinfo.spectra/10);
+    [sortedchan,sortidx] = sort({specinfo.chann.labels});
+    if ~strcmp(chanlist,cell2mat(sortedchan))
+        error('Channel names do not match!');
+    end
+    specinfo.spectra = specinfo.spectra(sortidx,:);
+    specinfo.specstd = specinfo.specstd(sortidx,:);
+            
+    load([filepath basename 'icohfdr.mat']);
+    [sortedchan,sortidx] = sort({chanlocs.labels});
+    if ~strcmp(chanlist,cell2mat(sortedchan))
+        error('Channel names do not match!');
+    end
+    matrix = matrix(:,sortidx,sortidx);
+    
+%     specinfo.spectra = 10.^(specinfo.spectra/10);
     
     %     figure;
     %     plot(specinfo.freqs,specinfo.spectra');
@@ -29,15 +43,6 @@ for s = 1:size(subjlist,1)
     %     close(gcf);
     
     %     meanspectra = meanspectra + specinfo.spectra;
-    
-    load([filepath basename 'icohfdr.mat']);
-    
-    [sortedchan,sortidx] = sort({chanlocs.labels});
-    if ~strcmp(chanlist,cell2mat(sortedchan))
-        error('Channel names do not match!');
-    end
-    matrix = matrix(:,sortidx,sortidx);
-    
     for f = 1:size(matrix,1)
         cohmat = squeeze(matrix(f,:,:));
         
@@ -62,9 +67,9 @@ for s = 1:size(subjlist,1)
         [~, bstop] = min(abs(specinfo.freqs-specinfo.freqlist(f,2)));
         bandpower(s,f,:) = mean(specinfo.spectra(:,bstart:bstop),2);
     end
-    for c = 1:size(bandpower,3)
-        bandpower(s,:,c) = bandpower(s,:,c)./sum(bandpower(s,:,c));
-    end
+%     for c = 1:size(bandpower,3)
+%         bandpower(s,:,c) = bandpower(s,:,c)./sum(bandpower(s,:,c));
+%     end
     grp(s,1) = subjlist{s,2};    
 end
 
