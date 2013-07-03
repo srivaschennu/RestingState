@@ -1,4 +1,3 @@
-
 function coherence
 % matrix with all coherence number for a frequency interval : freq1:freq2
 
@@ -7,10 +6,15 @@ loadpaths
 alpha = 0.05;
 
 loadsubj
-
+subjlist = cat(1,ctrllist,patlist);
 
 for subjidx = 1:size(subjlist,1)
     basename = subjlist{subjidx,1};
+    
+    if exist([filepath basename 'plifdr.mat'],'file')
+        fprintf('%s exists. Skipping...\n',[basename 'plifdr.mat']);
+        continue;
+    end
     
     load([filepath basename 'spectra.mat']);
     
@@ -28,10 +32,10 @@ for subjidx = 1:size(subjlist,1)
     for chann1=1:EEG.nbchan
         for chann2=1:EEG.nbchan
             if chann1 < chann2
-                [cohall, cohbootall, freqsout] = calcicoh(EEG,chann1,chann2);
+                [cohall, cohbootall, freqsout] = calcpli(EEG,chann1,chann2);
                 
                 for fidx = 1:size(freqlist,1)
-                    [matrix(fidx,chann1,chann2) pval(fidx,chann1,chann2)] = ...
+                    [matrix(fidx,chann1,chann2), pval(fidx,chann1,chann2)] = ...
                         bandcoh(freqlist(fidx,1),freqlist(fidx,2),cohall,cohbootall,freqsout);
                 end
             elseif chann1 > chann2
@@ -42,7 +46,7 @@ for subjidx = 1:size(subjlist,1)
         end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        save([filepath basename 'icohboot.mat'],'matrix','pval','chanlocs');
+        save([filepath basename 'pliboot.mat'],'matrix','pval','chanlocs');
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     end
     
@@ -70,6 +74,6 @@ for subjidx = 1:size(subjlist,1)
         matrix(f,:,:) = coh;
         pval(f,:,:) = pvals;
     end
-    save([filepath basename 'icohfdr.mat'],'matrix','pval','chanlocs');
+    save([filepath basename 'plifdr.mat'],'matrix','pval','chanlocs');
     
 end

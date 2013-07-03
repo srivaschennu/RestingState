@@ -5,8 +5,8 @@ loadsubj
 
 %subjlist = cat(1,ctrllist,patlist);
 %subjlist = ctrllist;
-% subjlist = patlist;
-subjlist = fmrilist;
+subjlist = patlist;
+% subjlist = fmrilist;
 
 allcoh = zeros(length(subjlist),5,91,91);
 degree = zeros(5,length(subjlist)*91);

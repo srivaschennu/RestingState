@@ -8,8 +8,8 @@ load chanlist
 
 %subjlist = cat(1,ctrllist,patlist);
 %subjlist = ctrllist;
-% subjlist = patlist;
-subjlist = fmrilist;
+subjlist = patlist;
+% subjlist = fmrilist;
 
 % degree = zeros(5,length(subjlist)*91);
 % weight = zeros(5,length(subjlist)*91*91);
