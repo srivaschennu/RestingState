@@ -125,3 +125,5 @@ fmrilist = {
     'p1012_restingstate'    0   0
     %    'p1311v2_restingstate'  0   0
     };
+
+allsubj = cat(1,patlist,ctrllist);

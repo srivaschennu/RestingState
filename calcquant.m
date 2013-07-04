@@ -1,4 +1,4 @@
-function calcquant
+function calcquant(listname)
 
 loadpaths
 
@@ -9,10 +9,7 @@ load chanlist
 chandist = chandist(:);
 quantiles = quantile(chandist,0:0.1:1);
 
-%subjlist = cat(1,ctrllist,patlist);
-%subjlist = ctrllist;
-subjlist = patlist;
-% subjlist = fmrilist;
+subjlist = eval(listname);
 
 % degree = zeros(5,length(subjlist)*91);
 % weight = zeros(5,length(subjlist)*91*91);
@@ -39,4 +36,4 @@ for s = 1:size(subjlist,1)
     grp(s,1) = subjlist{s,2};
 end
 
-save quantdata.mat quant grp
+save(sprintf('quantdata_%s.mat',listname), 'quant', 'grp');

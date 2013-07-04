@@ -1,6 +1,6 @@
 function plotcohdist
 
-load alldata
+load alldata_patlist
 load chanlist
 
 chandist = chandist ./ max(chandist(:));
@@ -9,9 +9,10 @@ chandist = chandist(:);
 uniqcd = unique(chandist);
 uniqcd = linspace(uniqcd(1),uniqcd(end),75);
 
-figure; hold all;
-for g = 0:2
-    groupcoh = squeeze(allcoh(grp == g,3,:,:));
+%figure;
+hold all;
+for g = 0%:2
+    groupcoh = squeeze(allcoh(:,3,:,:));
     plotvals = zeros(1,length(uniqcd)-1);
     
     for u = 1:length(uniqcd)-1

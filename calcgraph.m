@@ -1,4 +1,4 @@
-function calcgraph
+function calcgraph(listname)
 
 loadpaths
 
@@ -6,17 +6,16 @@ loadsubj
 
 load chanlist
 
-%subjlist = cat(1,ctrllist,patlist);
-%subjlist = ctrllist;
-subjlist = patlist;
-% subjlist = fmrilist;
+subjlist = eval(listname);
 
 % degree = zeros(5,length(subjlist)*91);
 % weight = zeros(5,length(subjlist)*91*91);
 
+tvals = 0;%1-(0.05:0.05:0.75);
+
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
-    fprintf('Processing %s.\n',basename);
+    fprintf('Processing %s.',basename);
     
     
     load([filepath basename 'icohfdr.mat']);
@@ -25,51 +24,76 @@ for s = 1:size(subjlist,1)
     matrix = matrix(:,sortidx,sortidx);
     pval = pval(:,sortidx,sortidx);
     
-    for f = 1:size(matrix,1)
+    for f = 1:3
         cohmat = squeeze(matrix(f,:,:));
         
-        %         degree(f,(s-1)*91+1:s*91) = mean(cohmat,1);
-        %         weight(f,(s-1)*91*91+1:s*91*91) = cohmat(:)';
+        %         bincohmat = double(cohmat ~= 0);
         
-%         tvals = 0:0.01:1;
-%         for t = 1:length(tvals)
-%             if mean(degrees_und(applythresh(cohmat,tvals(t)))) < log(size(cohmat,1))
-%                 break
+        %         for thresh = 1:length(tvals)
+        %             if mean(degrees_und(applythresh(cohmat,tvals(thresh)))) < log(size(cohmat,1))
+        %                 break
+        %             end
+        %         end
+        %         cohmat = applythresh(cohmat,tvals(thresh-1));
+        
+        for thresh = 1:length(tvals)
+            fprintf(' %d',thresh);
+            threshcoh = zeromean(cohmat);
+            %threshcoh = threshold_proportional(cohmat,tvals(thresh));
+            %bincohmat = double(threshcoh ~= 0);
+            
+            %clustering coeffcient
+            graph{1,1} = 'clustering';
+            graph{1,2}(s,f,thresh) = mean(clustering_coef_wu(threshcoh));
+%             graph{1,3}(s,f,thresh) = mean(clustering_coef_bu(bincohmat));
+            
+            
+            %characteristic path length and efficiency
+            graph{2,1} = 'efficiency';
+            graph{2,2}(s,f,thresh) = efficiency_wei(threshcoh);
+%             graph{2,3}(s,f,thresh) = efficiency_bin(bincohmat);
+            
+            %%% modularity
+            graph{3,1} = 'modularity';
+            graph{4,1} = 'num modules';
+            
+            %weighted
+            [Ci, Q] = modularity_louvain_und(threshcoh);
+            graph{3,2}(s,f,thresh) = Q;
+            graph{4,2}(s,f,thresh) = max(Ci);
+            
+            %modular distance
+            graph{6,1} = 'modular distance';
+            dist(s,f,thresh) = 0;
+            for m = 1:max(Ci)
+                distmat = chandist(Ci == m,Ci == m);% .* (threshcoh(Ci == m,Ci == m) > 0);
+                dist(s,f,thresh) = dist(s,f,thresh) + mean(mean(distmat));
+            end
+            graph{6,2}(s,f,thresh) = dist(s,f,thresh) / max(Ci);
+            
+            
+%             %binary
+%             [Ci, Q] = modularity_louvain_und(bincohmat);
+%             graph{3,3}(s,f,thresh) = Q;
+%             graph{4,3}(s,f,thresh) = max(Ci);
+%             
+%             %modular distance
+%             dist(s,f,thresh) = 0;
+%             for m = 1:max(Ci)
+%                 distmat = chandist(Ci == m,Ci == m);% .* (threshcoh(Ci == m,Ci == m) > 0);
+%                 dist(s,f,thresh) = dist(s,f,thresh) + mean(mean(distmat));
 %             end
-%         end
-%         cohmat = applythresh(cohmat,tvals(t-1));
-        thresh = 1;
-        
-        %clustering coeffcient
-        graph{1,1}(s,f,thresh) = mean(clustering_coef_wu(cohmat));
-        graph{1,2} = 'clustering';
-        
-        %characteristic path length and efficiency with weights
-        [~, graph{2,1}(s,f,thresh)] = charpath(distance_wei(1./cohmat));
-        graph{2,2} = 'efficiency';
-        
-        %modularity
-        [Ci, Q] = modularity_louvain_und(cohmat);
-        graph{3,1}(s,f,thresh) = Q;
-        graph{3,2} = 'modularity';
-        graph{4,1}(s,f,thresh) = max(Ci);
-        graph{4,2} = 'num modules';
-        
-        %betweenness (centrality)
-        graph{5,1}(s,f,thresh) = median(nonzeros(betweenness_wei(1./cohmat)));
-        graph{5,2} = 'centrality';
-        
-        %modular distance
-        dist(s,f,thresh) = 0;
-        for m = 1:max(Ci)
-            distmat = chandist(Ci == m,Ci == m);% .* (cohmat(Ci == m,Ci == m) > 0);
-            dist(s,f,thresh) = dist(s,f,thresh) + mean(mean(distmat));
+%             graph{6,3}(s,f,thresh) = dist(s,f,thresh) / max(Ci);
+            
+            %betweenness (centrality)
+            graph{5,1} = 'centrality';
+            graph{5,2}(s,f,thresh) = median(nonzeros(betweenness_wei(1./threshcoh)));
+%             graph{5,3}(s,f,thresh) = median(nonzeros(betweenness_bin(bincohmat)));
         end
-        graph{6,1}(s,f,thresh) = dist(s,f,thresh) / max(Ci);
-        graph{6,2} = 'modular distance';
     end
+    fprintf('\n');
     grp(s,1) = subjlist{s,2};
 end
 
-save graphdata.mat graph grp %tvals
+save(sprintf('graphdata_%s.mat',listname), 'graph', 'grp', 'tvals');
 
