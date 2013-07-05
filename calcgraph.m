@@ -11,7 +11,7 @@ subjlist = eval(listname);
 % degree = zeros(5,length(subjlist)*91);
 % weight = zeros(5,length(subjlist)*91*91);
 
-tvals = 0;%1-(0.05:0.05:0.75);
+tvals = 1-(0:0.05:0.75);
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
@@ -38,8 +38,7 @@ for s = 1:size(subjlist,1)
         
         for thresh = 1:length(tvals)
             fprintf(' %d',thresh);
-            threshcoh = zeromean(cohmat);
-            %threshcoh = threshold_proportional(cohmat,tvals(thresh));
+            threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh));
             %bincohmat = double(threshcoh ~= 0);
             
             %clustering coeffcient
