@@ -6,8 +6,7 @@ loadsubj
 subjlist = eval(listname);
 
 allcoh = zeros(length(subjlist),5,91,91);
-degree = zeros(5,length(subjlist)*91);
-weight = zeros(5,length(subjlist)*91*91);
+degree = zeros(length(subjlist),5,91);
 bandpower = zeros(size(subjlist,1),5,91);
 
 load chanlist.mat
@@ -42,11 +41,10 @@ for s = 1:size(subjlist,1)
     %     meanspectra = meanspectra + specinfo.spectra;
     for f = 1:size(matrix,1)
         cohmat = squeeze(matrix(f,:,:));
-        cohmat = zeromean(cohmat);
+%         cohmat = zeromean(cohmat);
         
         allcoh(s,f,:,:) = cohmat;
-        degree(f,(s-1)*91+1:s*91) = mean(cohmat,1);
-        weight(f,(s-1)*91*91+1:s*91*91) = cohmat(:)';
+        degree(s,f,:) = degrees_und(cohmat);%mean(cohmat,1);
         
         %cohmat = applythresh(cohmat,0.2);
         
@@ -71,4 +69,4 @@ for s = 1:size(subjlist,1)
     grp(s,1) = subjlist{s,2};    
 end
 
-save(sprintf('alldata_%s.mat',listname), 'grp', 'bandpower', 'allcoh', 'subjlist', 'degree', 'weight');
+save(sprintf('alldata_%s.mat',listname), 'grp', 'bandpower', 'allcoh', 'subjlist', 'degree');
