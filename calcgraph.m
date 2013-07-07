@@ -11,7 +11,10 @@ subjlist = eval(listname);
 % degree = zeros(5,length(subjlist)*91);
 % weight = zeros(5,length(subjlist)*91*91);
 
-tvals = 1-(0:0.05:0.75);
+%tvals = 1-(0:0.05:0.75);
+tvals = 1;
+
+load(sprintf('graphdata_%s.mat',listname)
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
@@ -65,10 +68,10 @@ for s = 1:size(subjlist,1)
             graph{6,1} = 'modular distance';
             dist(s,f,thresh) = 0;
             for m = 1:max(Ci)
-                distmat = chandist(Ci == m,Ci == m);% .* (threshcoh(Ci == m,Ci == m) > 0);
+                distmat = chandist(Ci == m,Ci == m) .* threshcoh(Ci == m,Ci == m);
                 dist(s,f,thresh) = dist(s,f,thresh) + mean(mean(distmat));
             end
-            graph{6,2}(s,f,thresh) = dist(s,f,thresh) / max(Ci);
+            graph{6,2}(s,f,thresh,1:91) = dist(s,f,thresh) / max(Ci);
             
             
 %             %binary
@@ -86,7 +89,7 @@ for s = 1:size(subjlist,1)
             
             %betweenness (centrality)
             graph{5,1} = 'centrality';
-            graph{5,2}(s,f,thresh) = median(nonzeros(betweenness_wei(1./threshcoh)));
+            graph{5,2}(s,f,1:length(chanlocs)) = betweenness_wei(1./threshcoh);
 %             graph{5,3}(s,f,thresh) = median(nonzeros(betweenness_bin(bincohmat)));
         end
     end
