@@ -23,7 +23,7 @@ for s = 1:size(subjlist,1)
     specinfo.spectra = specinfo.spectra(sortidx,:);
     specinfo.specstd = specinfo.specstd(sortidx,:);
             
-    load([filepath basename 'icohfdr.mat']);
+    load([filepath basename 'plifdr.mat']);
     [sortedchan,sortidx] = sort({chanlocs.labels});
     if ~strcmp(chanlist,cell2mat(sortedchan))
         error('Channel names do not match!');
@@ -41,7 +41,7 @@ for s = 1:size(subjlist,1)
     %     meanspectra = meanspectra + specinfo.spectra;
     for f = 1:size(matrix,1)
         cohmat = squeeze(matrix(f,:,:));
-%         cohmat = zeromean(cohmat);
+        cohmat = zeromean(cohmat);
         
         allcoh(s,f,:,:) = cohmat;
         degree(s,f,:) = degrees_und(cohmat);%mean(cohmat,1);
