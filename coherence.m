@@ -10,11 +10,11 @@ subjlist = cat(1,ctrllist,patlist);
 
 for subjidx = 1:size(subjlist,1)
     basename = subjlist{subjidx,1};
-    
-    if exist([filepath basename 'plifdr.mat'],'file')
-        fprintf('%s exists. Skipping...\n',[basename 'plifdr.mat']);
-        continue;
-    end
+%     
+%     if exist([filepath basename 'plifdr.mat'],'file')
+%         fprintf('%s exists. Skipping...\n',[basename 'plifdr.mat']);
+%         continue;
+%     end
     
     load([filepath basename 'spectra.mat']);
     

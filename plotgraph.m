@@ -53,6 +53,8 @@ set(hLegendEntry,'IconDisplayStyle','off')
 set(gca,'Visible','off','DataAspectRatioMode','manual');
 view(-90,90);
 
+plotmax = true;
+plotmin = true;
 for r = 1:size(matrix,1)
     for c = 1:size(matrix,2)
         if r < c && matrix(r,c) > 0
@@ -67,8 +69,12 @@ for r = 1:size(matrix,1)
                     lwrange(1)+(matrix(r,c)*(lwrange(2)-lwrange(1))),'LineStyle','-');
             end
             
-            if matrix(r,c) == max(nonzeros(matrix)) || matrix(r,c) == min(nonzeros(matrix))
+            if matrix(r,c) == max(nonzeros(matrix)) && plotmax
                 set(hLine,'DisplayName',sprintf('%.02f',origmatrix(r,c)));
+                plotmax = false;
+            elseif matrix(r,c) == min(nonzeros(matrix)) && plotmin
+                set(hLine,'DisplayName',sprintf('%.02f',origmatrix(r,c)));
+                plotmin = false;
             else
                 hAnnotation = get(hLine,'Annotation');
                 hLegendEntry = get(hAnnotation,'LegendInformation');

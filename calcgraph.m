@@ -8,7 +8,7 @@ load chanlist
 
 subjlist = eval(listname);
 
-tvals = 1-(0:0.05:0.75);
+tvals = 1-(0:0.01:1);
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
@@ -23,19 +23,30 @@ for s = 1:size(subjlist,1)
     for f = 1:3
         cohmat = squeeze(matrix(f,:,:));
         
-        %         bincohmat = double(cohmat ~= 0);
-        
-        %         for thresh = 1:length(tvals)
-        %             if mean(degrees_und(applythresh(cohmat,tvals(thresh)))) < log(size(cohmat,1))
-        %                 break
-        %             end
-        %         end
-        %         cohmat = applythresh(cohmat,tvals(thresh-1));
-        
         for thresh = 1:length(tvals)
-            fprintf(' %d',thresh);
-            threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh));
-            bincohmat = double(threshcoh ~= 0);
+            if mean(degrees_und(threshold_proportional(zeromean(cohmat),tvals(thresh)))) < log(size(cohmat,1))
+                break
+            end
+        end
+        
+        threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh-1));
+        bincohmat = double(threshcoh ~= 0);
+        fprintf(' %.2f',tvals(thresh-1));
+        
+        %threshold value
+        graph{8,1} = 'threshold';
+        graph{8,2}(s,f) = tvals(thresh-1);
+        
+        thresh = 1;
+        
+%         for thresh = 1:length(tvals)
+%             fprintf(' %d',thresh);
+%             threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh));
+%             bincohmat = double(threshcoh ~= 0);
+            
+%             %randomisation
+%             threshcoh = randmio_und(threshcoh,15);
+%             bincohmat = randmio_und(bincohmat,15);
             
             %clustering coeffcient
             graph{1,1} = 'clustering';
@@ -89,11 +100,12 @@ for s = 1:size(subjlist,1)
             graph{6,1} = 'centrality';
             graph{6,2}(s,f,thresh,1:length(chanlocs)) = betweenness_wei(1./threshcoh);
             graph{6,3}(s,f,thresh,1:length(chanlocs)) = median(nonzeros(betweenness_bin(bincohmat)));
-        end
+            
+%         end
     end
     fprintf('\n');
     grp(s,1) = subjlist{s,2};
 end
 
-save(sprintf('graphdata_%s_pli.mat',listname), 'graph', 'grp', 'tvals');
+save(sprintf('graphdata_%s_pli_sw.mat',listname), 'graph', 'grp', 'tvals');
 

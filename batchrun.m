@@ -23,8 +23,8 @@ for s = 1:length(subjlist)
     %     plotspec(basename);
     %     close(gcf);
     
-    load([filepath basename 'icohfdr.mat']);
+    load([filepath basename 'plifdr.mat']);
     plotgraph(squeeze(matrix(3,:,:)),chanlocs,0.95);
-    saveas(gcf,['figures/' basename 'graph.jpg']);
+    saveas(gcf,['figures/' basename 'pligraph.jpg']);
     close(gcf);
 end
