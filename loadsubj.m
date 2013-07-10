@@ -126,4 +126,20 @@ fmrilist = {
     %    'p1311v2_restingstate'  0   0
     };
 
+overnight = {
+    'p2_overnight1_noalpha_chunk1'
+    'p2_overnight1_noalpha_chunk2'
+    'p2_overnight1_noalpha_chunk3'
+    'p2_overnight1_noalpha_chunk4'
+    'p2_overnight1_noalpha_chunk5'
+    'p2_overnight1_noalpha_chunk6'
+    
+    'p2_overnight2_alpha_chunk1'
+    'p2_overnight2_alpha_chunk2'
+    'p2_overnight2_alpha_chunk3'
+    'p2_overnight2_alpha_chunk4'
+    'p2_overnight2_alpha_chunk5'
+    'p2_overnight2_alpha_chunk6'
+    };
+
 allsubj = cat(1,patlist,ctrllist);

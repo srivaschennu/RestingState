@@ -3,6 +3,9 @@ function plotcohdist(bandidx)
 load alldata_allsubj
 load chanlist
 
+grp(grp == 2) = 1;
+grp(grp == 3) = 2;
+
 chandist = chandist ./ max(chandist(:));
 
 chandist = chandist(:);
@@ -11,7 +14,7 @@ uniqcd = linspace(uniqcd(1),uniqcd(end),10);
 
 figure;
 hold all;
-for g = 0:3
+for g = 0:2
     groupcoh = squeeze(allcoh(grp == g,bandidx,:,:));
     plotvals = zeros(length(uniqcd)-1,size(groupcoh,1));
     

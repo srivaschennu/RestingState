@@ -6,7 +6,8 @@ loadpaths
 alpha = 0.05;
 
 loadsubj
-subjlist = cat(1,ctrllist,patlist);
+% subjlist = cat(1,ctrllist,patlist);
+subjlist = overnight;
 
 for subjidx = 1:size(subjlist,1)
     basename = subjlist{subjidx,1};
