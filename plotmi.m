@@ -1,22 +1,38 @@
-function plotmi
+function plotmi(bandidx)
 
-load alldata_allsubj
+load graphdata_allsubj_pli
 
-for g = 0:3
-    groupcoh = squeeze(allcoh(grp == g,3,:,:));
-    nmi = zeros(size(groupcoh,1),size(groupcoh,1));
-    
-    for u = 1:size(groupcoh,1)
-        udeg = degrees_und(squeeze(groupcoh(u,:,:)));
-%         udeg = mean(squeeze(groupcoh(u,:,:)));
-        for s = 1:size(groupcoh,1)
-            if u < s
-                sdeg = degrees_und(squeeze(groupcoh(s,:,:)));
-%                 sdeg = mean(squeeze(groupcoh(s,:,:)));
-                [~, nmi(u,s)] = minfo(udeg,sdeg);
-%                 nmi(u,s) = corr(udeg',sdeg');
+grp(grp == 2) = 1;
+grp(grp == 3) = 2;
+
+groups = unique(grp);
+
+weiorbin = 3;
+
+modinfo = graph{strcmp('modules',graph(:,1)),weiorbin};
+
+for g = 1:length(groups)
+    groupmod = modinfo(grp == groups(g),:,:,:);
+    for t = 1:size(groupmod,3)
+        for s1 = 1:size(groupmod,1)
+            for s2 = 1:size(groupmod,1)
+                if s1 < s2
+                    [~, mutinfo(g,t,s1,s2)] = partition_distance(squeeze(groupmod(s1,bandidx,t,:)),squeeze(groupmod(s2,bandidx,t,:)));
+                elseif s1 > s2
+                    mutinfo(g,t,s1,s2) = mutinfo(g,t,s2,s1);
+                elseif s1 == s2
+                    mutinfo(g,t,s1,s2) = 0;
+                end
             end
         end
     end
-    figure; imagesc(nmi); colorbar;% caxis([-1 1]);
 end
+
+figure; hold all
+for g = 1:length(groups)
+    errorbar(1-tvals,mean(mean(mutinfo(g,:,:,:),3),4),...
+        std(mean(mutinfo(g,:,:,:),3),[],4)/sqrt(size(mutinfo,4)),...
+        'DisplayName',num2str(groups(g)));
+end
+set(gca,'XLim',1-[tvals(1) tvals(end)]);
+legend('show');
