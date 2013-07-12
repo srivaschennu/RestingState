@@ -8,7 +8,7 @@ load chanlist
 
 subjlist = eval(listname);
 
-tvals = 1-(0:0.05:0.75);
+tvals = 1:-0.05:0.25;
 
 load graphdata_allsubj_pli
 

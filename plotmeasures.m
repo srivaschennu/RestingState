@@ -20,9 +20,10 @@ plotlist = {
 %     'global efficiency'
     'small-worldness index'
     'modularity'
-    'modules'
-    'centrality'
+%     'modules'
+%     'centrality'
     'modular distance'
+    'mutual information'
 %     'threshold'
     };
 
@@ -42,13 +43,15 @@ for f = 1:nfreq
         for g = 0:2
             if strcmp(graph{m,1},'modules') || strcmp(graph{m,1},'centrality')
                 groupvals = squeeze(max(graph{m,weiorbin}(grp == g,f,:,:),[],4));
+            elseif strcmp(graph{m,1},'mutual information')
+                groupvals = squeeze(mean(graph{m,weiorbin}(grp == g,grp == 2,f,:),2));
             else
                 groupvals = squeeze(mean(graph{m,weiorbin}(grp == g,f,:,:),4));
             end
             groupmean = mean(groupvals,1);
             groupstd = std(groupvals,[],1)/sqrt(size(groupvals,1));
             errorbar(1-tvals,groupmean,groupstd);
-            set(gca,'XLim',1-[tvals(1) tvals(end)]);
+            set(gca,'XLim',1-[tvals(1) tvals(end)],'XTick',1-tvals(1:2:end),'XTickLabel',tvals(1:2:end));
         end
         i = i+1;
         if f == 1

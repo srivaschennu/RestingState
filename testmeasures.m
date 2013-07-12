@@ -19,10 +19,14 @@ end
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
 
-trange = 1-[0.2 0.5];
+trange = [0.6 0.25];
 trange = (tvals <= trange(1) & tvals >= trange(2));
 
-testdata = squeeze(mean(mean(graph{mid,weiorbin}(:,freq,trange,:),4),3));
+if strcmp(measure,'mutual information')
+    testdata = squeeze(mean(mean(graph{mid,weiorbin}(:,grp == 2,freq,trange),4),2));
+else
+    testdata = squeeze(mean(mean(graph{mid,weiorbin}(:,freq,trange,:),4),3));
+end
 
 % for g = 0:2
 %     groupvals = squeeze(mean(mean(graph{mid,3}(grp == g,freq,trange,:),4),3));
@@ -31,7 +35,7 @@ testdata = squeeze(mean(mean(graph{mid,weiorbin}(:,freq,trange,:),4),3));
 % end
 
 [~,~,stats] = anova1(testdata,grp);
-figure; multcompare(stats);
+multcompare(stats);
 
 
 [rho, pval] = corr(testdata(grp == 0 | grp == 1),cell2mat(patlist(:,2)),'type','spearman');
