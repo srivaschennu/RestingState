@@ -10,8 +10,6 @@ subjlist = eval(listname);
 
 tvals = 1:-0.05:0.25;
 
-load graphdata_allsubj_pli
-
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
     fprintf('Processing %s.',basename);

@@ -1,18 +1,30 @@
-function plotmeasures
+function plotmeasures(listname)
 
 % load graphdata_allsubj_icoh
 
-load graphdata_allsubj_pli
+load(sprintf('graphdata_%s_pli.mat',listname));
 
 weiorbin = 3;
 
-randgraph = load('graphdata_allsubj_pli_rand');
-graph{end+1,1} = 'small-worldness index';
-graph{end,2} = ( mean(graph{1,2},4) ./ mean(randgraph.graph{1,2},4) ) ./ ( graph{2,2} ./ randgraph.graph{2,2}) ;
-graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
+if exist(sprintf('graphdata_%s_pli_rand.mat',listname),'file')
+    randgraph = load(sprintf('graphdata_%s_pli_rand.mat',listname));
+    graph{end+1,1} = 'small-worldness index';
+    graph{end,2} = ( mean(graph{1,2},4) ./ mean(randgraph.graph{1,2},4) ) ./ ( graph{2,2} ./ randgraph.graph{2,2}) ;
+    graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
+end
 
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
+
+groups = unique(grp)';
+
+bands = {
+    'delta'
+    'theta'
+    'alpha'
+    'beta'
+    'gamma'
+    };
 
 plotlist = {
     'clustering'
@@ -40,11 +52,11 @@ for f = 1:nfreq
         if isempty(m)
             continue;
         end
-        for g = 0:2
+        for g = groups
             if strcmp(graph{m,1},'modules') || strcmp(graph{m,1},'centrality')
                 groupvals = squeeze(max(graph{m,weiorbin}(grp == g,f,:,:),[],4));
             elseif strcmp(graph{m,1},'mutual information')
-                groupvals = squeeze(mean(graph{m,weiorbin}(grp == g,grp == 2,f,:),2));
+                groupvals = squeeze(mean(graph{m,weiorbin}(grp == g,grp == g,f,:),2));
             else
                 groupvals = squeeze(mean(graph{m,weiorbin}(grp == g,f,:,:),4));
             end
@@ -57,5 +69,9 @@ for f = 1:nfreq
         if f == 1
             title(graph{m,1});
         end
+        if midx == 1
+            ylabel(bands{f});
+        end
     end
 end
+xlabel('Graph connection density');

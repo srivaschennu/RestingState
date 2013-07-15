@@ -127,19 +127,19 @@ fmrilist = {
     };
 
 overnight = {
-%     'p2_overnight1_noalpha_chunk1'
-%     'p2_overnight1_noalpha_chunk2'
-%     'p2_overnight1_noalpha_chunk3'
-%     'p2_overnight1_noalpha_chunk4'
-%     'p2_overnight1_noalpha_chunk5'
-%     'p2_overnight1_noalpha_chunk6'
-%     
-%     'p2_overnight2_alpha_chunk1'
-%     'p2_overnight2_alpha_chunk2'
-%     'p2_overnight2_alpha_chunk3'
-    'p2_overnight2_alpha_chunk4'
-    'p2_overnight2_alpha_chunk5'
-    'p2_overnight2_alpha_chunk6'
+    'p2_overnight1_noalpha_chunk1'  0
+    'p2_overnight1_noalpha_chunk2'  0
+    'p2_overnight1_noalpha_chunk3'  0
+    'p2_overnight1_noalpha_chunk4'  0
+    'p2_overnight1_noalpha_chunk5'  0
+    'p2_overnight1_noalpha_chunk6'  0
+    
+    'p2_overnight2_alpha_chunk1'    1
+    'p2_overnight2_alpha_chunk2'    1
+    'p2_overnight2_alpha_chunk3'    1
+    'p2_overnight2_alpha_chunk4'    1
+    'p2_overnight2_alpha_chunk5'    1
+    'p2_overnight2_alpha_chunk6'    1
     };
 
 allsubj = cat(1,patlist,ctrllist);

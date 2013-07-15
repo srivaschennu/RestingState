@@ -1,8 +1,13 @@
-function calcmi
+function calcmi(listname)
 
-load graphdata_allsubj_pli_rand graph
+load(sprintf('graphdata_%s_pli.mat',listname), 'graph');
 
-graph{end+1,1} = 'mutual information';
+if any(strcmp('mutual information',graph(:,1)))
+    midx = find(strcmp('mutual information',graph(:,1)));
+else
+    graph{end+1,1} = 'mutual information';
+    midx = size(graph,1);
+end
 
 for weiorbin = 2:3
     modinfo = graph{strcmp('modules',graph(:,1)),weiorbin};
@@ -24,7 +29,7 @@ for weiorbin = 2:3
             end
         end
     end
-    graph{end,weiorbin} = mutinfo;
+    graph{midx,weiorbin} = mutinfo;
 end
 
-save graphdata_allsubj_pli_rand graph -append
+save(sprintf('graphdata_%s_pli.mat',listname), 'graph','-append');
