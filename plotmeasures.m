@@ -5,6 +5,7 @@ function plotmeasures(listname)
 load(sprintf('graphdata_%s_pli.mat',listname));
 
 weiorbin = 3;
+fontsize = 16;
 
 if exist(sprintf('graphdata_%s_pli_rand.mat',listname),'file')
     randgraph = load(sprintf('graphdata_%s_pli_rand.mat',listname));
@@ -27,14 +28,14 @@ bands = {
     };
 
 plotlist = {
-    'clustering'
+%     'clustering'
 %     'characteristic path length'
 %     'global efficiency'
     'small-worldness index'
     'modularity'
 %     'modules'
 %     'centrality'
-    'modular distance'
+    'modular span'
     'mutual information'
 %     'threshold'
     };
@@ -63,15 +64,17 @@ for f = 1:nfreq
             groupmean = mean(groupvals,1);
             groupstd = std(groupvals,[],1)/sqrt(size(groupvals,1));
             errorbar(1-tvals,groupmean,groupstd);
-            set(gca,'XLim',1-[tvals(1) tvals(end)],'XTick',1-tvals(1:2:end),'XTickLabel',tvals(1:2:end));
+            set(gca,'XLim',1-[tvals(1) tvals(end)],'XTick',1-tvals(1:2:end),'XTickLabel',tvals(1:2:end),...
+                'FontSize',fontsize);
         end
         i = i+1;
         if f == 1
-            title(graph{m,1});
+            title(graph{m,1},'FontSize',fontsize);
         end
         if midx == 1
-            ylabel(bands{f});
+            ylabel(bands{f},'FontSize',fontsize);
         end
     end
 end
-xlabel('Graph connection density');
+xlabel('Graph connection density','FontSize',fontsize);
+set(gcf,'Color','white');

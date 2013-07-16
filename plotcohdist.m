@@ -1,7 +1,9 @@
-function plotcohdist(listname,bandidx)
+function plotcohdist(listname)
 
 load(sprintf('alldata_%s.mat',listname));
 load chanlist
+
+fontsize = 16;
 
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
@@ -15,23 +17,28 @@ uniqcd = unique(chandist);
 uniqcd = linspace(uniqcd(1),uniqcd(end),10);
 
 figure;
-hold all;
-for g = groups
-    groupcoh = squeeze(allcoh(grp == g,bandidx,:,:));
-    plotvals = zeros(length(uniqcd)-1,size(groupcoh,1));
-    
-    for u = 1:length(uniqcd)-1
-        selvals = (chandist > uniqcd(u) & chandist <= uniqcd(u+1));
-        for s = 1:size(groupcoh,1)
-            cohmat = squeeze(groupcoh(s,:,:));
-            cohmat = cohmat(:);
-            cohmat = cohmat(selvals);
-            plotvals(u,s) = mean(cohmat);
+
+for bandidx = 1:3
+    subplot(1,3,bandidx); hold all;
+    for g = groups
+        groupcoh = squeeze(allcoh(grp == g,bandidx,:,:));
+        plotvals = zeros(length(uniqcd)-1,size(groupcoh,1));
+        
+        for u = 1:length(uniqcd)-1
+            selvals = (chandist > uniqcd(u) & chandist <= uniqcd(u+1));
+            for s = 1:size(groupcoh,1)
+                cohmat = squeeze(groupcoh(s,:,:));
+                cohmat = cohmat(:);
+                cohmat = cohmat(selvals);
+                plotvals(u,s) = mean(cohmat);
+            end
         end
+        errorbar(uniqcd(1:end-1),mean(plotvals,2),std(plotvals,[],2)/sqrt(size(plotvals,2)),'DisplayName',num2str(g));
     end
-    errorbar(uniqcd(1:end-1),mean(plotvals,2),std(plotvals,[],2)/sqrt(size(plotvals,2)),'DisplayName',num2str(g));
-    set(gca,'XLim',[uniqcd(1) uniqcd(end-1)]);
+    set(gca,'XLim',[uniqcd(1) uniqcd(end-1)],'FontSize',fontsize);
 end
-xlabel('Normalised inter-electrode distance');
-ylabel('Phase lag index');
+
+xlabel('Normalised inter-electrode distance','FontSize',fontsize);
+ylabel('Phase lag index','FontSize',fontsize);
 legend('show');
+set(gcf,'Color','white')

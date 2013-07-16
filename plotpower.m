@@ -1,6 +1,6 @@
-function plotpower
+function plotpower(listname)
 
-load alldata_allsubj
+load(sprintf('alldata_%s.mat',listname));
 
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
