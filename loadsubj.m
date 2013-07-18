@@ -51,35 +51,35 @@ patlist = {
     %
     % patients
     
-    'p0211_restingstate1'   2   14
-    'p0311_restingstate1'   0   7
-    'p0411_restingstate1'   0   7
-    'p0611_restingstate'    2   10
-    'p0710V2_restingstate'  1   14
+    'p0211_restingstate1'   1   12
+    'p0311_restingstate1'   0   6
+    'p0411_restingstate1'   0   6
+    'p0611_restingstate'    0   8
+    'p0710V2_restingstate'  2   14
     'p0711_restingstate'    2   15
     'p0811_restingstate'    1   10
-    'p0911_restingstate'    1   10
+    'p0911_restingstate'    1   11
     'p1011_restingstate'    1   10
     'p1311_restingstate'    0   8
-    'p1511_restingstate'    2   10
+    'p1511_restingstate'    1   10
     'p1611_restingstate'    0   7
-    'p0510V2_restingstate'  0   7
-    'p1711_restingstate'    2   19
+    'p0510V2_restingstate'  0   6
+    'p1711_restingstate'    2   17 %severely disabled
     'p1811_restingstate'    1   12
     'p1911_restingstate'    1   9
-    'p2011_restingstate'    1   8
+    'p2011_restingstate'    0   7
     'p0311V2_restingstate'  0   8
     'p0211V2_restingstate'	2   16
     'p0112_restingstate'	1   9
     'p0212_restingstate'    1   12
-    'p0312_restingstate'    1   8
+    'p0312_restingstate'    0   8
     'p0512_restingstate'    1   8
-    'p1811v2_restingstate'  2   15
+    'p1811v2_restingstate'  2   20
     'p0612_restingstate'    0   8
     'p1511v2_restingstate'  1   10
     'p71v3_restingstate'    0   8
     'p0712_restingstate'    0   7
-    'p0812_restingstate1'   1   8
+    'p0812_restingstate1'   1   7
     'p1012_restingstate'    2   13
     'p1311v2_restingstate'  0   8
     'p0113_restingstate'    0   7
@@ -98,11 +98,13 @@ patlist = {
 %     'p0411V2_restingstate'  1   8 %noisy
 %     'p2111_restingstate'    1   10 %noisy
 
-    %'p0912_restingstate' severely disabled
+
     %'p66v4_restingstate' %no data
     %'p0412_restingstate' %no data
     %'p0712v2_restingstate' %no data
     %'p0812v2_restingstate'  0   0 %no data
+    
+        %'p0912_restingstate' severely disabled
     };
 
 fmrilist = {

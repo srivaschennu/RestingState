@@ -57,7 +57,7 @@ for f = 1:nfreq
             if strcmp(graph{m,1},'modules') || strcmp(graph{m,1},'centrality')
                 groupvals = squeeze(max(graph{m,weiorbin}(grp == g,f,:,:),[],4));
             elseif strcmp(graph{m,1},'mutual information')
-                groupvals = squeeze(mean(graph{m,weiorbin}(grp == g,grp == g,f,:),2));
+                groupvals = squeeze(mean(graph{m,weiorbin}(grp == g,grp == 2,f,:),2));
             else
                 groupvals = squeeze(mean(graph{m,weiorbin}(grp == g,f,:,:),4));
             end

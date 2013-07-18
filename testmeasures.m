@@ -34,9 +34,9 @@ end
 %     groupse(1,g+1) = std(groupvals,[],1)/sqrt(size(groupvals,1));
 % end
 
-[~,~,stats] = anova1(testdata,grp);
-multcompare(stats);
+% [~,~,stats] = anova1(testdata,grp);
+% multcompare(stats);
 
 
-[rho, pval] = corr(testdata(grp == 0 | grp == 1),cell2mat(patlist(:,2)),'type','spearman');
+[rho, pval] = corr(testdata(grp == 0 | grp == 1),cell2mat(patlist(:,3)),'type','spearman');
 fprintf('Spearman rho = %.2f, p = %.3f.\n',rho,pval);
