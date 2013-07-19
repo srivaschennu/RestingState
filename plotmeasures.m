@@ -36,7 +36,8 @@ plotlist = {
 %     'modules'
 %     'centrality'
     'modular span'
-    'mutual information'
+%     'mutual information'
+    'rentian scaling'
 %     'threshold'
     };
 

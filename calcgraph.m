@@ -12,6 +12,7 @@ subjlist = eval(listname);
 tvals = 1:-0.05:0.25;
 
 load(sprintf('graphdata_%s_pli.mat',listname));
+graph{end+1,1} = 'rentian scaling';
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
@@ -25,6 +26,9 @@ for s = 1:size(subjlist,1)
     end    
     matrix = matrix(:,sortidx,sortidx);
     pval = pval(:,sortidx,sortidx);
+    
+    chanlocs = chanlocs(sortidx);
+    chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];
     
     for f = 1:3
         cohmat = squeeze(matrix(f,:,:));
@@ -57,7 +61,6 @@ for s = 1:size(subjlist,1)
             graph{1,1} = 'clustering';
             graph{1,2}(s,f,thresh,1:length(chanlocs)) = mean(clustering_coef_wu(threshcoh));
             graph{1,3}(s,f,thresh,1:length(chanlocs)) = mean(clustering_coef_bu(bincohmat));
-            
             
             %characteristic path length
             graph{2,1} = 'characteristic path length';
@@ -108,6 +111,13 @@ for s = 1:size(subjlist,1)
             graph{6,1} = 'centrality';
             graph{6,2}(s,f,thresh,1:length(chanlocs)) = betweenness_wei(1./threshcoh);
             graph{6,3}(s,f,thresh,1:length(chanlocs)) = betweenness_bin(bincohmat);
+            
+%             %rentian scaling
+%             [N, E] = rentian_scaling(bincohmat,chanXYZ,5000);
+%             E = E(N<size(bincohmat,1)/2);
+%             N = N(N<size(bincohmat,1)/2);
+%             b = robustfit(log10(N),log10(E));
+%             graph{end,3}(s,f,thresh) = b(2);
         end
     end
     fprintf('\n');
@@ -115,4 +125,3 @@ for s = 1:size(subjlist,1)
 end
 
 save(sprintf('graphdata_%s_pli.mat',listname), 'graph', 'grp', 'tvals', 'subjlist');
-
