@@ -4,6 +4,8 @@ function plotmeasures(listname)
 
 load(sprintf('graphdata_%s_pli.mat',listname));
 
+loadsubj
+
 weiorbin = 3;
 fontsize = 16;
 
@@ -16,6 +18,8 @@ end
 
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
+
+% grp = cell2mat(allsubj(:,4));
 
 groups = unique(grp)';
 
@@ -36,8 +40,8 @@ plotlist = {
 %     'modules'
 %     'centrality'
     'modular span'
-%     'mutual information'
-    'rentian scaling'
+    'mutual information'
+%     'rentian scaling'
 %     'threshold'
     };
 

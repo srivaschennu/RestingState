@@ -50,8 +50,8 @@ crs = cell2mat(patlist(:,3));
 
 fuinfo = zeros(size(patlist,1),1);
 for s = 1:size(patlist,1)
-    if ~isempty(patlist{s,4})
-        fuinfo(s) = find(strcmp(patlist{s,4},patlist(:,1)));
+    if ~isempty(patlist{s,5})
+        fuinfo(s) = find(strcmp(patlist{s,5},patlist(:,1)));
     end
 end
 
