@@ -1,7 +1,6 @@
 function calcgraph(listname)
 
 loadpaths
-
 loadsubj
 
 load chanlist
@@ -9,10 +8,9 @@ chandist = chandist / max(chandist(:));
 
 subjlist = eval(listname);
 
-tvals = 1:-0.05:0.25;
+tvals = 1:-0.05:0.05;
 
-load(sprintf('graphdata_%s_pli.mat',listname));
-graph{end+1,1} = 'rentian scaling';
+load(sprintf('graphdata_%s_pli_rand.mat',listname),'graph');
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
@@ -23,39 +21,39 @@ for s = 1:size(subjlist,1)
     [sortedchan,sortidx] = sort({chanlocs.labels});
     if ~strcmp(chanlist,cell2mat(sortedchan))
         error('Channel names do not match!');
-    end    
+    end
     matrix = matrix(:,sortidx,sortidx);
     pval = pval(:,sortidx,sortidx);
     
     chanlocs = chanlocs(sortidx);
     chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];
     
-    for f = 1:3
+    for f = 4:5
         cohmat = squeeze(matrix(f,:,:));
         
         %SMALL WORLD THRESHOLDING
-% %         for thresh = 1:length(tvals)
-% %             if mean(degrees_und(threshold_proportional(zeromean(cohmat),tvals(thresh)))) < log(size(cohmat,1))
-% %                 break
-% %             end
-% %         end
-% %         
-% %         threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh-1));
-% %         bincohmat = double(threshcoh ~= 0);
-% %         fprintf(' %.2f',tvals(thresh-1));
-% %         
-% %         %threshold value
-% %         graph{8,1} = 'threshold';
-% %         graph{8,2}(s,f) = tvals(thresh-1);
+        % %         for thresh = 1:length(tvals)
+        % %             if mean(degrees_und(threshold_proportional(zeromean(cohmat),tvals(thresh)))) < log(size(cohmat,1))
+        % %                 break
+        % %             end
+        % %         end
+        % %
+        % %         threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh-1));
+        % %         bincohmat = double(threshcoh ~= 0);
+        % %         fprintf(' %.2f',tvals(thresh-1));
+        % %
+        % %         %threshold value
+        % %         graph{8,1} = 'threshold';
+        % %         graph{8,2}(s,f) = tvals(thresh-1);
         
-        for thresh = 1:length(tvals)
-            fprintf(' %d',thresh);
+        for thresh = 1:length(tvals)            
+            fprintf(' %.2f',tvals(thresh));
             threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh));
             bincohmat = double(threshcoh ~= 0);
             
-% %             %randomisation
-% %             threshcoh = randmio_und(threshcoh,15);
-% %             bincohmat = randmio_und(bincohmat,15);
+            %randomisation
+            threshcoh = randmio_und(threshcoh,15);
+            bincohmat = randmio_und(bincohmat,15);
             
             %clustering coeffcient
             graph{1,1} = 'clustering';
@@ -117,11 +115,14 @@ for s = 1:size(subjlist,1)
 %             E = E(N<size(bincohmat,1)/2);
 %             N = N(N<size(bincohmat,1)/2);
 %             b = robustfit(log10(N),log10(E));
-%             graph{end,3}(s,f,thresh) = b(2);
+%             graph{9,3}(s,f,thresh) = b(2);
+            
+            %connection density
+%             graph{9,3}(s,f,thresh) = density_und(bincohmat);
         end
     end
     fprintf('\n');
     grp(s,1) = subjlist{s,2};
 end
 
-save(sprintf('graphdata_%s_pli.mat',listname), 'graph', 'grp', 'tvals', 'subjlist');
+save(sprintf('graphdata_%s_pli_rand.mat',listname), 'graph', 'grp', 'tvals', 'subjlist');

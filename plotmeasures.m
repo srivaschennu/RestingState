@@ -37,10 +37,11 @@ plotlist = {
 %     'global efficiency'
     'small-worldness index'
     'modularity'
-%     'modules'
-%     'centrality'
+% %     'modules'
+    'centrality'
     'modular span'
     'mutual information'
+%     'connection density'
 %     'rentian scaling'
 %     'threshold'
     };

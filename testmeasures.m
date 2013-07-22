@@ -27,7 +27,7 @@ end
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
 
-trange = [0.6 0.25];
+trange = [0.6 0.2];
 trange = (tvals <= trange(1) & tvals >= trange(2));
 
 if strcmp(measure,'mutual information')
@@ -67,6 +67,7 @@ figure('Color','white');
 hold all
 scatter(crs,testdata);
 lsline
+scatter(crs([4 12 22]),testdata([4 12 22]),'*');
 xlabel('CRS-R score');
 ylabel(sprintf('%s in %s',measure,bands{bandidx}));
 

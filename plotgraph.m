@@ -49,7 +49,7 @@ hScat = scatter3(cell2mat({chanlocs.X}), cell2mat({chanlocs.Y}), cell2mat({chanl
 hAnnotation = get(hScat,'Annotation');
 hLegendEntry = get(hAnnotation,'LegendInformation');
 set(hLegendEntry,'IconDisplayStyle','off')
-                
+
 set(gca,'Visible','off','DataAspectRatioMode','manual');
 view(-90,90);
 
