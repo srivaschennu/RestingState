@@ -1,4 +1,4 @@
-function plotspec(basename)
+function plotspec(basename,freqlist)
 
 loadpaths
 
@@ -6,6 +6,10 @@ fontname = 'Gill Sans';
 fontsize = 28;
 xlim = [0 45];
 ylim = [-30 30];
+
+if exist('freqlist','var') && ~isempty(freqlist)
+    save([filepath basename 'spectra.mat'],'freqlist','-append');
+end
 
 specinfo = load([filepath basename 'spectra.mat']);
 figure('Name',basename,'Color','white');

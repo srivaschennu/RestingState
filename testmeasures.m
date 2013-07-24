@@ -1,7 +1,5 @@
 function testmeasures(measure,bandidx)
 
-loadsubj
-
 load graphdata_allsubj_pli
 randgraph = load('graphdata_allsubj_pli_rand');
 
@@ -46,20 +44,24 @@ end
 % multcompare(stats);
 
 testdata = testdata(grp == 0 | grp == 1);
+patlist = subjlist(grp == 0 | grp == 1,:);
 crs = cell2mat(patlist(:,3));
 
-fuinfo = zeros(size(patlist,1),1);
+v1idx = zeros(size(patlist,1),1);
 for s = 1:size(patlist,1)
     if ~isempty(patlist{s,5})
-        fuinfo(s) = find(strcmp(patlist{s,5},patlist(:,1)));
+        v1idx(s) = find(strcmp(patlist{s,5},patlist(:,1)));
     end
 end
+v2idx = logical(v1idx);
+v1idx = nonzeros(v1idx);
 
-% futable = cat(2,crs(logical(fuinfo)) - crs(nonzeros(fuinfo)), ...
-%     testdata(logical(fuinfo)) - testdata(nonzeros(fuinfo)));
+% futable = cat(2,crs(v2idx) - crs(v1idx), testdata(v2idx) - testdata(v1idx));
 
-crs = crs(~logical(fuinfo));
-testdata = testdata(~logical(fuinfo));
+futable = cat(2,testdata(v1idx),crs(v2idx) - crs(v1idx));
+
+crs = crs(~v2idx);
+testdata = testdata(~v2idx);
 [rho, pval] = corr(crs,testdata,'type','spearman');
 fprintf('Spearman rho = %.2f, p = %.3f.\n',rho,pval);
 
@@ -71,12 +73,12 @@ scatter(crs([4 12 22]),testdata([4 12 22]),'*');
 xlabel('CRS-R score');
 ylabel(sprintf('%s in %s',measure,bands{bandidx}));
 
-% [rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
-% fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
-% 
-% figure('Color','white');
-% hold all
-% scatter(futable(:,1),futable(:,2));
-% lsline
-% xlabel('Change in CRS-R score');
-% ylabel(sprintf('Change in %s in %s',measure,bands{bandidx}));
+[rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
+fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
+
+figure('Color','white');
+hold all
+scatter(futable(:,1),futable(:,2));
+lsline
+xlabel(sprintf('Change in %s in %s',measure,bands{bandidx}));
+ylabel('Change in CRS-R score');

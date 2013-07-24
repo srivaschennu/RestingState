@@ -18,8 +18,8 @@ uniqcd = linspace(uniqcd(1),uniqcd(end),10);
 
 figure;
 
-for bandidx = 1:3
-    subplot(1,3,bandidx); hold all;
+for bandidx = 1:size(allcoh,2)
+    subplot(1,size(allcoh,2),bandidx); hold all;
     for g = groups
         groupcoh = squeeze(allcoh(grp == g,bandidx,:,:));
         plotvals = zeros(length(uniqcd)-1,size(groupcoh,1));

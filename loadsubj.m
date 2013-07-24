@@ -11,6 +11,69 @@ subjlist = {
     'p0512v2_restingstate' %noisy
     };
 
+patlist = {
+    %
+    % patients
+    
+    'p0211_restingstate1'   1   12  1   ''
+    'p0311_restingstate1'   0   6   0   ''
+    'p0411_restingstate1'   0   6   0   ''
+    'p0511_restingstate'    1   9   1   ''
+    'p0611_restingstate'    0   8   1   ''
+    'p0710V2_restingstate'  2   14  1   ''
+    'p0711_restingstate'    2   15  0   ''
+    'p0811_restingstate'    1   10  0   ''
+    'p0911_restingstate'    1   11  1   ''
+    'p1011_restingstate'    1   10  0   ''
+    'p1311_restingstate'    0   8   0   ''
+    'p1511_restingstate'    1   10  1   ''
+    'p1611_restingstate'    0   7   1   ''
+    'p0510V2_restingstate'  0   6   0   ''
+    'p1711_restingstate'    2   17  0   ''
+    'p1811_restingstate'    1   12  0   ''
+    'p1911_restingstate'    1   9   0   ''
+    'p2011_restingstate'    0   7   0   ''
+    'p0112_restingstate'	1   9   1   ''
+    'p0212_restingstate'    1   12  0   ''
+    'p0312_restingstate'    0   8   1   ''
+    'p0512_restingstate'    1   8   1   ''
+    'p0612_restingstate'    0   8   0   ''
+    'p71v3_restingstate'    0   8   0   ''
+    'p0712_restingstate'    0   7   0   ''
+    'p0812_restingstate1'   1   7   1   ''
+    'p1012_restingstate'    2   13  1   ''
+    'p0113_restingstate'    0   7   0   ''
+    'p0213_restingstate'    2   18  0   ''
+    'p0313_restingstate'    0   7   0   ''
+    
+    %follow-ups
+    'p0411V2_restingstate'  0   8   0   'p0411_restingstate1' %noisy
+    'p0511V2_restingstate'  1   10  0   'p0511_restingstate' %noisy
+    'p0311V2_restingstate'  0   8   0   'p0311_restingstate1'
+    'p0211V2_restingstate'	2   16  1   'p0211_restingstate1'
+    'p1811v2_restingstate'  2   20  0   'p1811_restingstate'
+    'p1511v2_restingstate'  1   10  0   'p1511_restingstate'
+    'p1311v2_restingstate'  0   8   0   'p1311_restingstate'
+    'p0612v2_restingstate'  0   7   0   'p0612_restingstate'
+    'p0611v2_restingstate'  1   11  0   'p0611_restingstate'
+    'p0512v2_restingstate'  0   8   0   'p0512_restingstate'
+    
+    % p0211_restingstate2'   2   14 duplicate
+    %'p0311_restingstate2'   0   7 duplicate
+    %'p0411_restingstate2'   0   7 duplicate
+    
+
+    %     'p2111_restingstate'    1   10 %noisy
+    
+    
+    %'p66v4_restingstate'   %no data
+    %'p0412_restingstate'   %no data
+    %'p0712v2_restingstate' %no data
+    %'p0812v2_restingstate' %no data
+    
+    %'p0912_restingstate' severely disabled
+    };
+
 ctrllist = {
     %     controls
     
@@ -47,65 +110,6 @@ ctrllist = {
     'AC_restingstate'  3  25   2     ''
     };
 
-patlist = {
-    %
-    % patients
-    
-    'p0211_restingstate1'   1   12  1   ''
-    'p0311_restingstate1'   0   6   0   ''
-    'p0411_restingstate1'   0   6   0   ''
-    'p0611_restingstate'    0   8   1   ''
-    'p0710V2_restingstate'  2   14  1   ''
-    'p0711_restingstate'    2   15  0   ''
-    'p0811_restingstate'    1   10  0   ''
-    'p0911_restingstate'    1   11  1   ''
-    'p1011_restingstate'    1   10  0   ''
-    'p1311_restingstate'    0   8   0   ''
-    'p1511_restingstate'    1   10  1   ''
-    'p1611_restingstate'    0   7   1   ''
-    'p0510V2_restingstate'  0   6   0   ''
-    'p1711_restingstate'    2   17  0   ''   %severely disabled
-    'p1811_restingstate'    1   12  0   ''
-    'p1911_restingstate'    1   9   0   ''
-    'p2011_restingstate'    0   7   0   ''
-    'p0311V2_restingstate'  0   8   0   'p0311_restingstate1'
-    'p0211V2_restingstate'	2   16  1   'p0211_restingstate1'
-    'p0112_restingstate'	1   9   1   ''
-    'p0212_restingstate'    1   12  0   ''
-    'p0312_restingstate'    0   8   1   ''
-    'p0512_restingstate'    1   8   1   ''
-    'p1811v2_restingstate'  2   20  0   'p1811_restingstate'
-    'p0612_restingstate'    0   8   0   ''
-    'p1511v2_restingstate'  1   10  0   'p1511_restingstate'
-    'p71v3_restingstate'    0   8   0   ''
-    'p0712_restingstate'    0   7   0   ''
-    'p0812_restingstate1'   1   7   1   ''
-    'p1012_restingstate'    2   13  1   ''
-    'p1311v2_restingstate'  0   8   0   'p1311_restingstate'
-    'p0113_restingstate'    0   7   0   ''
-    'p0213_restingstate'    2   18  0   ''
-    'p0612v2_restingstate'  0   7   0   'p0612_restingstate'
-    'p0611v2_restingstate'  1   11  0   'p0611_restingstate'
-    'p0313_restingstate'    0   7   0   ''
-    'p0512v2_restingstate'  0   8   0   'p0512_restingstate'
-    
-    % p0211_restingstate2'   2   14 duplicate
-    %'p0311_restingstate2'   0   7 duplicate
-    %'p0411_restingstate2'   0   7 duplicate
-    
-    %     'p0511_restingstate'    1   10 %noisy
-    %     'p0511V2_restingstate'  1   10 %noisy
-    %     'p0411V2_restingstate'  1   8 %noisy
-    %     'p2111_restingstate'    1   10 %noisy
-    
-    
-    %'p66v4_restingstate' %no data
-    %'p0412_restingstate' %no data
-    %'p0712v2_restingstate' %no data
-    %'p0812v2_restingstate'  0   0 %no data
-    
-    %'p0912_restingstate' severely disabled
-    };
 
 % fmrilist = {
 %     'p0211_restingstate2'   2   14

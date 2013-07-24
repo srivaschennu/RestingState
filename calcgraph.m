@@ -1,7 +1,11 @@
-function calcgraph(listname)
+function calcgraph(listname,randomise)
 
 loadpaths
 loadsubj
+
+if ~exist('randomise','var') || isempty(randomise)
+    randomise = false;
+end
 
 load chanlist
 chandist = chandist / max(chandist(:));
@@ -10,7 +14,7 @@ subjlist = eval(listname);
 
 tvals = 1:-0.05:0.05;
 
-load(sprintf('graphdata_%s_pli_rand.mat',listname),'graph');
+% load(sprintf('graphdata_%s_pli.mat',listname),'graph');
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
@@ -28,7 +32,7 @@ for s = 1:size(subjlist,1)
     chanlocs = chanlocs(sortidx);
     chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];
     
-    for f = 4:5
+    for f = 1:size(matrix,1)
         cohmat = squeeze(matrix(f,:,:));
         
         %SMALL WORLD THRESHOLDING
@@ -46,14 +50,16 @@ for s = 1:size(subjlist,1)
         % %         graph{8,1} = 'threshold';
         % %         graph{8,2}(s,f) = tvals(thresh-1);
         
-        for thresh = 1:length(tvals)            
+        for thresh = 1:length(tvals)
             fprintf(' %.2f',tvals(thresh));
             threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh));
             bincohmat = double(threshcoh ~= 0);
             
-            %randomisation
-            threshcoh = randmio_und(threshcoh,15);
-            bincohmat = randmio_und(bincohmat,15);
+            if randomise
+                %randomisation
+                threshcoh = randmio_und(threshcoh,15);
+                bincohmat = randmio_und(bincohmat,15);
+            end
             
             %clustering coeffcient
             graph{1,1} = 'clustering';
@@ -116,13 +122,22 @@ for s = 1:size(subjlist,1)
 %             N = N(N<size(bincohmat,1)/2);
 %             b = robustfit(log10(N),log10(E));
 %             graph{9,3}(s,f,thresh) = b(2);
+
+            %connection density
+            graph{8,1} = 'mutual information';
             
             %connection density
-%             graph{9,3}(s,f,thresh) = density_und(bincohmat);
+            graph{9,1} = 'connection density';
+            graph{9,3}(s,f,thresh) = density_und(bincohmat);
         end
     end
     fprintf('\n');
     grp(s,1) = subjlist{s,2};
 end
 
-save(sprintf('graphdata_%s_pli_rand.mat',listname), 'graph', 'grp', 'tvals', 'subjlist');
+if randomise
+    savename = sprintf('graphdata_%s_rand_pli.mat',listname);
+else
+    savename = sprintf('graphdata_%s_pli.mat',listname);
+end
+save(savename, 'graph', 'grp', 'tvals', 'subjlist');

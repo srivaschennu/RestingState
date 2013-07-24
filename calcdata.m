@@ -8,6 +8,7 @@ subjlist = eval(listname);
 allcoh = zeros(length(subjlist),5,91,91);
 degree = zeros(length(subjlist),5,91);
 bandpower = zeros(size(subjlist,1),5,91);
+bandpeak = zeros(size(subjlist,1),5);
 
 load chanlist.mat
 
@@ -62,11 +63,15 @@ for s = 1:size(subjlist,1)
         [~, bstart] = min(abs(specinfo.freqs-specinfo.freqlist(f,1)));
         [~, bstop] = min(abs(specinfo.freqs-specinfo.freqlist(f,2)));
         bandpower(s,f,:) = mean(specinfo.spectra(:,bstart:bstop),2);
+        
+        [maxpow, maxfreq] = max(specinfo.spectra(:,bstart:bstop),[],2);
+        [~,maxchan] = max(maxpow);
+        bandpeak(s,f) = specinfo.freqs(bstart-1+maxfreq(maxchan));
     end
-%     for c = 1:size(bandpower,3)
-%         bandpower(s,:,c) = bandpower(s,:,c)./sum(bandpower(s,:,c));
-%     end
+    for c = 1:size(bandpower,3)
+        bandpower(s,:,c) = bandpower(s,:,c) + abs(min(bandpower(s,:,c)));
+        bandpower(s,:,c) = bandpower(s,:,c)./sum(bandpower(s,:,c));
+    end
     grp(s,1) = subjlist{s,2};    
 end
-
-save(sprintf('alldata_%s.mat',listname), 'grp', 'bandpower', 'allcoh', 'subjlist', 'degree');
+save(sprintf('alldata_%s.mat',listname), 'grp', 'bandpower', 'bandpeak', 'allcoh', 'subjlist', 'degree');
