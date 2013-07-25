@@ -2,7 +2,6 @@ function testpower(listname)
 
 load(sprintf('alldata_%s.mat',listname));
 load chanlist
-loadsubj
 
 bands = {
     'delta'
@@ -15,14 +14,20 @@ bands = {
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
 
-crs = cell2mat(patlist(:,3));
-% fuinfo = zeros(size(patlist,1),1);
-% for s = 1:size(patlist,1)
-%     if ~isempty(patlist{s,5})
-%         fuinfo(s) = find(strcmp(patlist{s,5},patlist(:,1)));
-%     end
-% end
-% crs = crs(~logical(fuinfo));
+crs = cell2mat(subjlist(:,3));
+
+v1idx = zeros(size(subjlist,1),1);
+for s = 1:size(subjlist,1)
+    if ~isempty(subjlist{s,5})
+        v1idx(s) = find(strcmp(subjlist{s,5},subjlist(:,1)));
+    end
+end
+v2idx = logical(v1idx);
+v1idx = nonzeros(v1idx);
+
+crs = crs(~v2idx);
+bandpower = bandpower(~v2idx,:,:);
+grp = grp(~v2idx);
 
 groups = unique(grp);
 barvals = zeros(size(bandpower,2),length(groups));
@@ -49,19 +54,17 @@ for bandidx = 1:size(bandpower,2)
     fprintf('%s band power: Mann-whitney p = %.3f.\n',bands{bandidx},pval);
     
     testdata = mean(bandpower(grp == 0 | grp == 1,bandidx,:),3);
-%     testdata = testdata(~logical(fuinfo));
-    [rho,pval] = corr(crs,testdata,'type','spearman');
+    [rho,pval] = corr(crs(grp == 0 | grp == 1),testdata,'type','spearman');
     fprintf('%s band power: Spearman rho = %.2f, p = %.3f.\n',bands{bandidx},rho,pval);
     
     subplot(size(bandpower,2),length(groups)+1,p); hold all;
-    scatter(crs,testdata);
+    scatter(crs(grp == 0 | grp == 1),testdata);
     lsline
     xlabel('CRS-R score');
     ylabel(sprintf('Power in %s',bands{bandidx}));
     p = p+1;
     
 %     testdata = bandpeak(grp == 0 | grp == 1,bandidx);
-%     testdata = testdata(~logical(fuinfo));
 %     [rho,pval] = corr(crs,testdata,'type','spearman');
 %     fprintf('%s band peak freq: Spearman rho = %.2f, p = %.3f.\n',bands{bandidx},rho,pval);
 end

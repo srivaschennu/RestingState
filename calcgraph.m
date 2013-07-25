@@ -12,10 +12,22 @@ chandist = chandist / max(chandist(:));
 
 subjlist = eval(listname);
 
-tvals = 1:-0.05:0.05;
+tvals = 0.5:-0.025:0.025;
 
 % load(sprintf('graphdata_%s_pli.mat',listname),'graph');
 
+graph{1,1} = 'clustering';
+graph{2,1} = 'characteristic path length';
+graph{3,1} = 'global efficiency';
+graph{4,1} = 'modularity';
+graph{5,1} = 'modules';
+graph{6,1} = 'centrality';
+graph{7,1} = 'modular span';
+graph{8,1} = 'participation coefficient';
+graph{9,1} = 'connection density';
+graph{10,1} = 'mutual information';
+
+            
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
     fprintf('Processing %s.',basename);
@@ -61,45 +73,60 @@ for s = 1:size(subjlist,1)
                 bincohmat = randmio_und(bincohmat,15);
             end
             
-            %clustering coeffcient
-            graph{1,1} = 'clustering';
-            graph{1,2}(s,f,thresh,1:length(chanlocs)) = mean(clustering_coef_wu(threshcoh));
+%             %%%%%%  WEIGHTED %%%%%%%%%
+% 
+%             %clustering coeffcient
+%             graph{1,2}(s,f,thresh,1:length(chanlocs)) = mean(clustering_coef_wu(threshcoh));
+%             
+%             %characteristic path length
+%             graph{2,2}(s,f,thresh) = charpath(distance_wei(1./threshcoh));
+% 
+%             %global efficiency
+%             graph{3,2}(s,f,thresh) = efficiency_wei(threshcoh);
+% 
+%             [Ci, Q] = modularity_louvain_und(threshcoh);
+%             % modularity
+%             graph{4,2}(s,f,thresh) = Q;
+%             % community structure
+%             graph{5,2}(s,f,thresh,1:length(chanlocs)) = Ci;
+%             
+%             %betweenness (centrality)
+%             graph{6,2}(s,f,thresh,1:length(chanlocs)) = betweenness_wei(1./threshcoh);
+%             
+%             %modular span
+%             dist(s,f,thresh) = 0;
+%             for m = 1:max(Ci)
+%                 if sum(Ci == m) > 1
+%                     distmat = chandist(Ci == m,Ci == m) .* threshcoh(Ci == m,Ci == m);
+%                     dist(s,f,thresh) = dist(s,f,thresh) + mean(distmat(logical(triu(distmat,1))));
+%                 end
+%             end
+%             graph{7,2}(s,f,thresh) = dist(s,f,thresh) / max(Ci);
+% 
+%             %participation coefficient
+%             graph{8,2}(s,f,thresh,1:length(chanlocs)) = participation_coef(threshcoh,Ci);
+%             
+%             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            
+            %BINARY
+            
+            %clustering coefficient
             graph{1,3}(s,f,thresh,1:length(chanlocs)) = mean(clustering_coef_bu(bincohmat));
             
             %characteristic path length
-            graph{2,1} = 'characteristic path length';
-            graph{2,2}(s,f,thresh) = charpath(distance_wei(1./threshcoh));
             graph{2,3}(s,f,thresh) = charpath(distance_bin(bincohmat));
-            
+
             %global efficiency
-            graph{3,1} = 'global efficiency';
-            graph{3,2}(s,f,thresh) = efficiency_wei(threshcoh);
             graph{3,3}(s,f,thresh) = efficiency_bin(bincohmat);
-            
-            %%% modularity
-            graph{4,1} = 'modularity';
-            graph{5,1} = 'modules';
-            
-            %weighted
-            [Ci, Q] = modularity_louvain_und(threshcoh);
-            graph{4,2}(s,f,thresh) = Q;
-            graph{5,2}(s,f,thresh,1:length(chanlocs)) = Ci;
-            
-            %modular span
-            graph{7,1} = 'modular span';
-            dist(s,f,thresh) = 0;
-            for m = 1:max(Ci)
-                if sum(Ci == m) > 1
-                    distmat = chandist(Ci == m,Ci == m) .* threshcoh(Ci == m,Ci == m);
-                    dist(s,f,thresh) = dist(s,f,thresh) + mean(distmat(logical(triu(distmat,1))));
-                end
-            end
-            graph{7,2}(s,f,thresh) = dist(s,f,thresh) / max(Ci);
-            
-            %binary
+
             [Ci, Q] = modularity_louvain_und(bincohmat);
+            %modularity
             graph{4,3}(s,f,thresh) = Q;
+            %community structure
             graph{5,3}(s,f,thresh,1:length(chanlocs)) = Ci;
+
+            %betweenness centrality
+            graph{6,3}(s,f,thresh,1:length(chanlocs)) = betweenness_bin(bincohmat);
             
             %modular span
             dist(s,f,thresh) = 0;
@@ -111,10 +138,13 @@ for s = 1:size(subjlist,1)
             end
             graph{7,3}(s,f,thresh) = dist(s,f,thresh) / max(Ci);
             
-            %betweenness (centrality)
-            graph{6,1} = 'centrality';
-            graph{6,2}(s,f,thresh,1:length(chanlocs)) = betweenness_wei(1./threshcoh);
-            graph{6,3}(s,f,thresh,1:length(chanlocs)) = betweenness_bin(bincohmat);
+            %participation coefficient
+            graph{8,3}(s,f,thresh,1:length(chanlocs)) = participation_coef(bincohmat,Ci);
+            
+            %connection density
+            graph{9,3}(s,f,thresh) = density_und(bincohmat);
+
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
 %             %rentian scaling
 %             [N, E] = rentian_scaling(bincohmat,chanXYZ,5000);
@@ -123,12 +153,6 @@ for s = 1:size(subjlist,1)
 %             b = robustfit(log10(N),log10(E));
 %             graph{9,3}(s,f,thresh) = b(2);
 
-            %connection density
-            graph{8,1} = 'mutual information';
-            
-            %connection density
-            graph{9,1} = 'connection density';
-            graph{9,3}(s,f,thresh) = density_und(bincohmat);
         end
     end
     fprintf('\n');

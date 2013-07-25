@@ -8,6 +8,18 @@ fontsize = 16;
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
 
+v1idx = zeros(size(subjlist,1),1);
+for s = 1:size(subjlist,1)
+    if ~isempty(subjlist{s,5})
+        v1idx(s) = find(strcmp(subjlist{s,5},subjlist(:,1)));
+    end
+end
+v2idx = logical(v1idx);
+v1idx = nonzeros(v1idx);
+
+grp = grp(~v2idx);
+allcoh = allcoh(~v2idx,:,:,:);
+
 groups = unique(grp)';
 
 chandist = chandist ./ max(chandist(:));
@@ -33,7 +45,8 @@ for bandidx = 1:size(allcoh,2)
                 plotvals(u,s) = mean(cohmat);
             end
         end
-        errorbar(uniqcd(1:end-1),mean(plotvals,2),std(plotvals,[],2)/sqrt(size(plotvals,2)),'DisplayName',num2str(g));
+        errorbar(uniqcd(1:end-1),mean(plotvals,2),std(plotvals,[],2)/sqrt(size(plotvals,2)),...
+            'DisplayName',sprintf('%s (%d)',num2str(g),size(groupcoh,1)));
     end
     set(gca,'XLim',[uniqcd(1) uniqcd(end-1)],'FontSize',fontsize);
 end

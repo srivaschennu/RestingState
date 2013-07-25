@@ -22,7 +22,9 @@ for s = 1:size(subjlist,1)
         error('Channel names do not match!');
     end
     specinfo.spectra = specinfo.spectra(sortidx,:);
+    specinfo.spectra = 10.^(specinfo.spectra/10);
     specinfo.specstd = specinfo.specstd(sortidx,:);
+    specinfo.specstd = 10.^(specinfo.specstd/10);
             
     load([filepath basename 'plifdr.mat']);
     [sortedchan,sortidx] = sort({chanlocs.labels});
@@ -31,7 +33,6 @@ for s = 1:size(subjlist,1)
     end
     matrix = matrix(:,sortidx,sortidx);
     
-%     specinfo.spectra = 10.^(specinfo.spectra/10);
     
     %     figure;
     %     plot(specinfo.freqs,specinfo.spectra');
@@ -69,7 +70,6 @@ for s = 1:size(subjlist,1)
         bandpeak(s,f) = specinfo.freqs(bstart-1+maxfreq(maxchan));
     end
     for c = 1:size(bandpower,3)
-        bandpower(s,:,c) = bandpower(s,:,c) + abs(min(bandpower(s,:,c)));
         bandpower(s,:,c) = bandpower(s,:,c)./sum(bandpower(s,:,c));
     end
     grp(s,1) = subjlist{s,2};    

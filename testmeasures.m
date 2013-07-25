@@ -1,9 +1,10 @@
 function testmeasures(measure,bandidx)
 
 load graphdata_allsubj_pli
-randgraph = load('graphdata_allsubj_pli_rand');
+randgraph = load('graphdata_allsubj_rand_pli');
 
 weiorbin = 3;
+trange = [0.6 0.2];
 
 bands = {
     'delta'
@@ -25,7 +26,15 @@ end
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
 
-trange = [0.6 0.2];
+v1idx = zeros(size(subjlist,1),1);
+for s = 1:size(subjlist,1)
+    if ~isempty(subjlist{s,5})
+        v1idx(s) = find(strcmp(subjlist{s,5},subjlist(:,1)));
+    end
+end
+v2idx = logical(v1idx);
+v1idx = nonzeros(v1idx);
+
 trange = (tvals <= trange(1) & tvals >= trange(2));
 
 if strcmp(measure,'mutual information')
@@ -34,46 +43,32 @@ else
     testdata = squeeze(mean(mean(graph{mid,weiorbin}(:,bandidx,trange,:),4),3));
 end
 
-% for g = 0:2
-%     groupvals = squeeze(mean(mean(graph{mid,3}(grp == g,freq,trange,:),4),3));
-%     groupmean(1,g+1) = mean(groupvals,1);
-%     groupse(1,g+1) = std(groupvals,[],1)/sqrt(size(groupvals,1));
-% end
-
-% [~,~,stats] = anova1(testdata,grp);
-% multcompare(stats);
+% test patients vs controls group difference
+pval = ranksum(testdata(grp == 0 | grp == 1 & ~v2idx),testdata(grp == 2));
+fprintf('%s band power patients vs controls: Mann-whitney p = %.3f.\n',bands{bandidx},pval);
 
 testdata = testdata(grp == 0 | grp == 1);
-patlist = subjlist(grp == 0 | grp == 1,:);
-crs = cell2mat(patlist(:,3));
+crs = cell2mat(subjlist(:,3));
+crs = crs(grp == 0 | grp == 1);
+v2idx = v2idx(grp == 0 | grp == 1);
 
-v1idx = zeros(size(patlist,1),1);
-for s = 1:size(patlist,1)
-    if ~isempty(patlist{s,5})
-        v1idx(s) = find(strcmp(patlist{s,5},patlist(:,1)));
-    end
-end
-v2idx = logical(v1idx);
-v1idx = nonzeros(v1idx);
-
-% futable = cat(2,crs(v2idx) - crs(v1idx), testdata(v2idx) - testdata(v1idx));
-
-futable = cat(2,testdata(v1idx),crs(v2idx) - crs(v1idx));
-
-crs = crs(~v2idx);
-testdata = testdata(~v2idx);
-[rho, pval] = corr(crs,testdata,'type','spearman');
+% correlate patients with crs scores
+[rho, pval] = corr(crs(~v2idx),testdata(~v2idx),'type','spearman');
 fprintf('Spearman rho = %.2f, p = %.3f.\n',rho,pval);
 
 figure('Color','white');
 hold all
-scatter(crs,testdata);
+scatter(crs(~v2idx),testdata(~v2idx));
 lsline
-scatter(crs([4 12 22]),testdata([4 12 22]),'*');
 xlabel('CRS-R score');
 ylabel(sprintf('%s in %s',measure,bands{bandidx}));
 
-[rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
+% correlate follow-ups
+% futable = cat(2,crs(v2idx) - crs(v1idx), testdata(v2idx) - testdata(v1idx));
+
+futable = cat(2,testdata(v1idx), crs(v2idx)-crs(v1idx));
+
+[rho, pval] = corr(futable(:,1),futable(:,2));
 fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
 
 figure('Color','white');

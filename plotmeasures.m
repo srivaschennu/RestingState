@@ -4,13 +4,11 @@ function plotmeasures(listname)
 
 load(sprintf('graphdata_%s_pli.mat',listname));
 
-loadsubj
-
 weiorbin = 3;
 fontsize = 16;
 
-if exist(sprintf('graphdata_%s_pli_rand.mat',listname),'file')
-    randgraph = load(sprintf('graphdata_%s_pli_rand.mat',listname));
+if exist(sprintf('graphdata_%s_rand_pli.mat',listname),'file')
+    randgraph = load(sprintf('graphdata_%s_rand_pli.mat',listname));
     graph{end+1,1} = 'small-worldness index';
     graph{end,2} = ( mean(graph{1,2},4) ./ mean(randgraph.graph{1,2},4) ) ./ ( graph{2,2} ./ randgraph.graph{2,2}) ;
     graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
@@ -18,6 +16,15 @@ end
 
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
+
+v1idx = zeros(size(subjlist,1),1);
+for s = 1:size(subjlist,1)
+    if ~isempty(subjlist{s,5})
+        v1idx(s) = find(strcmp(subjlist{s,5},subjlist(:,1)));
+    end
+end
+v2idx = logical(v1idx);
+v1idx = nonzeros(v1idx);
 
 % grp = cell2mat(allsubj(:,4));
 
@@ -61,11 +68,11 @@ for f = 1:nfreq
         end
         for g = groups
             if strcmp(graph{m,1},'modules') || strcmp(graph{m,1},'centrality')
-                groupvals = squeeze(max(graph{m,weiorbin}(grp == g,f,:,:),[],4));
+                groupvals = squeeze(max(graph{m,weiorbin}(grp == g & ~v2idx,f,:,:),[],4));
             elseif strcmp(graph{m,1},'mutual information')
-                groupvals = squeeze(mean(graph{m,weiorbin}(grp == g,grp == 2,f,:),2));
+                groupvals = squeeze(mean(graph{m,weiorbin}(grp == g & ~v2idx,grp == 2,f,:),2));
             else
-                groupvals = squeeze(mean(graph{m,weiorbin}(grp == g,f,:,:),4));
+                groupvals = squeeze(mean(graph{m,weiorbin}(grp == g & ~v2idx,f,:,:),4));
             end
             groupmean = mean(groupvals,1);
             groupstd = std(groupvals,[],1)/sqrt(size(groupvals,1));
