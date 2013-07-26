@@ -45,7 +45,8 @@ plotlist = {
     'small-worldness index'
     'modularity'
 % %     'modules'
-    'centrality'
+%     'centrality'
+    'participation coefficient'
     'modular span'
     'mutual information'
 %     'connection density'
@@ -53,8 +54,12 @@ plotlist = {
 %     'threshold'
     };
 
-nfreq = size(graph{1,2},2);
+nfreq = size(graph{1,3},2);
 nmes = length(plotlist);
+
+trange = [0.5 0.05];
+trange = (tvals <= trange(1) & tvals >= trange(2));
+plottvals = tvals(trange);
 
 figure;
 i = 1;
@@ -71,13 +76,15 @@ for f = 1:nfreq
                 groupvals = squeeze(max(graph{m,weiorbin}(grp == g & ~v2idx,f,:,:),[],4));
             elseif strcmp(graph{m,1},'mutual information')
                 groupvals = squeeze(mean(graph{m,weiorbin}(grp == g & ~v2idx,grp == 2,f,:),2));
+            elseif strcmp(graph{m,1},'participation coefficient')
+                groupvals = squeeze(std(graph{m,weiorbin}(grp == g & ~v2idx,f,:,:),[],4));
             else
                 groupvals = squeeze(mean(graph{m,weiorbin}(grp == g & ~v2idx,f,:,:),4));
             end
             groupmean = mean(groupvals,1);
             groupstd = std(groupvals,[],1)/sqrt(size(groupvals,1));
-            errorbar(1-tvals,groupmean,groupstd);
-            set(gca,'XLim',1-[tvals(1) tvals(end)],'XTick',1-tvals(1:2:end),'XTickLabel',tvals(1:2:end),...
+            errorbar(1-plottvals,groupmean(trange),groupstd(trange));
+            set(gca,'XLim',1-[plottvals(1) plottvals(end)],'XTick',1-plottvals(1:2:end),'XTickLabel',plottvals(1:2:end),...
                 'FontSize',fontsize);
         end
         i = i+1;

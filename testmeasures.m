@@ -4,7 +4,7 @@ load graphdata_allsubj_pli
 randgraph = load('graphdata_allsubj_rand_pli');
 
 weiorbin = 3;
-trange = [0.6 0.2];
+trange = [0.5 0.2];
 
 bands = {
     'delta'
@@ -44,8 +44,9 @@ else
 end
 
 % test patients vs controls group difference
-pval = ranksum(testdata(grp == 0 | grp == 1 & ~v2idx),testdata(grp == 2));
-fprintf('%s band power patients vs controls: Mann-whitney p = %.3f.\n',bands{bandidx},pval);
+[pval,~,stats] = ranksum(testdata(grp == 0 | grp == 1 & ~v2idx),testdata(grp == 2));
+fprintf('%s band power: Diff = %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
+    bands{bandidx},mean(testdata(grp == 2))-mean(testdata(grp == 0 | grp == 1 & ~v2idx)),stats.ranksum,pval);
 
 testdata = testdata(grp == 0 | grp == 1);
 crs = cell2mat(subjlist(:,3));
@@ -53,27 +54,33 @@ crs = crs(grp == 0 | grp == 1);
 v2idx = v2idx(grp == 0 | grp == 1);
 
 % correlate patients with crs scores
-[rho, pval] = corr(crs(~v2idx),testdata(~v2idx),'type','spearman');
+[rho, pval] = corr(testdata(~v2idx),crs(~v2idx),'type','spearman');
 fprintf('Spearman rho = %.2f, p = %.3f.\n',rho,pval);
+
+% [b,stats] = robustfit(testdata(~v2idx),crs(~v2idx));
+% fprintf('Robust fit b = %.2f, p = %.3f.\n',b(2),stats.p(2));
 
 figure('Color','white');
 hold all
-scatter(crs(~v2idx),testdata(~v2idx));
-lsline
-xlabel('CRS-R score');
-ylabel(sprintf('%s in %s',measure,bands{bandidx}));
+scatter(testdata(~v2idx),crs(~v2idx));
+% plot(sort(testdata(~v2idx)),b(1)+b(2)*sort(testdata(~v2idx)));
+xlabel(sprintf('%s in %s',measure,bands{bandidx}));
+ylabel('CRS-R score');
 
 % correlate follow-ups
 % futable = cat(2,crs(v2idx) - crs(v1idx), testdata(v2idx) - testdata(v1idx));
 
-futable = cat(2,testdata(v1idx), crs(v2idx)-crs(v1idx));
+futable = cat(2,testdata(v1idx),crs(v2idx));
 
-[rho, pval] = corr(futable(:,1),futable(:,2));
-fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
+% [rho, pval] = corr(futable(:,1),futable(:,2));
+% fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
+
+[b,stats] = robustfit(futable(:,1),futable(:,2));
+fprintf('Robust fit b = %.2f, p = %.3f.\n',b(2),stats.p(2));
 
 figure('Color','white');
 hold all
 scatter(futable(:,1),futable(:,2));
-lsline
+plot(sort(futable(:,1)),b(1)+b(2)*sort(futable(:,1)));
 xlabel(sprintf('Change in %s in %s',measure,bands{bandidx}));
 ylabel('Change in CRS-R score');
