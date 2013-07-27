@@ -18,7 +18,6 @@ lwrange = [0.1 6];
 % range of point sizes
 ptrange = [10 600];
 
-matrix = zeromean(matrix);
 if ~exist('minfo','var') || isempty(minfo)
     minfo = modularity_louvain_und(matrix);
 end

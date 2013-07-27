@@ -14,7 +14,11 @@ subjlist = eval(listname);
 
 tvals = 0.5:-0.025:0.025;
 
-% load(sprintf('graphdata_%s_pli.mat',listname),'graph');
+if randomise
+    savename = sprintf('graphdata_%s_rand_pli.mat',listname);
+else
+    savename = sprintf('graphdata_%s_pli.mat',listname);
+end
 
 graph{1,1} = 'clustering';
 graph{2,1} = 'characteristic path length';
@@ -30,6 +34,7 @@ graph{10,1} = 'mutual information';
             
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
+    
     fprintf('Processing %s.',basename);
     
     load([filepath basename 'plifdr.mat']);
@@ -42,7 +47,7 @@ for s = 1:size(subjlist,1)
     pval = pval(:,sortidx,sortidx);
     
     chanlocs = chanlocs(sortidx);
-    chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];
+%     chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];
     
     for f = 1:size(matrix,1)
         cohmat = squeeze(matrix(f,:,:));
@@ -63,9 +68,9 @@ for s = 1:size(subjlist,1)
         % %         graph{8,2}(s,f) = tvals(thresh-1);
         
         for thresh = 1:length(tvals)
-            fprintf(' %.2f',tvals(thresh));
+%             fprintf(' %.2f',tvals(thresh));
             threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh));
-            bincohmat = double(threshcoh ~= 0);
+            bincohmat = double(threshold_proportional(cohmat,tvals(thresh)) ~= 0);
             
             if randomise
                 %randomisation
@@ -159,9 +164,4 @@ for s = 1:size(subjlist,1)
     grp(s,1) = subjlist{s,2};
 end
 
-if randomise
-    savename = sprintf('graphdata_%s_rand_pli.mat',listname);
-else
-    savename = sprintf('graphdata_%s_pli.mat',listname);
-end
 save(savename, 'graph', 'grp', 'tvals', 'subjlist');

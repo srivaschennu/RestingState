@@ -72,15 +72,15 @@ ylabel('CRS-R score');
 
 futable = cat(2,testdata(v1idx),crs(v2idx));
 
-% [rho, pval] = corr(futable(:,1),futable(:,2));
-% fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
+[rho, pval] = corr(futable(:,1),futable(:,2));
+fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
 
-[b,stats] = robustfit(futable(:,1),futable(:,2));
-fprintf('Robust fit b = %.2f, p = %.3f.\n',b(2),stats.p(2));
+% [b,stats] = robustfit(futable(:,1),futable(:,2));
+% fprintf('Robust fit b = %.2f, p = %.3f.\n',b(2),stats.p(2));
 
 figure('Color','white');
 hold all
 scatter(futable(:,1),futable(:,2));
-plot(sort(futable(:,1)),b(1)+b(2)*sort(futable(:,1)));
+% plot(sort(futable(:,1)),b(1)+b(2)*sort(futable(:,1)));
 xlabel(sprintf('Change in %s in %s',measure,bands{bandidx}));
-ylabel('Change in CRS-R score');
+ylabel('Follow-up CRS-R score');

@@ -14,25 +14,38 @@ bands = {
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
 
+crs = cell2mat(subjlist(:,3));
+
+v1idx = zeros(size(subjlist,1),1);
+for s = 1:size(subjlist,1)
+    if ~isempty(subjlist{s,5})
+        v1idx(s) = find(strcmp(subjlist{s,5},subjlist(:,1)));
+    end
+end
+v2idx = logical(v1idx);
+v1idx = nonzeros(v1idx);
+
+crs = crs(~v2idx);
+bandpower = bandpower(~v2idx,:,:);
+grp = grp(~v2idx);
+
 groups = unique(grp);
-plotvals = zeros(size(bandpower,2),length(groups));
+barvals = zeros(size(bandpower,2),length(groups));
+errvals = zeros(size(bandpower,2),length(groups));
 figure('Color','white');
 p = 1;
-for g = 1:length(groups)
-    for bandidx = 1:size(bandpower,2)
-        subplot(length(groups),size(bandpower,2),p); hold all;
-        topoplot(squeeze(mean(bandpower(grp == groups(g),bandidx,:),1)),chanlocs); colorbar
+for bandidx = 1:size(bandpower,2)
+    for g = 1:length(groups)
+        barvals(bandidx,g) = mean(mean(bandpower(grp == groups(g),bandidx,:),3),1);
+        errvals(bandidx,g) = std(mean(bandpower(grp == groups(g),bandidx,:),3),[],1)/sqrt(sum(grp == groups(g)));
+        
+        subplot(size(bandpower,2),length(groups),p); hold all;
+        topoplot(squeeze(mean(bandpower(grp == groups(g),bandidx,:),1)),chanlocs,'maplimits','maxmin'); colorbar
         if g == 1
             title(bands{bandidx});
         end
-        if bandidx == 1
-            text(0,0,num2str(groups(g)));
-        end
         p = p+1;
-        plotvals(bandidx,g) = mean(mean(bandpower(grp == groups(g),bandidx,:),3),1);
     end
-    
 end
 figure('Color','white');
-bar(plotvals,'grouped');
-legend(num2cell(num2str(groups))');
+barweb(barvals,errvals,[],bands,[],[],[],[],[],{'VS','MCS','Control'},[],[]);

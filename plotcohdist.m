@@ -7,6 +7,7 @@ fontsize = 16;
 
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
+allcoh = squeeze(mean(allcoh,3));
 
 v1idx = zeros(size(subjlist,1),1);
 for s = 1:size(subjlist,1)
