@@ -11,6 +11,48 @@ bands = {
     'gamma'
     };
 
+frontal = {
+    'E16'
+    'F3'
+    'F4'
+    'Fz'
+    'E19'
+    'E4'
+    'E5'
+    'E6'
+    'E12'
+    };
+
+for e = 1:length(frontal)
+    chanidx = find(strcmp(frontal{e},{sortedlocs.labels}));
+    if isempty(chanidx)
+        error('Channel %s not found!',frontal{e});
+    end
+    frontal{e} = chanidx;
+end
+frontal = cell2mat(frontal);
+
+occipital = {
+    'Oz'
+    'O1'
+    'O2'
+    'E65'
+    'E71'
+    'E76'
+    'E90'
+    'E66'
+    'E84'
+    };
+
+for e = 1:length(occipital)
+    chanidx = find(strcmp(occipital{e},{sortedlocs.labels}));
+    if isempty(chanidx)
+        error('Channel %s not found!',occipital{e});
+    end
+    occipital{e} = chanidx;
+end
+occipital = cell2mat(occipital);
+
 grp(grp == 2) = 1;
 grp(grp == 3) = 2;
 
@@ -24,8 +66,6 @@ for s = 1:size(subjlist,1)
 end
 v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
-
-groups = unique(grp);
 
 testdata = mean(bandpower(:,bandidx,:),3);
 [pval,~,stats] = ranksum(testdata(grp == 0 | grp == 1 & ~v2idx),testdata(grp == 2 & ~v2idx));

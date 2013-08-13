@@ -48,6 +48,8 @@ patlist = {
     'p0113_restingstate'    0   7   0   ''
     'p0213_restingstate'    2   18  0   ''
     'p0313_restingstate'    0   7   0   '' %noisy
+%     'p0413_restingstate'    2   14  0   ''
+    %'p0613_restingstate'    
     
     %follow-ups
     'p0411V2_restingstate'  0   8   0   'p0411_restingstate1' %noisy
@@ -60,7 +62,9 @@ patlist = {
     'p0612v2_restingstate'  0   7   0   'p0612_restingstate'
     'p0611v2_restingstate'  1   11  0   'p0611_restingstate' %noisy
     'p0512v2_restingstate'  0   8   0   'p0512_restingstate' %noisy
+%     'p0712v2_restingstate'  0   7   0   'p0712_restingstate'
     
+    %duplicates
     % p0211_restingstate2'   2   14 duplicate
     %'p0311_restingstate2'   0   7 duplicate
     %'p0411_restingstate2'   0   7 duplicate

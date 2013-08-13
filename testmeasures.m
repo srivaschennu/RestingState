@@ -1,7 +1,10 @@
-function testmeasures(measure,bandidx)
+function testmeasures(listname,measure,bandidx)
 
-load graphdata_allsubj_pli
-randgraph = load('graphdata_allsubj_rand_pli');
+load(sprintf('alldata_%s.mat',listname));
+load chanlist
+
+load(sprintf('graphdata_%s_pli.mat',listname));
+randgraph = load(sprintf('graphdata_%s_rand_pli.mat',listname));
 
 weiorbin = 3;
 trange = [0.5 0.2];
@@ -45,8 +48,8 @@ end
 
 % test patients vs controls group difference
 [pval,~,stats] = ranksum(testdata(grp == 0 | grp == 1 & ~v2idx),testdata(grp == 2));
-fprintf('%s band power: Diff = %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
-    bands{bandidx},mean(testdata(grp == 2))-mean(testdata(grp == 0 | grp == 1 & ~v2idx)),stats.ranksum,pval);
+fprintf('%s band %s: Diff = %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
+    bands{bandidx},measure,mean(testdata(grp == 2))-mean(testdata(grp == 0 | grp == 1 & ~v2idx)),stats.ranksum,pval);
 
 testdata = testdata(grp == 0 | grp == 1);
 crs = cell2mat(subjlist(:,3));
@@ -59,6 +62,9 @@ fprintf('Spearman rho = %.2f, p = %.3f.\n',rho,pval);
 
 % [b,stats] = robustfit(testdata(~v2idx),crs(~v2idx));
 % fprintf('Robust fit b = %.2f, p = %.3f.\n',b(2),stats.p(2));
+
+testdata2 = mean(bandpower(grp == 0 | grp == 1,bandidx,:),3);
+
 
 figure('Color','white');
 hold all

@@ -37,7 +37,7 @@ groups = unique(grp);
 for bandidx = 1:size(allcoh,2)
     for g = 1:length(groups)
         groupcoh = squeeze(mean(mean(allcoh(grp == groups(g),bandidx,:,:,:),3),1));
-        plotgraph(groupcoh,chanlocs,0.85);
+        plotgraph(groupcoh,sortedlocs,0.85);
         set(gcf,'Name',sprintf('group %s: %s band',grouplist{g},bands{bandidx}));
         saveas(gcf,sprintf('figures/meangraph_%s_%s.jpg',grouplist{g},bands{bandidx}));
         close(gcf);
