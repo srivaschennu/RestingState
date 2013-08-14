@@ -49,7 +49,7 @@ patlist = {
     'p0213_restingstate'    2   18  0   ''
     'p0313_restingstate'    0   7   0   '' %noisy
 %     'p0413_restingstate'    2   14  0   ''
-    %'p0613_restingstate'    
+%     'p0613_restingstate'    0   8   0   ''
     
     %follow-ups
     'p0411V2_restingstate'  0   8   0   'p0411_restingstate1' %noisy
