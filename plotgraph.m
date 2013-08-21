@@ -1,9 +1,10 @@
-function plotgraph(matrix,chanlocs,plotqt,minfo)
+function plotgraph(matrix,chanlocs,varargin)
 
-%%%%% PLOT PARAMETERS
-if ~exist('plotqt','var') || isempty(plotqt)
-    plotqt = 0.90;
-end
+param = finputcheck(varargin, {
+    'plotqt', 'real', [], 0.9; ...
+    'minfo', 'integer', [], []; ...
+    'legend', 'string', {'on','off'}, 'on'; ...
+    });
 
 %%%%% VISUAL FEATURES
 
@@ -16,26 +17,27 @@ fontweight = 'bold';
 lwrange = [0.1 6];
 
 % range of point sizes
-ptrange = [10 600];
-
-if ~exist('minfo','var') || isempty(minfo)
-    minfo = modularity_louvain_und(matrix);
-end
+ptrange = [10 1000];
 
 % keep only top <plotqt>% of weights and rescale them to be between 0 and 1
 origmatrix = matrix;
 allval = sort(nonzeros(matrix),'descend');
-plotthresh = quantile(allval,plotqt);
+plotthresh = quantile(allval,param.plotqt);
 matrix = matrix - plotthresh;
 matrix(matrix < 0) = 0;
 matrix = matrix / max(max(matrix));
+
+% calculate modules *after* thresholding edges
+if isempty(param.minfo)
+    param.minfo = modularity_louvain_und(matrix);
+end
 
 figure('Color','white','Name',mfilename);
 
 colormap(hsv);
 cmap = colormap;
-num_mod = length(unique(minfo));
-vcol = cmap(round((minfo/num_mod)*size(cmap,1)),:);
+num_mod = length(unique(param.minfo));
+vcol = cmap(round((param.minfo/num_mod)*size(cmap,1)),:);
 
 for c = 1:length(chanlocs)
     vsize(c) = length(nonzeros(matrix(c,:)));
@@ -57,8 +59,8 @@ plotmin = true;
 for r = 1:size(matrix,1)
     for c = 1:size(matrix,2)
         if r < c && matrix(r,c) > 0
-            if minfo(r) == minfo(c)
-                ecol = cmap(round((minfo(r)/num_mod)*size(cmap,1)),:);
+            if param.minfo(r) == param.minfo(c)
+                ecol = cmap(round((param.minfo(r)/num_mod)*size(cmap,1)),:);
                 hLine = line([chanlocs(r).X chanlocs(c).X],[chanlocs(r).Y chanlocs(c).Y],...
                     [chanlocs(r).Z chanlocs(c).Z],'Color',ecol,'LineWidth',...
                     lwrange(1)+(matrix(r,c)*(lwrange(2)-lwrange(1))),'LineStyle','-');
@@ -91,4 +93,6 @@ end
 
 figpos = get(gcf,'Position');
 set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*2 figpos(4)*2]);
-legend('show');
+if strcmp(param.legend,'on')
+    legend('show');
+end

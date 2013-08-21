@@ -8,15 +8,12 @@ fontname = 'Helvetica';
 fontsize = 28;
 
 bands = {
-    'delta'
-    'theta'
-    'alpha'
-    'beta'
-    'gamma'
+    'Delta'
+    'Theta'
+    'Alpha'
+    'Beta'
+    'Gamma'
     };
-
-grp(grp == 2) = 1;
-grp(grp == 3) = 2;
 
 groupnames = {
     'VS'
@@ -38,6 +35,7 @@ v1idx = nonzeros(v1idx);
 crs = crs(~v2idx);
 bandpower = bandpower(~v2idx,:,:);
 grp = grp(~v2idx);
+spectra = spectra(~v2idx,:,:);
 
 [groups, sortidx] = sort(unique(grp),'descend');
 groupnames = groupnames(sortidx);
@@ -52,7 +50,7 @@ for bandidx = 1:size(bandpower,2)
         
         figure;
 %         subplot(size(bandpower,2),length(groups),p); hold all;
-        topoplot(squeeze(mean(bandpower(grp == groups(g),bandidx,:),1))*100,sortedlocs,'maplimits','absmax');
+        topoplot(squeeze(mean(bandpower(grp == groups(g),bandidx,:),1))*100,sortedlocs,'maplimits','maxmin');
         set(colorbar,'FontName',fontname,'FontSize',fontsize);
         set(gcf,'Color','white');
         export_fig(gcf,sprintf('figures/powertopo_%s_%s.eps',bands{bandidx},groupnames{g}));
@@ -60,7 +58,6 @@ for bandidx = 1:size(bandpower,2)
         p = p+1;
     end
 end
-set(gcf,'Color','white');
 
 figure('Color','white');
 hdl = barweb(barvals*100,errvals*100,[],bands,[],[],[],[],[],groupnames,[],[]);

@@ -26,9 +26,6 @@ grouplist = {
     'Control'
     };
 
-grp(grp == 2) = 1;
-grp(grp == 3) = 2;
-
 grp = grp(~v2idx);
 allcoh = allcoh(~v2idx,:,:,:,:);
 
@@ -36,10 +33,11 @@ groups = unique(grp);
 
 for bandidx = 1:size(allcoh,2)
     for g = 1:length(groups)
-        groupcoh = squeeze(mean(mean(allcoh(grp == groups(g),bandidx,:,:,:),3),1));
-        plotgraph(groupcoh,sortedlocs,0.85);
+%         groupcoh = squeeze(mean(mean(allcoh(grp == groups(g),bandidx,:,:,:),3),1));
+        groupcoh = squeeze(mean(allcoh(grp == groups(g),bandidx,:,:),1));
+        plotgraph(groupcoh,sortedlocs,'plotqt',0.75,'legend','off');
         set(gcf,'Name',sprintf('group %s: %s band',grouplist{g},bands{bandidx}));
-        saveas(gcf,sprintf('figures/meangraph_%s_%s.jpg',grouplist{g},bands{bandidx}));
+        export_fig(gcf,sprintf('figures/meangraph_%s_%s.tif',grouplist{g},bands{bandidx}));
         close(gcf);
     end
 end

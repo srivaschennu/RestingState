@@ -31,12 +31,12 @@ for s = 1:length(subjlist)
     
     %         fix1020(basename);
     
-    coherence(basename);
+%     coherence(basename);
     
-    %     load([filepath basename 'plifdr.mat']);
-    %     plotgraph(squeeze(matrix(3,:,:)),chanlocs,0.95);
-    %     saveas(gcf,['figures/' basename 'pligraph.jpg']);
-    %     close(gcf);
+        load([filepath basename 'plifdr.mat']);
+        plotgraph(squeeze(matrix(3,:,:)),chanlocs,'plotqt',0.75,'legend','off');
+        export_fig(gcf,['figures/' basename 'pligraph.tif']);
+        close(gcf);
 
 end
 % save batchrun.mat batchrun

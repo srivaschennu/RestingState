@@ -1,19 +1,50 @@
-function plotmi(bandidx)
+function plotmi(listname,bandidx)
 
-load graphdata_allsubj_pli
+fontname = 'Helvetica';
+fontsize = 28;
+
+load(sprintf('graphdata_%s_pli.mat',listname));
+
+weiorbin = 3;
+
+bands = {
+    'Delta'
+    'Theta'
+    'Alpha'
+    'Beta'
+    'Gamma'
+    };
+
+mutinfo = graph{strcmpi('mutual information',graph(:,1)),weiorbin};
+
+v1idx = zeros(size(subjlist,1),1);
+for s = 1:size(subjlist,1)
+    if ~isempty(subjlist{s,5})
+        v1idx(s) = find(strcmp(subjlist{s,5},subjlist(:,1)));
+    end
+end
+v2idx = logical(v1idx);
+v1idx = nonzeros(v1idx);
+mutinfo = mutinfo(~v2idx,~v2idx,:,:);
+grp = grp(~v2idx);
 
 groups = unique(grp);
 
-grp(grp == 2) = 1;
-grp(grp == 3) = 2;
+figure('Color','white'); hold all
+plotdata = mean(mutinfo(:,:,bandidx,:),4);
+imagesc(plotdata);
 
-mutinfo = graph{end,3};
-
-figure; hold all
-for g = 1:length(groups)
-    errorbar(1-tvals,squeeze(mean(mean(mutinfo(grp == groups(g),grp == groups(g),3,:),1),2)),...
-        squeeze(std(mean(mutinfo(grp == groups(g),grp == groups(g),3,:),1),[],2))/sqrt(size(mutinfo,2)),...
-        'DisplayName',num2str(groups(g)));
+for g = 1:length(groups)-1
+    groupedge = find(grp == groups(g),1,'last');
+    line([groupedge+0.5 groupedge+0.5],ylim,'Color','black','Linewidth',4);
+    line(xlim,[groupedge+0.5 groupedge+0.5],'Color','black','Linewidth',4);
 end
-set(gca,'XLim',1-[tvals(1) tvals(end)],'YLim',[0 0.18]);
-legend('show');
+% colorbar
+set(gca,'FontName',fontname,'FontSize',fontsize,'XTick',[],'YTick',[],...
+    'XLim',[0.5 size(plotdata,1)+0.5],'YLim',[0.5 size(plotdata,2)+0.5],'YDir','reverse');
+
+% export_fig(gcf,sprintf('figures/NMImap_%s.eps',bands{bandidx}));
+
+export_fig(gcf,sprintf('figures/NMImap_%s.eps',bands{bandidx}),'-opengl');
+
+close(gcf);
