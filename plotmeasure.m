@@ -58,7 +58,7 @@ bands = {
     'Gamma'
     };
 
-trange = [0.5 0.05];
+trange = [0.5 0.1];
 trange = (tvals <= trange(1) & tvals >= trange(2));
 plottvals = tvals(trange);
 

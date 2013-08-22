@@ -1,5 +1,13 @@
 function testmeasure(listname,measure,bandidx,varargin)
 
+load(sprintf('graphdata_%s_pli.mat',listname));
+if ~exist('measure','var') || isempty(measure)
+    for m = 1:size(graph,1)
+        fprintf('%s\n',graph{m,1});
+    end
+    return;
+end
+
 param = finputcheck(varargin, {
     'xlim', 'real', [], []; ...
     'xtick', 'real', [], []; ...
@@ -12,14 +20,13 @@ param = finputcheck(varargin, {
 fontname = 'Helvetica';
 fontsize = 28;
 
-load(sprintf('alldata_%s.mat',listname));
+%load(sprintf('alldata_%s.mat',listname));
 load chanlist
 
-load(sprintf('graphdata_%s_pli.mat',listname));
 randgraph = load(sprintf('graphdata_%s_rand_pli.mat',listname));
 
 weiorbin = 3;
-trange = [0.5 0.05];
+trange = [0.5 0.1];
 
 crs = cell2mat(subjlist(:,3));
 tennis = cell2mat(subjlist(:,4));
@@ -86,7 +93,7 @@ fprintf('%s %s: R2 = %.2f, p = %.3f.\n',bands{bandidx},measure,mdl.Rsquared.Adju
 figure('Color','white');
 hold all
 scatter(datatable(datatable(:,3) == 0,1),datatable(datatable(:,3) == 0,2),'filled');
-scatter(datatable(datatable(:,3) == 1,1),datatable(datatable(:,3) == 1,2),'filled','red');
+scatter(datatable(datatable(:,3) == 1,1),datatable(datatable(:,3) == 1,2),'filled','blue');
 b = mdl.Coefficients.Estimate;
 plot(datatable(:,1),b(1)+b(2)*datatable(:,1),'--','Color','black');
 
@@ -109,7 +116,7 @@ futable = sortrows(cat(2,testdata(v1idx),crs(v2idx)-crs(v1idx)));
 % [rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
 % fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
 
-mdl = LinearModel.fit(futable(:,1),futable(:,2),'RobustOpts','on');
+mdl = LinearModel.fit(futable(:,1),futable(:,2),'RobustOpts','off');
 [Fstat,pVal] = fTest(mdl);
 fprintf('%s follow-up: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,pVal);
 figure('Color','white');
