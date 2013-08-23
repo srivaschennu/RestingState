@@ -46,12 +46,12 @@ occipital = {
     'Oz'
     'O1'
     'O2'
-    'E65'
-    'E71'
-    'E76'
-    'E90'
-    'E66'
-    'E84'
+%     'E65'
+%     'E71'
+%     'E76'
+%     'E90'
+%     'E66'
+%     'E84'
     };
 
 for e = 1:length(occipital)
@@ -76,12 +76,15 @@ v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
 
 %% compare power between patients and controls
-testdata = mean(bandpower(:,bandidx,:),3);
+testdata = mean(bandpower(:,bandidx,occipital),3);
+tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
+
 [pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx),testdata(grp == 2 & ~v2idx));
 fprintf('Pat vs Ctrl %s band power: Mann-whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
+[pval,~,stats] = ranksum(testdata(grp == 0 & ~v2idx),testdata(grp == 1 & ~v2idx));
+fprintf('VS vs MCS %s band power: Mann-whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
 
 %% compare power between imagers and non-imagers
-tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 [pval,~,stats] = ranksum(testdata(~tennisidx),testdata(tennisidx));
 fprintf('Imagers vs non-imagers %s band power: Mann-whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
 
@@ -97,7 +100,6 @@ fprintf('Imagers vs non-imagers %s band power: Mann-whitney U = %.2f, p = %.3f.\
 % ylabel(sprintf('Peak frequency in %s',bands{bandidx}));
 
 %% correlate power and crs
-testdata = mean(bandpower(:,bandidx,:),3);
 % [rho,pval] = corr(crs((grp == 0 | grp == 1) & ~v2idx),testdata((grp == 0 | grp == 1) & ~v2idx)*100,'type','spearman');
 % fprintf('%s band power: Spearman rho = %.2f, p = %.3f.\n',bands{bandidx},rho,pval);
 datatable = sortrows(cat(2,crs((grp == 0 | grp == 1) & ~v2idx),...
