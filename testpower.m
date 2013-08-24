@@ -46,10 +46,8 @@ occipital = {
     'Oz'
     'O1'
     'O2'
-%     'E65'
 %     'E71'
 %     'E76'
-%     'E90'
 %     'E66'
 %     'E84'
     };
@@ -76,7 +74,7 @@ v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
 
 %% compare power between patients and controls
-testdata = mean(bandpower(:,bandidx,occipital),3);
+testdata = mean(bandpower(:,bandidx,:),3);
 tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 
 [pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx),testdata(grp == 2 & ~v2idx));
@@ -102,6 +100,18 @@ fprintf('Imagers vs non-imagers %s band power: Mann-whitney U = %.2f, p = %.3f.\
 %% correlate power and crs
 % [rho,pval] = corr(crs((grp == 0 | grp == 1) & ~v2idx),testdata((grp == 0 | grp == 1) & ~v2idx)*100,'type','spearman');
 % fprintf('%s band power: Spearman rho = %.2f, p = %.3f.\n',bands{bandidx},rho,pval);
+
+% for c = 1:size(bandpower,3)
+%     testdata = bandpower(:,bandidx,c);
+%     datatable = sortrows(cat(2,crs((grp == 0 | grp == 1) & ~v2idx),...
+%         testdata((grp == 0 | grp == 1) & ~v2idx)*100,tennisidx));
+%     mdl = LinearModel.fit(datatable(:,1),datatable(:,2),'RobustOpts','on');
+%     [~,pVals(c)] = fTest(mdl);
+% end
+% pVals = 1-pVals;
+% [~,maxchan] = max(pVals);
+% figure; topoplot(pVals,sortedlocs, 'maplimits', 'maxmin', 'electrodes','off', 'emarker2',{maxchan,'o','green',14,1});
+
 datatable = sortrows(cat(2,crs((grp == 0 | grp == 1) & ~v2idx),...
     testdata((grp == 0 | grp == 1) & ~v2idx)*100,tennisidx));
 mdl = LinearModel.fit(datatable(:,1),datatable(:,2),'RobustOpts','on');
