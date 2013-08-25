@@ -48,9 +48,13 @@ for bandidx = 1:size(bandpower,2)
         barvals(bandidx,g) = mean(mean(bandpower(grp == groups(g),bandidx,:),3),1);
         errvals(bandidx,g) = std(mean(bandpower(grp == groups(g),bandidx,:),3),[],1)/sqrt(sum(grp == groups(g)));
         
+        plotdata = squeeze(mean(bandpower(grp == groups(g),bandidx,:),1))*100;
+        if bandidx == 3 && groups(g) == 1
+            plotdata = (squeeze(mean(bandpower(grp == 1,3,:),1)) - squeeze(mean(bandpower(grp == 0,3,:),1))) *100;
+        end
         figure;
 %         subplot(size(bandpower,2),length(groups),p); hold all;
-        topoplot(squeeze(mean(bandpower(grp == groups(g),bandidx,:),1))*100,sortedlocs,'maplimits','maxmin');
+        topoplot(plotdata,sortedlocs,'maplimits','maxmin');
         set(colorbar,'FontName',fontname,'FontSize',fontsize);
         set(gcf,'Color','white');
         export_fig(gcf,sprintf('figures/powertopo_%s_%s.eps',bands{bandidx},groupnames{g}));

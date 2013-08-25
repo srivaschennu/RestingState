@@ -74,7 +74,7 @@ v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
 
 %% compare power between patients and controls
-testdata = mean(bandpower(:,bandidx,:),3);
+testdata = mean(bandpower(:,bandidx,occipital),3);
 tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 
 [pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx),testdata(grp == 2 & ~v2idx));
