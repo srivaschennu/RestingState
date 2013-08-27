@@ -112,38 +112,50 @@ fprintf('Imagers vs non-imagers %s band power: Mann-whitney U = %.2f, p = %.3f.\
 % [~,maxchan] = max(pVals);
 % figure; topoplot(pVals,sortedlocs, 'maplimits', 'maxmin', 'electrodes','off', 'emarker2',{maxchan,'o','green',14,1});
 
-datatable = sortrows(cat(2,crs((grp == 0 | grp == 1) & ~v2idx),...
-    testdata((grp == 0 | grp == 1) & ~v2idx)*100,tennisidx));
-mdl = LinearModel.fit(datatable(:,1),datatable(:,2),'RobustOpts','on');
+datatable = sortrows(cat(2,...
+    crs((grp == 0 | grp == 1) & ~v2idx),...
+    testdata((grp == 0 | grp == 1) & ~v2idx)*100,...
+    tennisidx),...
+    2);
+mdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on');
 [Fstat,pVal] = fTest(mdl);
 fprintf('%s band power: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,pVal);
 
 figure('Color','white'); hold all
-scatter(datatable(datatable(:,3) == 0,1),datatable(datatable(:,3) == 0,2),'filled');
-scatter(datatable(datatable(:,3) == 1,1),datatable(datatable(:,3) == 1,2),'filled','red');
+scatter(datatable(datatable(:,3) == 0,2),datatable(datatable(:,3) == 0,1),'filled');
+scatter(datatable(datatable(:,3) == 1,2),datatable(datatable(:,3) == 1,1),'filled','red');
 b = mdl.Coefficients.Estimate;
-plot(datatable(:,1),b(1)+b(2)*datatable(:,1),'--','Color','black');
+plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'--','Color','black');
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
-xlabel('CRS-R score','FontName',fontname,'FontSize',fontsize);
-ylabel(sprintf('%s power (%%)',bands{bandidx}),'FontName',fontname,'FontSize',fontsize);
+if ~isempty(param.xlim)
+    set(gca,'XLim',param.xlim);
+end
+if ~isempty(param.ylim)
+    set(gca,'YLim',param.ylim);
+end
+xlabel(sprintf('%s power (%%)',bands{bandidx}),'FontName',fontname,'FontSize',fontsize);
+ylabel('CRS-R score','FontName',fontname,'FontSize',fontsize);
 export_fig(gcf,sprintf('figures/crscorr_power_%s.eps',bands{bandidx}));
 close(gcf);
 
-futable = sortrows(cat(2,testdata(v1idx)*100,crs(v2idx)-crs(v1idx)));
+futable = sortrows(cat(2,...
+    crs(v2idx)-crs(v1idx),...
+    testdata(v1idx)*100),...
+    2);
 
 %% correlate follow-up power with crs
 % [rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
 % fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
-mdl = LinearModel.fit(futable(:,1),futable(:,2),'RobustOpts','on');
+mdl = LinearModel.fit(futable(:,2),futable(:,1),'RobustOpts','on');
 [Fstat,pVal] = fTest(mdl);
 fprintf('%s follow-up: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,pVal);
 
 figure('Color','white');
 hold all
-scatter(futable(:,1),futable(:,2),'filled');
+scatter(futable(:,2),futable(:,1),'filled');
 b = mdl.Coefficients.Estimate;
-plot(futable(:,1),b(1)+b(2)*futable(:,1),'--','Color','black');
+plot(futable(:,2),b(1)+b(2)*futable(:,2),'--','Color','black');
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
 if ~isempty(param.xlim)

@@ -14,13 +14,13 @@ param = finputcheck(varargin, {
     'ylim', 'real', [], []; ...
     'legend', 'string', {'on','off'}, 'on'; ...
     'plotinfo', 'string', {'on','off'}, 'on'; ...
-    'ylabel', 'string', {}, measure; ...
+    'xlabel', 'string', {}, measure; ...
     });
 
 fontname = 'Helvetica';
 fontsize = 28;
 
-%load(sprintf('alldata_%s.mat',listname));
+load(sprintf('alldata_%s.mat',listname));
 load chanlist
 
 randgraph = load(sprintf('graphdata_%s_rand_pli.mat',listname));
@@ -66,6 +66,7 @@ if strcmpi(measure,'mutual information')
 else
     testdata = squeeze(mean(mean(graph{mid,weiorbin}(:,bandidx,trange,:),4),3));
 end
+powerdata = mean(bandpower(:,bandidx,:),3);
 
 %% test patients vs controls group difference
 [pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx),testdata(grp == 2));
@@ -78,52 +79,61 @@ tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 fprintf('Imagers vs non-imagers %s band power: Mann-whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
 
 %% correlate patients with crs scores
-% [rho, pval] = corr(crs(~v2idx),testdata(~v2idx),'type','spearman');
-% fprintf('Spearman rho = %.2f, p = %.3f.\n',rho,pval);
 
-datatable = sortrows(cat(2,crs((grp == 0 | grp == 1) & ~v2idx),...
-    testdata((grp == 0 | grp == 1) & ~v2idx),tennisidx));
-mdl = LinearModel.fit(datatable(:,1),datatable(:,2),'RobustOpts','on');
+datatable = sortrows(cat(2,...
+    crs((grp == 0 | grp == 1) & ~v2idx),...
+    testdata((grp == 0 | grp == 1) & ~v2idx),...
+    tennisidx,...
+    powerdata((grp == 0 | grp == 1) & ~v2idx)),...
+    2);
+mdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on');
+[rho, pval] = corr(datatable(:,1),datatable(:,2),'type','spearman');
+fprintf('Spearman rho = %.2f, p = %.3f.\n',rho,pval);
+
 [Fstat,pVal] = fTest(mdl);
 fprintf('%s %s: R2 = %.2f, p = %.3f.\n',bands{bandidx},measure,mdl.Rsquared.Adjusted,pVal);
 
-%testdata2 = mean(bandpower(grp == 0 | grp == 1,bandidx,:),3);
-
-
 figure('Color','white');
 hold all
-scatter(datatable(datatable(:,3) == 0,1),datatable(datatable(:,3) == 0,2),'filled');
-scatter(datatable(datatable(:,3) == 1,1),datatable(datatable(:,3) == 1,2),'filled','blue');
+scatter(datatable(datatable(:,3) == 0,2),datatable(datatable(:,3) == 0,1),'filled');
+scatter(datatable(datatable(:,3) == 1,2),datatable(datatable(:,3) == 1,1),'filled','red');
 b = mdl.Coefficients.Estimate;
-plot(datatable(:,1),b(1)+b(2)*datatable(:,1),'--','Color','black');
+plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'--','Color','black');
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
 if ~isempty(param.ylim)
     set(gca,'YLim',param.ylim);
 end
-ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
+if ~isempty(param.xlim)
+    set(gca,'XLim',param.xlim);
+end
+xlabel(param.xlabel,'FontName',fontname,'FontSize',fontsize);
 if strcmp(param.plotinfo,'on')
-    xlabel('CRS-R score','FontName',fontname,'FontSize',fontsize);
+    ylabel('CRS-R score','FontName',fontname,'FontSize',fontsize);
 else
-    xlabel(' ','FontName',fontname,'FontSize',fontsize);
+    ylabel(' ','FontName',fontname,'FontSize',fontsize);
 end
 export_fig(sprintf('figures/crscorr_%s_%s.eps',measure,bands{bandidx}));
 close(gcf);
 
-%% correlate follow-ups
-futable = sortrows(cat(2,testdata(v1idx),crs(v2idx)-crs(v1idx)));
+futable = sortrows(cat(2,...
+    crs(v2idx)-crs(v1idx),...
+    testdata(v1idx),...
+    powerdata(v1idx)),...
+    2);
 
+%% correlate follow-ups
 % [rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
 % fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
 
-mdl = LinearModel.fit(futable(:,1),futable(:,2),'RobustOpts','off');
+mdl = LinearModel.fit(futable(:,2),futable(:,1),'RobustOpts','on');
 [Fstat,pVal] = fTest(mdl);
 fprintf('%s follow-up: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,pVal);
 figure('Color','white');
 hold all
-scatter(futable(:,1),futable(:,2),'filled');
+scatter(futable(:,2),futable(:,1),'filled');
 b = mdl.Coefficients.Estimate;
-plot(futable(:,1),b(1)+b(2)*futable(:,1),'--','Color','black');
+plot(futable(:,2),b(1)+b(2)*futable(:,2),'--','Color','black');
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
 if ~isempty(param.xlim)
