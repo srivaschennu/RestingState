@@ -5,6 +5,7 @@ param = finputcheck(varargin, {
     'legend', 'string', {'on','off'}, 'on'; ...
     'plotinfo', 'string', {'on','off'}, 'on'; ...
     'plotticks', 'string', {'on','off'}, 'on'; ...
+    'ylabel', 'string', {}, measure; ...
     });
 
 % load graphdata_allsubj_icoh
@@ -86,7 +87,7 @@ for g = groups
 end
 
 if strcmp(param.plotticks,'on')
-    ylabel(measure,'FontName',fontname,'FontSize',fontsize);
+    ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
     if strcmp(param.plotinfo,'on')
         xlabel('Graph connection density','FontName',fontname,'FontSize',fontsize);
     else
