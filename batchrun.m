@@ -3,6 +3,7 @@ function batchrun(listname)
 loadsubj
 loadpaths
 subjlist = eval(listname);
+load freqlist
 
 for s = 1:length(subjlist)
     basename = subjlist{s};
@@ -26,17 +27,20 @@ for s = 1:length(subjlist)
 %             rejartifacts2(basename,2,1);
     
 %             calcspectra(basename);
-%             plotspec(basename);
-%             close(gcf);
-    
+
+
+            plotspec(basename);
+            export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
+            close(gcf);
+%     
     %         fix1020(basename);
     
 %     coherence(basename);
     
-        load([filepath basename 'plifdr.mat']);
-        plotgraph(squeeze(matrix(3,:,:)),chanlocs,'plotqt',0.75,'legend','off');
-        export_fig(gcf,['figures/' basename 'pligraph.tif']);
-        close(gcf);
+%         load([filepath basename 'plifdr.mat']);
+%         plotgraph(squeeze(matrix(3,:,:)),chanlocs,'plotqt',0.75,'legend','off');
+%         export_fig(gcf,['figures/' basename 'pligraph.tif']);
+%         close(gcf);
 
 end
 % save batchrun.mat batchrun
