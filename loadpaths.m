@@ -4,7 +4,7 @@ function loadpaths
 
 if strncmpi(hostname,'hsbpc58',length('hsbpc58'))
     assignin('caller','nsfpath','/Users/chennu/Data/RestingState/');
-    assignin('caller','filepath','/Users/chennu/Data/RestingState/save/');
+    assignin('caller','filepath','/Users/chennu/Data/RestingState/');
     assignin('caller','chanlocpath','/Users/chennu/Work/EGI/');
 
 elseif strncmpi(hostname,'hsbpc57',length('hsbpc57'))
