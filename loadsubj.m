@@ -18,11 +18,11 @@ patlist = {
     %
     % patients
     
-%     'p0311_restingstate1'	0	7	0   ''
-%     'p0411_restingstate1'	0	7	0   ''
-%     'p1611_restingstate'	0	7	1   ''
-%     'p0510V2_restingstate'	0	7	0   ''
-%     'p1311_restingstate'	0	8	0   ''
+    'p0311_restingstate1'	0	7	0   ''
+    'p0411_restingstate1'	0	7	0   ''
+    'p1611_restingstate'	0	7	1   ''
+    'p0510V2_restingstate'	0	7	0   ''
+    'p1311_restingstate'	0	8	0   ''
     'p2011_restingstate'	0	7	0   ''
     'p0612_restingstate'	0	8	0   ''
     'p71v3_restingstate'	0	8	0   ''
