@@ -29,13 +29,13 @@ for s = 1:length(subjlist)
 %             calcspectra(basename);
 
 
-%             plotspec(basename);
-%             export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
-%             close(gcf);
+            plotspec(basename);
+            export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
+            close(gcf);
 %     
     %         fix1020(basename);
     
-    coherence(basename);
+%     coherence(basename);
     
 %         load([filepath basename 'plifdr.mat']);
 %         plotgraph(squeeze(matrix(3,:,:)),chanlocs,'plotqt',0.75,'legend','off');

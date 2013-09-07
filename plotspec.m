@@ -34,7 +34,7 @@ for f = 1:size(specinfo.freqlist,1)
         'LineStyle','-.','Color','black');
     line([specinfo.freqlist(f,2) specinfo.freqlist(f,2)],ylim,'LineWidth',1,...
         'LineStyle','-.','Color','black');
-%     text(specinfo.freqlist(f,1),ylimits(2),...
-%         sprintf('\\%s',bands{f}),'FontName',fontname,'FontSize',fontsize);
+    text(specinfo.freqlist(f,1),ylimits(2),...
+        sprintf('\\%s',bands{f}),'FontName',fontname,'FontSize',fontsize);
 end
 box on

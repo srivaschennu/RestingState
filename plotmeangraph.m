@@ -1,4 +1,4 @@
-function plotmeangraph(listname)
+function plotmeangraph(listname,bandidx)
 
 load(sprintf('alldata_%s.mat',listname));
 load chanlist
@@ -31,7 +31,6 @@ allcoh = allcoh(~v2idx,:,:,:,:);
 
 groups = unique(grp);
 
-for bandidx = 1:size(allcoh,2)
     for g = 1:length(groups)
 %         groupcoh = squeeze(mean(mean(allcoh(grp == groups(g),bandidx,:,:,:),3),1));
         groupcoh = squeeze(mean(allcoh(grp == groups(g),bandidx,:,:),1));
@@ -40,4 +39,3 @@ for bandidx = 1:size(allcoh,2)
         export_fig(gcf,sprintf('figures/meangraph_%s_%s.tif',grouplist{g},bands{bandidx}));
         close(gcf);
     end
-end
