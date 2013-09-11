@@ -12,6 +12,15 @@ for s = 1:length(subjlist)
     
     fprintf('Processing %s.\n',basename);
     
+%     copyfile([filepath basename '.set'],[filepath 'commonfreq/' basename '.set']);
+%     copyfile([filepath basename '.fdt'],[filepath 'commonfreq/' basename '.fdt']);
+%     copyfile([filepath basename 'pliboot.mat'],[filepath 'commonfreq/' basename 'pliboot.mat']);
+%     copyfile([filepath basename 'plifdr.mat'],[filepath 'commonfreq/' basename 'plifdr.mat']);
+    
+%     EEG = pop_loadset('filepath',filepath,'filename',[basename '.set']);
+%     EEG = rereference(EEG,2);
+%     pop_saveset(EEG,'savemode','resave');
+
 %         dataimport(basename);
 %         epochdata(basename);
     
@@ -29,13 +38,13 @@ for s = 1:length(subjlist)
 %             calcspectra(basename);
 
 
-            plotspec(basename);
-            export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
-            close(gcf);
-%     
+%             plotspec(basename);
+%             export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
+%             close(gcf);
+% %     
     %         fix1020(basename);
     
-%     coherence(basename);
+    coherence(basename);
     
 %         load([filepath basename 'plifdr.mat']);
 %         plotgraph(squeeze(matrix(3,:,:)),chanlocs,'plotqt',0.75,'legend','off');

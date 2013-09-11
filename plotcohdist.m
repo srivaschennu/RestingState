@@ -51,6 +51,7 @@ uniqcd = linspace(uniqcd(1),uniqcd(end),10);
 figure('Color','white'); hold all
 for g = groups
     groupcoh = squeeze(allcoh(grp == g,bandidx,:,:));
+    groupcoh = reshape(groupcoh,1,size(groupcoh,1),size(groupcoh,2));
     plotvals = zeros(length(uniqcd)-1,size(groupcoh,1));
     
     for u = 1:length(uniqcd)-1
@@ -77,4 +78,4 @@ if ~isempty(param.ylim)
     ylim(param.ylim);
 end
 export_fig(gcf,sprintf('figures/plidist_%s.eps',bands{bandidx}));
-close(gcf);
+% close(gcf);

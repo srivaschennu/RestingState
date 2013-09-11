@@ -98,7 +98,6 @@ ctrllist = {
     'p47_restingstate'  2  25   2     ''
     'p48_restingstate'  2  25   2     ''
     'p49_restingstate'  2  25   2     ''
-    % 'p50_restingstate'
     'subj01_restingstate'  2    25   2     ''
     'subj02_restingstate'  2    25   2     ''
     'VS_restingstate'  2  25   2     ''
@@ -107,13 +106,14 @@ ctrllist = {
     'ML_restingstate'  2  25   2     ''
     'MC_restingstate'  2  25   2     ''
     'JS_restingstate'  2  25   2     ''
-    % 'FD_restingstate'
     'ET_restingstate'  2  25   2     ''
     'EP_restingstate'  2  25   2     ''
-    % 'CS_restingstate'  ''
     'CL_restingstate'  2  25   2     ''
     'CD_restingstate'  2  25   2     ''
     'AC_restingstate'  2  25   2     ''
+    % 'p50_restingstate'
+    % 'FD_restingstate'
+    % 'CS_restingstate'  ''
     };
 
 
