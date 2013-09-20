@@ -1,4 +1,4 @@
-function testmeasure(listname,measure,bandidx,varargin)
+function [testdata,grp,v2idx,v1idx] = testmeasure(listname,measure,bandidx,varargin)
 
 load(sprintf('graphdata_%s_pli.mat',listname));
 if ~exist('measure','var') || isempty(measure)
@@ -72,8 +72,8 @@ powerdata = mean(bandpower(:,bandidx,:),3);
 
 %% test patients vs controls group difference
 [pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
-fprintf('%s band %s: Ctrl - Pat = %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
-    bands{bandidx},measure,mean(testdata(grp == 2))-mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats.ranksum,pval);
+fprintf('%s band %s: Ctrl %.2f, Pat %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
+    bands{bandidx},measure,mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats.ranksum,pval);
 
 %% compare vs to mcs patients
 [pval,~,stats] = ranksum(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx));
