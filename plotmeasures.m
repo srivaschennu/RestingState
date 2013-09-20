@@ -15,7 +15,7 @@ bands = {
     'Gamma'
     };
 
-for f = 3%1:5
+for f = 2:3%1:5
     for p = 1:length(plotlist)
         if f == 2 && p == 1
             plotoptions = {'plotinfo','on','legend','on'};
