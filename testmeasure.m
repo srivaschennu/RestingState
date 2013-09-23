@@ -31,7 +31,7 @@ weiorbin = 3;
 trange = [0.5 0.1];
 
 crs = cell2mat(subjlist(:,3));
-tennis = cell2mat(subjlist(:,4));
+tennis = logical(cell2mat(subjlist(:,4)));
 
 bands = {
     'Delta'
@@ -81,8 +81,7 @@ fprintf('%s band %s: MCS - VS = %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
     bands{bandidx},measure,mean(testdata(grp == 1 & ~v2idx))-mean(testdata(grp == 0 & ~v2idx)),stats.ranksum,pval);
 
 %% compare power between imagers and non-imagers
-tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
-[pval,~,stats] = ranksum(testdata(~tennisidx),testdata(tennisidx));
+[pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx & ~tennis),testdata((grp == 0 | grp == 1) & ~v2idx & tennis));
 fprintf('Imagers vs non-imagers %s band power: Mann-whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
 
 %% correlate patients with crs scores
@@ -90,7 +89,7 @@ fprintf('Imagers vs non-imagers %s band power: Mann-whitney U = %.2f, p = %.3f.\
 datatable = sortrows(cat(2,...
     crs((grp == 0 | grp == 1) & ~v2idx),...
     testdata((grp == 0 | grp == 1) & ~v2idx),...
-    tennisidx,...
+    tennis((grp == 0 | grp == 1) & ~v2idx),...
     grp((grp == 0 | grp == 1) & ~v2idx),...
     powerdata((grp == 0 | grp == 1) & ~v2idx)),...
     2);
