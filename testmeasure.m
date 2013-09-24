@@ -22,7 +22,7 @@ param = finputcheck(varargin, {
 fontname = 'Helvetica';
 fontsize = 28;
 
-load(sprintf('alldata_%s.mat',listname));
+powerdata = load(sprintf('alldata_%s.mat',listname));
 load chanlist
 
 randgraph = load(sprintf('graphdata_%s_rand_pli.mat',listname));
@@ -68,7 +68,7 @@ if strcmpi(measure,'mutual information')
 else
     testdata = squeeze(mean(mean(graph{mid,weiorbin}(:,bandidx,trange,:),4),3));
 end
-powerdata = mean(bandpower(:,bandidx,:),3);
+powerdata = mean(powerdata.bandpower(:,bandidx,:),3);
 
 %% test patients vs controls group difference
 [pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
