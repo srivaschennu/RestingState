@@ -79,19 +79,19 @@ testdata = mean(bandpower(:,bandidx,occipital),3)*100;
 tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 
 [pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
-fprintf('%s band power: Ctrl - Pat = %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
+fprintf('%s band power: Ctrl - Pat = %.2f, Mann-Whitney U = %.2f, p = %.3f.\n',...
     bands{bandidx},mean(testdata(grp == 2))-mean(testdata((grp == 0 | grp == 1) & ~v2idx)),...
     stats.ranksum,pval);
 
 %% compare vs to mcs patients
 [pval,~,stats] = ranksum(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx));
-fprintf('%s band power: MCS - VS = %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
+fprintf('%s band power: MCS - VS = %.2f, Mann-Whitney U = %.2f, p = %.3f.\n',...
     bands{bandidx},mean(testdata(grp == 1 & ~v2idx))-mean(testdata(grp == 0 & ~v2idx)),...
     stats.ranksum,pval);
 
 %% compare power between imagers and non-imagers
 [pval,~,stats] = ranksum(testdata(~tennisidx),testdata(tennisidx));
-fprintf('Imagers vs non-imagers %s band power: Mann-whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
+fprintf('Imagers vs non-imagers %s band power: Mann-Whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
 
 %% correlate peak freq with crs
 peakdata = mean(bandpeak((grp == 0 | grp == 1) & ~v2idx,bandidx,occipital),3);
@@ -159,9 +159,9 @@ legendoff(scatter(datatable(datatable(:,4) == 1 & datatable(:,3) == 1,2), ...
 b = mdl.Coefficients.Estimate;
 plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'-','Color','black',...
     'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
-b = exmdl.Coefficients.Estimate;
-plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'--','Color','black',...
-    'Display',sprintf('R^2 = %.2f, p = %.3f',exmdl.Rsquared.Adjusted,doftest(exmdl)));
+% b = exmdl.Coefficients.Estimate;
+% plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'--','Color','black',...
+%     'Display',sprintf('R^2 = %.2f, p = %.3f',exmdl.Rsquared.Adjusted,doftest(exmdl)));
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
 if ~isempty(param.xlim)

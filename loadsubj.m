@@ -83,8 +83,6 @@ patlist = {
 ctrllist = {
     %     controls
     
-    %     'jenny_restingstate'
-    %     %'SaltyWater_restingstate'
     'NW_restingstate'   2  25   2     ''    2
     'p37_restingstate'  2  25   2     ''    2
     'p38_restingstate'  2  25   2     ''    2
@@ -111,6 +109,8 @@ ctrllist = {
     'CL_restingstate'  2  25   2     ''    2
     'CD_restingstate'  2  25   2     ''    2
     'AC_restingstate'  2  25   2     ''    2
+    %     'jenny_restingstate'
+    %     %'SaltyWater_restingstate'
     % 'p50_restingstate'
     % 'FD_restingstate'
     % 'CS_restingstate'  ''
