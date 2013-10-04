@@ -67,7 +67,7 @@ end
 set(gca,'XLim',[uniqcd(1) uniqcd(end)],'FontSize',fontsize);
 if strcmp(param.plotinfo,'on')
     xlabel('Normalised inter-channel distance','FontName',fontname,'FontSize',fontsize);
-    ylabel('Normalised PLI','FontName',fontname,'FontSize',fontsize);
+    ylabel('PLI z-scores','FontName',fontname,'FontSize',fontsize);
     legend(groupnames);
 else
     xlabel(' ','FontName',fontname,'FontSize',fontsize);

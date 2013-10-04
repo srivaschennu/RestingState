@@ -22,6 +22,8 @@ tvals = oldgraph.tvals;
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
+    grp(s,1) = subjlist{s,2};
+    
     oldsubjidx = find(strcmp(basename,oldgraph.subjlist(:,1)));
     if isempty(oldsubjidx)
         error('%d: %s not found!',s,basename);

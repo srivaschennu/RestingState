@@ -1,4 +1,4 @@
-function [testdata,grp,v2idx,v1idx] = testmeasure(listname,measure,bandidx,varargin)
+function [testdata,grp,v2idx,v1idx,pval1] = testmeasure(listname,measure,bandidx,varargin)
 
 load(sprintf('graphdata_%s_pli.mat',listname));
 if ~exist('measure','var') || isempty(measure)
@@ -63,7 +63,7 @@ trange = (tvals <= trange(1) & tvals >= trange(2));
 
 if strcmpi(measure,'mutual information')
     for s = 1:size(subjlist,1)
-        testdata(s,1) = squeeze(mean(mean(graph{mid,weiorbin}(s,grp == grp(s),bandidx,trange),4),2));
+        testdata(s,1) = squeeze(mean(mean(graph{mid,weiorbin}(s,grp == grp(s) & ~v2idx,bandidx,trange),4),2));
     end
 else
     testdata = squeeze(mean(mean(graph{mid,weiorbin}(:,bandidx,trange,:),4),3));
@@ -71,18 +71,20 @@ end
 powerdata = mean(powerdata.bandpower(:,bandidx,:),3);
 
 %% test patients vs controls group difference
-[pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
-fprintf('%s band %s: Ctrl %.2f, Pat %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
-    bands{bandidx},measure,mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats.ranksum,pval);
+% [pval1,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
+[~,pval1,~,stats] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),'Vartype','unequal');
+fprintf('%s band %s: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...
+    bands{bandidx},measure,mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats.tstat,pval1);
 
 %% compare vs to mcs patients
-[pval,~,stats] = ranksum(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx));
-fprintf('%s band %s: MCS - VS = %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
-    bands{bandidx},measure,mean(testdata(grp == 1 & ~v2idx))-mean(testdata(grp == 0 & ~v2idx)),stats.ranksum,pval);
+% [pval2,~,stats] = ranksum(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx));
+% fprintf('%s band %s: MCS - VS = %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
+%     bands{bandidx},measure,mean(testdata(grp == 1 & ~v2idx))-mean(testdata(grp == 0 & ~v2idx)),stats.ranksum,pval2);
 
-%% compare power between imagers and non-imagers
-[pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx & ~tennis),testdata((grp == 0 | grp == 1) & ~v2idx & tennis));
-fprintf('Imagers vs non-imagers %s band power: Mann-whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
+%% compare measure between VS imagers and non-imagers
+% [pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx & ~tennis),testdata((grp == 0 | grp == 1) & ~v2idx & tennis));
+[~,pval2,~,stats] = ttest2(testdata(grp == 0 & ~v2idx & ~tennis),testdata(grp == 0 & ~v2idx & tennis),'Vartype','unequal');
+fprintf('VS Imagers vs non-imagers %s band power: t = %.2f, p = %.3f.\n',bands{bandidx},stats.tstat,pval2);
 
 %% correlate patients with crs scores
 
@@ -95,7 +97,7 @@ datatable = sortrows(cat(2,...
     2);
 mdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on');
 fprintf('%s %s: R2 = %.2f, p = %.3f.\n',bands{bandidx},measure,mdl.Rsquared.Adjusted,doftest(mdl));
-exmdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0 & datatable(:,3) == 1));
+exmdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0));
 fprintf('%s %s (excl): R2 = %.2f, p = %.3f.\n',bands{bandidx},measure,exmdl.Rsquared.Adjusted,doftest(exmdl));
 
 % test with power covariate
@@ -113,17 +115,19 @@ legendoff(scatter(datatable(datatable(:,4) == 0 & datatable(:,3) == 0,2), ...
     datatable(datatable(:,4) == 0 & datatable(:,3) == 0,1),'red'));
 legendoff(scatter(datatable(datatable(:,4) == 0 & datatable(:,3) == 1,2), ...
     datatable(datatable(:,4) == 0 & datatable(:,3) == 1,1),'red','filled'));
+% legendoff(scatter(datatable(datatable(:,4) == 0,2),datatable(datatable(:,4) == 0,1),'red','filled'));
 %MCS
 legendoff(scatter(datatable(datatable(:,4) == 1 & datatable(:,3) == 0,2), ...
     datatable(datatable(:,4) == 1 & datatable(:,3) == 0,1),'blue'));
 legendoff(scatter(datatable(datatable(:,4) == 1 & datatable(:,3) == 1,2), ...
     datatable(datatable(:,4) == 1 & datatable(:,3) == 1,1),'blue','filled'));
+% legendoff(scatter(datatable(datatable(:,4) == 1,2),datatable(datatable(:,4) == 1,1),'blue','filled'));
 
 b = mdl.Coefficients.Estimate;
 plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'-','Color','black',...
     'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
 b = exmdl.Coefficients.Estimate;
-plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'--','Color','black',...
+plot(datatable(datatable(:,4) == 1,2),b(1)+b(2)*datatable(datatable(:,4) == 1,2),'--','Color','black',...
     'Display',sprintf('R^2 = %.2f, p = %.3f',exmdl.Rsquared.Adjusted,doftest(exmdl)));
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
@@ -160,52 +164,52 @@ futable = sortrows(cat(2,...
     powerdata(v1idx)),...
     2);
 
-%% correlate follow-ups
-% [rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
-% fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
-
-mdl = LinearModel.fit(futable(:,2),futable(:,1),'RobustOpts','off');
-fprintf('%s follow-up: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
-% powmdl = LinearModel.fit(futable(:,[2 3]),futable(:,1),'RobustOpts','off');
-% fprintf('%s follow-up with power: R2 = %.2f, p = %.3f.\n',bands{bandidx},powmdl.Rsquared.Adjusted,doftest(powmdl));
-
-figure('Color','white');
-hold all
-legendoff(scatter(futable(:,2),futable(:,1),'filled'));
-
-b = mdl.Coefficients.Estimate;
-plot(futable(:,2),b(1)+b(2)*futable(:,2),'-','Color','black',...
-    'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
-% b = powmdl.Coefficients.Estimate;
-% plot(futable(:,2),b(1)+b(2)*futable(:,2),'--','Color','black',...
-%     'Display',sprintf('R^2 = %.2f, p = %.3f',powmdl.Rsquared.Adjusted,doftest(powmdl)));
-
-set(gca,'FontName',fontname,'FontSize',fontsize);
-if ~isempty(param.xlim)
-    set(gca,'XLim',param.xlim);
-end
-if ~isempty(param.ylim)
-    set(gca,'YLim',param.ylim);
-end
-xlabel(sprintf('Visit1 %s %s',bands{bandidx},measure),'FontName',fontname,'FontSize',fontsize);
-if strcmp(param.plotinfo,'on')
-    ylabel('V2 CRS-R - V1 CRS-R','FontName',fontname,'FontSize',fontsize);
-else
-    ylabel(' ','FontName',fontname,'FontSize',fontsize);
-end
-if strcmp(param.legend,'on')
-    leg_h = legend('show');
-    if isempty(param.legendposition)
-        set(leg_h,'Location','Best');
-    else
-        set(leg_h,'Location',param.legendposition);
-    end
-    txt_h = findobj(leg_h,'type','text');
-    set(txt_h,'FontSize',fontsize-6,'FontWeight','bold')
-    legend('boxoff');
-end
-
-export_fig(sprintf('figures/measurefu_%s_%s.eps',measure,bands{bandidx}));
-close(gcf);
-
+% %% correlate follow-ups
+% % [rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
+% % fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
+% 
+% mdl = LinearModel.fit(futable(:,2),futable(:,1),'RobustOpts','off');
+% fprintf('%s follow-up: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
+% % powmdl = LinearModel.fit(futable(:,[2 3]),futable(:,1),'RobustOpts','off');
+% % fprintf('%s follow-up with power: R2 = %.2f, p = %.3f.\n',bands{bandidx},powmdl.Rsquared.Adjusted,doftest(powmdl));
+% 
+% figure('Color','white');
+% hold all
+% legendoff(scatter(futable(:,2),futable(:,1),'filled'));
+% 
+% b = mdl.Coefficients.Estimate;
+% plot(futable(:,2),b(1)+b(2)*futable(:,2),'-','Color','black',...
+%     'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
+% % b = powmdl.Coefficients.Estimate;
+% % plot(futable(:,2),b(1)+b(2)*futable(:,2),'--','Color','black',...
+% %     'Display',sprintf('R^2 = %.2f, p = %.3f',powmdl.Rsquared.Adjusted,doftest(powmdl)));
+% 
+% set(gca,'FontName',fontname,'FontSize',fontsize);
+% if ~isempty(param.xlim)
+%     set(gca,'XLim',param.xlim);
+% end
+% if ~isempty(param.ylim)
+%     set(gca,'YLim',param.ylim);
+% end
+% xlabel(sprintf('Visit1 %s %s',bands{bandidx},measure),'FontName',fontname,'FontSize',fontsize);
+% if strcmp(param.plotinfo,'on')
+%     ylabel('V2 CRS-R - V1 CRS-R','FontName',fontname,'FontSize',fontsize);
+% else
+%     ylabel(' ','FontName',fontname,'FontSize',fontsize);
+% end
+% if strcmp(param.legend,'on')
+%     leg_h = legend('show');
+%     if isempty(param.legendposition)
+%         set(leg_h,'Location','Best');
+%     else
+%         set(leg_h,'Location',param.legendposition);
+%     end
+%     txt_h = findobj(leg_h,'type','text');
+%     set(txt_h,'FontSize',fontsize-6,'FontWeight','bold')
+%     legend('boxoff');
+% end
+% 
+% export_fig(sprintf('figures/measurefu_%s_%s.eps',measure,bands{bandidx}));
+% close(gcf);
+% 
 end

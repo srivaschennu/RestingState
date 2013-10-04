@@ -75,7 +75,7 @@ v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
 
 %% compare power between patients and controls
-testdata = mean(bandpower(:,bandidx,occipital),3)*100;
+testdata = mean(bandpower(:,bandidx,:),3)*100;
 tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 
 [pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
@@ -89,9 +89,9 @@ fprintf('%s band power: MCS - VS = %.2f, Mann-Whitney U = %.2f, p = %.3f.\n',...
     bands{bandidx},mean(testdata(grp == 1 & ~v2idx))-mean(testdata(grp == 0 & ~v2idx)),...
     stats.ranksum,pval);
 
-%% compare power between imagers and non-imagers
-[pval,~,stats] = ranksum(testdata(~tennisidx),testdata(tennisidx));
-fprintf('Imagers vs non-imagers %s band power: Mann-Whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
+% %% compare power between imagers and non-imagers
+% [pval,~,stats] = ranksum(testdata(~tennisidx),testdata(tennisidx));
+% fprintf('Imagers vs non-imagers %s band power: Mann-Whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
 
 %% correlate peak freq with crs
 peakdata = mean(bandpeak((grp == 0 | grp == 1) & ~v2idx,bandidx,occipital),3);
@@ -141,20 +141,22 @@ datatable = sortrows(cat(2,...
     2);
 mdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on');
 fprintf('%s band power: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
-exmdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0 & datatable(:,3) == 1));
-fprintf('%s band power (excl): R2 = %.2f, p = %.3f.\n',bands{bandidx},exmdl.Rsquared.Adjusted,doftest(exmdl));
+% exmdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0 & datatable(:,3) == 1));
+% fprintf('%s band power (excl): R2 = %.2f, p = %.3f.\n',bands{bandidx},exmdl.Rsquared.Adjusted,doftest(exmdl));
 
 figure('Color','white'); hold all
 %VS
-legendoff(scatter(datatable(datatable(:,4) == 0 & datatable(:,3) == 0,2), ...
-    datatable(datatable(:,4) == 0 & datatable(:,3) == 0,1),'red'));
-legendoff(scatter(datatable(datatable(:,4) == 0 & datatable(:,3) == 1,2), ...
-    datatable(datatable(:,4) == 0 & datatable(:,3) == 1,1),'red','filled'));
+% legendoff(scatter(datatable(datatable(:,4) == 0 & datatable(:,3) == 0,2), ...
+%     datatable(datatable(:,4) == 0 & datatable(:,3) == 0,1),'red'));
+% legendoff(scatter(datatable(datatable(:,4) == 0 & datatable(:,3) == 1,2), ...
+%     datatable(datatable(:,4) == 0 & datatable(:,3) == 1,1),'red','filled'));
+legendoff(scatter(datatable(datatable(:,4) == 0,2),datatable(datatable(:,4) == 0,1),'red','filled'));
 %MCS
-legendoff(scatter(datatable(datatable(:,4) == 1 & datatable(:,3) == 0,2), ...
-    datatable(datatable(:,4) == 1 & datatable(:,3) == 0,1),'blue'));
-legendoff(scatter(datatable(datatable(:,4) == 1 & datatable(:,3) == 1,2), ...
-    datatable(datatable(:,4) == 1 & datatable(:,3) == 1,1),'blue','filled'));
+% legendoff(scatter(datatable(datatable(:,4) == 1 & datatable(:,3) == 0,2), ...
+%     datatable(datatable(:,4) == 1 & datatable(:,3) == 0,1),'blue'));
+% legendoff(scatter(datatable(datatable(:,4) == 1 & datatable(:,3) == 1,2), ...
+%     datatable(datatable(:,4) == 1 & datatable(:,3) == 1,1),'blue','filled'));
+legendoff(scatter(datatable(datatable(:,4) == 1,2),datatable(datatable(:,4) == 1,1),'blue','filled'));
 
 b = mdl.Coefficients.Estimate;
 plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'-','Color','black',...
@@ -170,8 +172,13 @@ end
 if ~isempty(param.ylim)
     set(gca,'YLim',param.ylim);
 end
-xlabel(sprintf('Occipital %s power (%%)',lower(bands{bandidx})),'FontName',fontname,'FontSize',fontsize);
-ylabel('CRS-R score','FontName',fontname,'FontSize',fontsize);
+xlabel(sprintf('%s power (%%)',bands{bandidx}),'FontName',fontname,'FontSize',fontsize);
+if strcmp(param.plotinfo','on')
+    ylabel('CRS-R score','FontName',fontname,'FontSize',fontsize);
+else
+    ylabel(' ','FontName',fontname,'FontSize',fontsize);
+end
+
 if strcmp(param.legend,'on')
     leg_h = legend('show');
     if isempty(param.legendposition)
@@ -191,44 +198,44 @@ futable = sortrows(cat(2,...
     testdata(v1idx)),...
     2);
 
-%% correlate follow-up power with crs
-% [rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
-% fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
-mdl = LinearModel.fit(futable(:,2),futable(:,1),'RobustOpts','off');
-fprintf('%s follow-up: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
-
-figure('Color','white');
-hold all
-legendoff(scatter(futable(:,2),futable(:,1),'filled'));
-b = mdl.Coefficients.Estimate;
-plot(futable(:,2),b(1)+b(2)*futable(:,2),'-','Color','black',...
-    'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
-
-set(gca,'FontName',fontname,'FontSize',fontsize);
-if ~isempty(param.xlim)
-    set(gca,'XLim',param.xlim);
-end
-if ~isempty(param.ylim)
-    set(gca,'YLim',param.ylim);
-end
-xlabel(sprintf('Visit 1 %s power (%%)',bands{bandidx}),'FontName',fontname,'FontSize',fontsize);
-if strcmp(param.plotinfo,'on')
-    ylabel('Visit 2 - Visit 1 CRS-R','FontName',fontname,'FontSize',fontsize);
-else
-    ylabel(' ','FontName',fontname,'FontSize',fontsize);
-end
-if strcmp(param.legend,'on')
-    leg_h = legend('show');
-    if isempty(param.legendposition)
-        set(leg_h,'Location','Best');
-    else
-        set(leg_h,'Location',param.legendposition);
-    end
-    txt_h = findobj(leg_h,'type','text');
-    set(txt_h,'FontSize',fontsize-6,'FontWeight','bold')
-    legend('boxoff');
-end
-
-export_fig(sprintf('figures/powerfu_%s.eps',bands{bandidx}));
-close(gcf);
+% %% correlate follow-up power with crs
+% % [rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
+% % fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
+% mdl = LinearModel.fit(futable(:,2),futable(:,1),'RobustOpts','off');
+% fprintf('%s follow-up: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
+% 
+% figure('Color','white');
+% hold all
+% legendoff(scatter(futable(:,2),futable(:,1),'filled'));
+% b = mdl.Coefficients.Estimate;
+% plot(futable(:,2),b(1)+b(2)*futable(:,2),'-','Color','black',...
+%     'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
+% 
+% set(gca,'FontName',fontname,'FontSize',fontsize);
+% if ~isempty(param.xlim)
+%     set(gca,'XLim',param.xlim);
+% end
+% if ~isempty(param.ylim)
+%     set(gca,'YLim',param.ylim);
+% end
+% xlabel(sprintf('Visit 1 %s power (%%)',bands{bandidx}),'FontName',fontname,'FontSize',fontsize);
+% if strcmp(param.plotinfo,'on')
+%     ylabel('Visit 2 - Visit 1 CRS-R','FontName',fontname,'FontSize',fontsize);
+% else
+%     ylabel(' ','FontName',fontname,'FontSize',fontsize);
+% end
+% if strcmp(param.legend,'on')
+%     leg_h = legend('show');
+%     if isempty(param.legendposition)
+%         set(leg_h,'Location','Best');
+%     else
+%         set(leg_h,'Location',param.legendposition);
+%     end
+%     txt_h = findobj(leg_h,'type','text');
+%     set(txt_h,'FontSize',fontsize-6,'FontWeight','bold')
+%     legend('boxoff');
+% end
+% 
+% export_fig(sprintf('figures/powerfu_%s.eps',bands{bandidx}));
+% close(gcf);
 end
