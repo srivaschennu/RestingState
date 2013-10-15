@@ -69,13 +69,13 @@ for s = 1:size(subjlist,1)
         
         for thresh = 1:length(tvals)
 %             fprintf(' %.2f',tvals(thresh));
-            threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh));
+%             threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh));
             bincohmat = double(threshold_proportional(cohmat,tvals(thresh)) ~= 0);
             
             if randomise
                 %randomisation
-                threshcoh = randmio_und(threshcoh,15);
-                bincohmat = randmio_und(bincohmat,15);
+%                 threshcoh = randmio_und(threshcoh,50);
+                bincohmat = randmio_und(bincohmat,50);
             end
             
 %             %%%%%%  WEIGHTED %%%%%%%%%

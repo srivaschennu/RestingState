@@ -78,16 +78,18 @@ v1idx = nonzeros(v1idx);
 testdata = mean(bandpower(:,bandidx,:),3)*100;
 tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 
-[pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
-fprintf('%s band power: Ctrl - Pat = %.2f, Mann-Whitney U = %.2f, p = %.3f.\n',...
+% [pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
+[~,pval,~,stats] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
+fprintf('%s band power: Ctrl - Pat = %.2f, t = %.2f, p = %.3f.\n',...
     bands{bandidx},mean(testdata(grp == 2))-mean(testdata((grp == 0 | grp == 1) & ~v2idx)),...
-    stats.ranksum,pval);
+    stats.tstat,pval);
 
 %% compare vs to mcs patients
-[pval,~,stats] = ranksum(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx));
-fprintf('%s band power: MCS - VS = %.2f, Mann-Whitney U = %.2f, p = %.3f.\n',...
-    bands{bandidx},mean(testdata(grp == 1 & ~v2idx))-mean(testdata(grp == 0 & ~v2idx)),...
-    stats.ranksum,pval);
+% [pval,~,stats] = ranksum(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx));
+% [~,pval,~,stats] = ttest2(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx),'Vartype','unequal');
+% fprintf('%s band power: MCS - VS = %.2f, t = %.2f, p = %.3f.\n',...
+%     bands{bandidx},mean(testdata(grp == 1 & ~v2idx))-mean(testdata(grp == 0 & ~v2idx)),...
+%     stats.tstat,pval);
 
 % %% compare power between imagers and non-imagers
 % [pval,~,stats] = ranksum(testdata(~tennisidx),testdata(tennisidx));
