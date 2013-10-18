@@ -1,4 +1,4 @@
-function [testdata,grp,v2idx,v1idx,pval1] = testmeasure(listname,measure,bandidx,varargin)
+function [testdata,grp,v2idx,v1idx,pval1,stats1] = testmeasure(listname,measure,bandidx,varargin)
 
 load(sprintf('graphdata_%s_pli.mat',listname));
 if ~exist('measure','var') || isempty(measure)
@@ -65,10 +65,8 @@ if strcmpi(measure,'mutual information')
     for s = 1:size(subjlist,1)
         testdata(s,1) = squeeze(mean(mean(graph{mid,weiorbin}(s,grp == grp(s) & ~v2idx,bandidx,trange),4),2));
     end
-% elseif strcmpi(measure,'participation coefficient')
-%     testdata = squeeze(mean(skewness(graph{mid,weiorbin}(:,bandidx,trange,:),[],4),3));
-elseif strcmpi(measure,'centrality')
-    testdata = squeeze(mean(max(graph{mid,weiorbin}(:,bandidx,trange,:),[],4),3));
+elseif strcmpi(measure,'participation coefficient')
+    testdata = squeeze(mean(std(graph{mid,weiorbin}(:,bandidx,trange,:),[],4),3));
 else
     testdata = squeeze(mean(mean(graph{mid,weiorbin}(:,bandidx,trange,:),4),3));
 end
@@ -76,9 +74,9 @@ powerdata = mean(powerdata.bandpower(:,bandidx,:),3);
 
 %% test patients vs controls group difference
 % [pval1,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
-[~,pval1,~,stats] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
+[~,pval1,~,stats1] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
 fprintf('%s band %s: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...
-    bands{bandidx},measure,mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats.tstat,pval1);
+    bands{bandidx},measure,mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats1.tstat,pval1);
 
 %% compare vs to mcs patients
 % [pval2,~,stats] = ranksum(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx));
@@ -87,8 +85,8 @@ fprintf('%s band %s: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...
 
 %% compare measure between VS imagers and non-imagers
 % [pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx & ~tennis),testdata((grp == 0 | grp == 1) & ~v2idx & tennis));
-[~,pval2,~,stats] = ttest2(testdata(grp == 0 & ~v2idx & ~tennis),testdata(grp == 0 & ~v2idx & tennis),[],[],'unequal');
-fprintf('VS Imagers vs non-imagers %s band power: t = %.2f, p = %.3f.\n',bands{bandidx},stats.tstat,pval2);
+[~,pval2,~,stats2] = ttest2(testdata(grp == 0 & ~v2idx & ~tennis),testdata(grp == 0 & ~v2idx & tennis),[],[],'unequal');
+fprintf('VS Imagers vs non-imagers %s band power: t = %.2f, p = %.3f.\n',bands{bandidx},stats2.tstat,pval2);
 
 %% correlate patients with crs scores
 

@@ -75,15 +75,8 @@ for bandidx = 1:3
             groupvals = squeeze(max(graph{m,weiorbin}(grp == groups(g) & ~v2idx,bandidx,:,:),[],4));
         elseif strcmp(graph{m,1},'mutual information')
             groupvals = squeeze(mean(graph{m,weiorbin}(grp == groups(g) & ~v2idx,grp == groups(g) & ~v2idx,bandidx,:),2));
-%         elseif strcmp(graph{m,1},'participation coefficient')
-%             groupvals = squeeze(std(graph{m,weiorbin}(grp == groups(g) & ~v2idx,bandidx,:,:),[],4));
-        elseif strcmp(graph{m,1},'centrality')
-            allgroupvals = squeeze(graph{m,weiorbin}(grp == groups(g) & ~v2idx,bandidx,:,:));
-            for s = 1:size(allgroupvals,1)
-                for t = 1:size(allgroupvals,2)
-                    groupvals(s,t) = mean(allgroupvals(s,t,allgroupvals(s,t,:) > quantile(squeeze(allgroupvals(s,t,:)),0.75)),3);
-                end
-            end
+        elseif strcmp(graph{m,1},'participation coefficient')
+            groupvals = squeeze(std(graph{m,weiorbin}(grp == groups(g) & ~v2idx,bandidx,:,:),[],4));
         else
             groupvals = squeeze(mean(graph{m,weiorbin}(grp == groups(g) & ~v2idx,bandidx,:,:),4));
         end
