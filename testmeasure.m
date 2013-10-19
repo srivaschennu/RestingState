@@ -22,10 +22,8 @@ param = finputcheck(varargin, {
 fontname = 'Helvetica';
 fontsize = 28;
 
-powerdata = load(sprintf('alldata_%s.mat',listname));
-load chanlist
-
-randgraph = load(sprintf('graphdata_%s_rand_pli.mat',listname));
+% powerdata = load(sprintf('alldata_%s.mat',listname));
+% load chanlist
 
 weiorbin = 3;
 trange = [0.5 0.1];
@@ -41,9 +39,12 @@ bands = {
     'Gamma'
     };
 
-graph{end+1,1} = 'small-worldness';
-graph{end,2} = ( mean(graph{1,2},4) ./ mean(randgraph.graph{1,2},4) ) ./ ( graph{2,2} ./ randgraph.graph{2,2}) ;
-graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
+if exist(sprintf('graphdata_%s_rand_pli.mat',listname),'file')
+    randgraph = load(sprintf('graphdata_%s_rand_pli.mat',listname));
+    graph{end+1,1} = 'small-worldness';
+    graph{end,2} = ( mean(graph{1,2},4) ./ mean(randgraph.graph{1,2},4) ) ./ ( graph{2,2} ./ randgraph.graph{2,2}) ;
+    graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
+end
 
 mid = find(strcmpi(measure,graph(:,1)));
 if isempty(mid)
@@ -70,7 +71,7 @@ elseif strcmpi(measure,'participation coefficient')
 else
     testdata = squeeze(mean(mean(graph{mid,weiorbin}(:,bandidx,trange,:),4),3));
 end
-powerdata = mean(powerdata.bandpower(:,bandidx,:),3);
+% powerdata = mean(powerdata.bandpower(:,bandidx,:),3);
 
 %% test patients vs controls group difference
 % [pval1,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
@@ -94,9 +95,9 @@ datatable = sortrows(cat(2,...
     crs((grp == 0 | grp == 1) & ~v2idx),...
     testdata((grp == 0 | grp == 1) & ~v2idx),...
     tennis((grp == 0 | grp == 1) & ~v2idx),...
-    grp((grp == 0 | grp == 1) & ~v2idx),...
-    powerdata((grp == 0 | grp == 1) & ~v2idx)),...
+    grp((grp == 0 | grp == 1) & ~v2idx)),...
     2);
+%     powerdata((grp == 0 | grp == 1) & ~v2idx)),...
 mdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on');
 fprintf('%s %s: R2 = %.2f, p = %.3f.\n',bands{bandidx},measure,mdl.Rsquared.Adjusted,doftest(mdl));
 exmdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0));
@@ -162,9 +163,9 @@ close(gcf);
 
 futable = sortrows(cat(2,...
     crs(v2idx)-crs(v1idx),...
-    testdata(v1idx),...
-    powerdata(v1idx)),...
+    testdata(v1idx)),...
     2);
+%     powerdata(v1idx)),...
 
 % %% correlate follow-ups
 % % [rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
