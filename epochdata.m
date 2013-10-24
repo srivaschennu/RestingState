@@ -18,7 +18,7 @@ EEG = eeg_checkset(EEG,'eventconsistency');
 fprintf('\nSegmenting into %d sec epochs.\n',epochlength);
 EEG = pop_epoch(EEG,{'EVNT'},[0 epochlength]);
 
-EEG = eeg_detrend(EEG);
+% EEG = eeg_detrend(EEG);
 
 EEG = pop_rmbase(EEG,[]);
 
