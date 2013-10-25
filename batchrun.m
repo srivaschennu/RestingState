@@ -44,22 +44,22 @@ for s = 1:length(subjlist)
 % %     
     %         fix1020(basename);
     
-%     coherence(basename);
+    coherence(basename);
     
 %         load([filepath basename 'plifdr.mat']);
 %         plotgraph(squeeze(matrix(3,:,:)),chanlocs,'plotqt',0.75,'legend','off');
 %         export_fig(gcf,['figures/' basename 'pligraph.tif']);
 %         close(gcf);
 
-                javaaddpath('/Users/chennu/Work/mffimport/MFF-1.0.d0004.jar');
-                filenames = dir(sprintf('%s%s*', filepath, basename));
-                mfffiles = filenames(logical(cell2mat({filenames.isdir})));
-                filename = mfffiles.name;
-    
-                fprintf('Reading information from %s%s.\n',filepath,filename);
-                mffinfo = read_mff_info([filepath filename]);
-                mffdate = sscanf(mffinfo.date,'%d-%d-%d');
-                batchres{s,2} = sprintf('%02d/%02d/%04d',mffdate(3),mffdate(2),mffdate(1));
+%                 javaaddpath('/Users/chennu/Work/mffimport/MFF-1.0.d0004.jar');
+%                 filenames = dir(sprintf('%s%s*', filepath, basename));
+%                 mfffiles = filenames(logical(cell2mat({filenames.isdir})));
+%                 filename = mfffiles.name;
+%     
+%                 fprintf('Reading information from %s%s.\n',filepath,filename);
+%                 mffinfo = read_mff_info([filepath filename]);
+%                 mffdate = sscanf(mffinfo.date,'%d-%d-%d');
+%                 batchres{s,2} = sprintf('%02d/%02d/%04d',mffdate(3),mffdate(2),mffdate(1));
 %     
 %                 fprintf('Reading subject information from %s%s.\n',filepath,filename);
 %                 subjinfo{s} = read_mff_subj([filepath filename]);
@@ -86,4 +86,4 @@ end
 %     fprintf('\n');
 % end
 
-save batchres.mat batchres
+% save batchres.mat batchres

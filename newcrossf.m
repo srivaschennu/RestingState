@@ -500,7 +500,7 @@ case { 'ms', 'deg', 'rad' },;
 otherwise error('Angleunit must be either ''deg'', ''rad'', or ''ms''');
 end;    
 switch g.type
-case { 'coher', 'phasecoher' 'phasecoher2' 'amp' 'crossspec' 'pli' 'icoh'},;
+case { 'coher', 'phasecoher' 'phasecoher2' 'amp' 'crossspec' 'pli' 'wpli' 'icoh'},;
 otherwise error('Type must be either ''coher'', ''phasecoher'', ''crossspec'', or ''amp''');
 end;    
 switch g.boottype
@@ -821,6 +821,10 @@ switch g.type
  case 'pli',
   coherres = abs(mean( sign( angle(alltfX) - angle(alltfY) ), 3));
 
+ case 'wpli',
+  coherres = imag(alltfX .* conj(alltfY));
+  coherres = ((sum(coherres,3).^2) - sum(coherres.^2,3)) ./ ((sum(abs(coherres),3).^2) - sum(coherres.^2,3));
+  
  case 'icoh',
   coherres = sum(imag(alltfX .* conj(alltfY)), 3) ./ sqrt( sum(abs(alltfX).^2,3) .* sum(abs(alltfY).^2,3) );
 end;
@@ -876,6 +880,10 @@ else
            case 'pli',
             inputdata = { alltfX alltfY };
             formula = [ 'abs(mean(sign(angle(arg1)-angle(arg2)),3));' ];
+            
+           case 'wpli',
+            inputdata = { alltfX alltfY };
+            formula = [ '((sum(imag(arg1 .* conj(arg2)),3).^2) - sum(imag(arg1 .* conj(arg2)).^2,3)) ./ ((sum(abs(imag(arg1 .* conj(arg2))),3).^2) - sum(imag(arg1 .* conj(arg2)).^2,3));' ];
             
            case 'icoh', 
             inputdata = { alltfX alltfY }; % default
@@ -944,7 +952,7 @@ end;
 % proces outputs
 % --------------
 switch g.type
-    case {'pli' 'icoh'}
+    case {'pli' 'wpli' 'icoh'}
         Rangle = zeros(size(coherres));
         R = coherres;
     otherwise
