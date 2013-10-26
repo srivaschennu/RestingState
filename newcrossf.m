@@ -819,7 +819,8 @@ switch g.type
   coherres = sum( coherresout ./ abs(coherresout), 3) / g.trials;
 
  case 'pli',
-  coherres = abs(mean( sign( angle(alltfX) - angle(alltfY) ), 3));
+%   coherres = abs(mean( sign( angle(alltfX) - angle(alltfY) ), 3));
+  coherres = abs(mean( sign( imag ( alltfX .* conj(alltfY) ) ), 3));
 
  case 'wpli',
   coherres = imag(alltfX .* conj(alltfY));
@@ -879,7 +880,8 @@ else
             
            case 'pli',
             inputdata = { alltfX alltfY };
-            formula = [ 'abs(mean(sign(angle(arg1)-angle(arg2)),3));' ];
+%             formula = [ 'abs(mean(sign(angle(arg1)-angle(arg2)),3));' ];
+            formula = [ 'abs(mean( sign( imag ( arg1 .* conj(arg2) ) ), 3));' ];
             
            case 'wpli',
             inputdata = { alltfX alltfY };
