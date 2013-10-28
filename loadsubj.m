@@ -51,18 +51,18 @@ patlist = {
 	'p0213_restingstate'	1	19	1	''	1
 	'p0413_restingstate'	1	14	0	''	1
     
-    %follow-ups
-    'p0311V2_restingstate'  0   8   0   'p0311_restingstate1'   0
-    'p1311v2_restingstate'  0   8   0   'p1311_restingstate'    1
-    'p0612v2_restingstate'  0   7   1   'p0612_restingstate'    1
-    'p0712v2_restingstate'  0   7   0   'p0712_restingstate'    0
-    'p0411V2_restingstate'  1   8   0   'p0411_restingstate1'   1 %noisy
-    'p0512v2_restingstate'  1   8   0   'p0512_restingstate'    1 %noisy
-    'p0511V2_restingstate'  1   10  0   'p0511_restingstate'    0 %noisy
-    'p1511v2_restingstate'  1   10  0   'p1511_restingstate'    1
-    'p0611v2_restingstate'  1   11  0   'p0611_restingstate'    0 %noisy
-    'p0211V2_restingstate'	1   16  1   'p0211_restingstate1'   1
-    'p1811v2_restingstate'  1   20  0   'p1811_restingstate'    1
+%     %follow-ups
+%     'p0311V2_restingstate'  0   8   0   'p0311_restingstate1'   0
+%     'p1311v2_restingstate'  0   8   0   'p1311_restingstate'    1
+%     'p0612v2_restingstate'  0   7   1   'p0612_restingstate'    1
+%     'p0712v2_restingstate'  0   7   0   'p0712_restingstate'    0
+%     'p0411V2_restingstate'  1   8   0   'p0411_restingstate1'   1 %noisy
+%     'p0512v2_restingstate'  1   8   0   'p0512_restingstate'    1 %noisy
+%     'p0511V2_restingstate'  1   10  0   'p0511_restingstate'    0 %noisy
+%     'p1511v2_restingstate'  1   10  0   'p1511_restingstate'    1
+%     'p0611v2_restingstate'  1   11  0   'p0611_restingstate'    0 %noisy
+%     'p0211V2_restingstate'	1   16  1   'p0211_restingstate1'   1
+%     'p1811v2_restingstate'  1   20  0   'p1811_restingstate'    1
     
     %duplicates
     % p0211_restingstate2'   2   14 duplicate

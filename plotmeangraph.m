@@ -1,6 +1,6 @@
 function plotmeangraph(listname,bandidx)
 
-load(sprintf('alldata_%s.mat',listname));
+load(sprintf('alldata_%s_wpli.mat',listname));
 load chanlist
 
 v1idx = zeros(size(subjlist,1),1);

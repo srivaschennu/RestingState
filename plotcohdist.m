@@ -6,7 +6,7 @@ param = finputcheck(varargin, {
     'plotinfo', 'string', {'on','off'}, 'on'; ...
     });
 
-load(sprintf('alldata_%s.mat',listname));
+load(sprintf('alldata_%s_wpli.mat',listname));
 load chanlist
 
 fontname = 'Helvetica';

@@ -67,4 +67,4 @@ for s = 1:size(subjlist,1)
     end
     grp(s,1) = subjlist{s,2};
 end
-save(sprintf('alldata_%s.mat',listname), 'grp', 'spectra', 'freqbins', 'bandpower', 'bandpeak', 'allcoh', 'subjlist', 'degree');
+save(sprintf('alldata_%s_pli.mat',listname), 'grp', 'spectra', 'freqbins', 'bandpower', 'bandpeak', 'allcoh', 'subjlist', 'degree');
