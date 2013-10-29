@@ -1,4 +1,4 @@
-function calcgraph(listname,randomise)
+function calcgraph(listname,conntype,randomise)
 
 loadpaths
 loadsubj
@@ -12,12 +12,12 @@ chandist = chandist / max(chandist(:));
 
 subjlist = eval(listname);
 
-tvals = 0.5:-0.025:0.025;
+tvals = 0.5:-0.025:0.1;%0.025;
 
 if randomise
-    savename = sprintf('graphdata_%s_rand_pli.mat',listname);
+    savename = sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype);
 else
-    savename = sprintf('graphdata_%s_pli.mat',listname);
+    savename = sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype);
 end
 
 graph{1,1} = 'clustering';
@@ -37,7 +37,7 @@ for s = 1:size(subjlist,1)
     
     fprintf('Processing %s.',basename);
     
-    load([filepath basename 'plifdr.mat']);
+    load([filepath 'wpli/' basename 'wplifdr.mat']);
     
     [sortedchan,sortidx] = sort({chanlocs.labels});
     if ~strcmp(chanlist,cell2mat(sortedchan))

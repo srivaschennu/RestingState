@@ -1,9 +1,11 @@
-function plotmi(listname,bandidx)
+function plotmi(listname,conntype,bandidx)
+
+loadpaths
 
 fontname = 'Helvetica';
 fontsize = 28;
 
-load(sprintf('graphdata_%s_pli.mat',listname));
+load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
 
 weiorbin = 3;
 trange = [0.5 0.1];
@@ -54,7 +56,7 @@ end
 set(gca,'FontName',fontname,'FontSize',fontsize,'XTick',[],'YTick',[],...
     'XLim',[0.5 size(plotdata,1)+0.5],'YLim',[0.5 size(plotdata,2)+0.5],'YDir','reverse');
 
-% export_fig(gcf,sprintf('figures/NMImap_%s.eps',bands{bandidx}));
+export_fig(gcf,sprintf('figures/NMImap_%s.eps',bands{bandidx}));
 
 export_fig(gcf,sprintf('figures/NMImap_%s.eps',bands{bandidx}),'-opengl');
 

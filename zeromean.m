@@ -1,6 +1,6 @@
 function cohmat = zeromean(cohmat)
 
-% cohmat(isnan(cohmat)) = 0;
+cohmat(isnan(cohmat)) = 0;
 nzloc = (cohmat > 0);
 % submat = zeros(size(cohmat));
 % submat(nzloc) = mean(nonzeros(cohmat))-0.5;

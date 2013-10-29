@@ -1,4 +1,6 @@
-function plotcohdist(listname,bandidx,varargin)
+function plotcohdist(listname,conntype,bandidx,varargin)
+
+loadpaths
 
 param = finputcheck(varargin, {
     'xlim', 'real', [], []; ...
@@ -6,7 +8,7 @@ param = finputcheck(varargin, {
     'plotinfo', 'string', {'on','off'}, 'on'; ...
     });
 
-load(sprintf('alldata_%s_wpli.mat',listname));
+load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
 load chanlist
 
 fontname = 'Helvetica';

@@ -1,6 +1,8 @@
-function calcmi(listname)
+function calcmi(listname,conntype)
 
-load(sprintf('graphdata_%s_pli.mat',listname), 'graph');
+loadpaths
+
+load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype), 'graph');
 
 if any(strcmp('mutual information',graph(:,1)))
     midx = find(strcmp('mutual information',graph(:,1)));
@@ -32,4 +34,4 @@ for weiorbin = 3
     graph{midx,weiorbin} = mutinfo;
 end
 
-save(sprintf('graphdata_%s_pli.mat',listname), 'graph','-append');
+save(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype), 'graph','-append');

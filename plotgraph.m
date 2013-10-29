@@ -4,6 +4,7 @@ param = finputcheck(varargin, {
     'plotqt', 'real', [], 0.9; ...
     'minfo', 'integer', [], []; ...
     'legend', 'string', {'on','off'}, 'on'; ...
+    'plotinter', 'string', {'on','off'}, 'on'; ...
     });
 
 %%%%% VISUAL FEATURES
@@ -36,8 +37,8 @@ figure('Color','white','Name',mfilename);
 
 colormap(hsv);
 cmap = colormap;
-num_mod = length(unique(param.minfo));
-vcol = cmap(round((param.minfo/num_mod)*size(cmap,1)),:);
+num_mod = max(param.minfo);
+vcol = cmap(ceil((param.minfo/num_mod)*size(cmap,1)),:);
 
 for c = 1:length(chanlocs)
     vsize(c) = length(nonzeros(matrix(c,:)));
@@ -60,28 +61,31 @@ for r = 1:size(matrix,1)
     for c = 1:size(matrix,2)
         if r < c && matrix(r,c) > 0
             if param.minfo(r) == param.minfo(c)
-                ecol = cmap(round((param.minfo(r)/num_mod)*size(cmap,1)),:);
+                ecol = cmap(ceil((param.minfo(r)/num_mod)*size(cmap,1)),:);
                 hLine = line([chanlocs(r).X chanlocs(c).X],[chanlocs(r).Y chanlocs(c).Y],...
                     [chanlocs(r).Z chanlocs(c).Z],'Color',ecol,'LineWidth',...
                     lwrange(1)+(matrix(r,c)*(lwrange(2)-lwrange(1))),'LineStyle','-');
-            else
+            elseif strcmp(param.plotinter,'on')
                 hLine = line([chanlocs(r).X chanlocs(c).X],[chanlocs(r).Y chanlocs(c).Y],...
                     [chanlocs(r).Z chanlocs(c).Z],'Color',[0 0 0],'LineWidth',...
                     lwrange(1)+(matrix(r,c)*(lwrange(2)-lwrange(1))),'LineStyle','-');
-            end
-            
-            if matrix(r,c) == max(nonzeros(matrix)) && plotmax
-                set(hLine,'DisplayName',sprintf('%.02f',origmatrix(r,c)));
-                plotmax = false;
-            elseif matrix(r,c) == min(nonzeros(matrix)) && plotmin
-                set(hLine,'DisplayName',sprintf('%.02f',origmatrix(r,c)));
-                plotmin = false;
             else
-                hAnnotation = get(hLine,'Annotation');
-                hLegendEntry = get(hAnnotation,'LegendInformation');
-                set(hLegendEntry,'IconDisplayStyle','off')
+                hLine = [];
             end
             
+            if ~isempty(hLine)
+                if matrix(r,c) == max(nonzeros(matrix)) && plotmax
+                    set(hLine,'DisplayName',sprintf('%.02f',origmatrix(r,c)));
+                    plotmax = false;
+                elseif matrix(r,c) == min(nonzeros(matrix)) && plotmin
+                    set(hLine,'DisplayName',sprintf('%.02f',origmatrix(r,c)));
+                    plotmin = false;
+                else
+                    hAnnotation = get(hLine,'Annotation');
+                    hLegendEntry = get(hAnnotation,'LegendInformation');
+                    set(hLegendEntry,'IconDisplayStyle','off')
+                end
+            end
         end
     end
 end

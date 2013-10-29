@@ -1,6 +1,9 @@
-function [testdata,grp,v2idx,v1idx,pval1,stats1] = testmeasure(listname,measure,bandidx,varargin)
+function [testdata,grp,v2idx,v1idx,pval1,stats1] = testmeasure(listname,conntype,measure,bandidx,varargin)
 
-load(sprintf('graphdata_%s_pli.mat',listname));
+loadpaths
+
+load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
+
 if ~exist('measure','var') || isempty(measure)
     for m = 1:size(graph,1)
         fprintf('%s\n',graph{m,1});
@@ -39,8 +42,8 @@ bands = {
     'Gamma'
     };
 
-if exist(sprintf('graphdata_%s_rand_pli.mat',listname),'file')
-    randgraph = load(sprintf('graphdata_%s_rand_pli.mat',listname));
+if exist(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype),'file')
+    randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));
     graph{end+1,1} = 'small-worldness';
     graph{end,2} = ( mean(graph{1,2},4) ./ mean(randgraph.graph{1,2},4) ) ./ ( graph{2,2} ./ randgraph.graph{2,2}) ;
     graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
@@ -80,14 +83,13 @@ fprintf('%s band %s: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...
     bands{bandidx},measure,mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats1.tstat,pval1);
 
 %% compare vs to mcs patients
-% [pval2,~,stats] = ranksum(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx));
-% fprintf('%s band %s: MCS - VS = %.2f, Mann-whitney U = %.2f, p = %.3f.\n',...
-%     bands{bandidx},measure,mean(testdata(grp == 1 & ~v2idx))-mean(testdata(grp == 0 & ~v2idx)),stats.ranksum,pval2);
+[~,pval2,~,stats2] = ttest2(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx),[],[],'unequal');
+fprintf('MCS vs. VS: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
 
 %% compare measure between VS imagers and non-imagers
 % [pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx & ~tennis),testdata((grp == 0 | grp == 1) & ~v2idx & tennis));
 [~,pval2,~,stats2] = ttest2(testdata(grp == 0 & ~v2idx & ~tennis),testdata(grp == 0 & ~v2idx & tennis),[],[],'unequal');
-fprintf('VS Imagers vs non-imagers %s band power: t = %.2f, p = %.3f.\n',bands{bandidx},stats2.tstat,pval2);
+fprintf('VS Imagers vs non-imagers: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
 
 %% correlate patients with crs scores
 

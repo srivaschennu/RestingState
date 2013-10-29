@@ -1,4 +1,4 @@
-function calcdata(listname)
+function calcdata(listname,conntype)
 
 loadpaths
 loadsubj
@@ -7,7 +7,7 @@ subjlist = eval(listname);
 
 load chanlist.mat
 
-tvals = 0.5:-0.025:0.025;
+tvals = 0.5:-0.025:0.1;%0.025;
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
@@ -23,7 +23,7 @@ for s = 1:size(subjlist,1)
     specinfo.specstd = specinfo.specstd(sortidx,:);
     specinfo.specstd = 10.^(specinfo.specstd/10);
     
-    load([filepath basename 'plifdr.mat']);
+    load([filepath conntype '/' basename conntype 'fdr.mat']);
     [sortedchan,sortidx] = sort({chanlocs.labels});
     if ~strcmp(chanlist,cell2mat(sortedchan))
         error('Channel names do not match!');
@@ -41,6 +41,7 @@ for s = 1:size(subjlist,1)
     
     spectra(s,:,:) = specinfo.spectra;
     for f = 1:size(matrix,1)
+%         cohmat = squeeze(matrix(f,:,:));
         cohmat = zeromean(squeeze(matrix(f,:,:)));
         
         %collate spectral info
@@ -67,4 +68,4 @@ for s = 1:size(subjlist,1)
     end
     grp(s,1) = subjlist{s,2};
 end
-save(sprintf('alldata_%s_pli.mat',listname), 'grp', 'spectra', 'freqbins', 'bandpower', 'bandpeak', 'allcoh', 'subjlist', 'degree');
+save(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype), 'grp', 'spectra', 'freqbins', 'bandpower', 'bandpeak', 'allcoh', 'subjlist', 'degree');

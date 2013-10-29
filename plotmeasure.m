@@ -1,4 +1,6 @@
-function plotmeasure(listname,measure,varargin)
+function plotmeasure(listname,conntype,measure,varargin)
+
+loadpaths
 
 param = finputcheck(varargin, {
     'ylim', 'real', [], []; ...
@@ -13,7 +15,7 @@ param = finputcheck(varargin, {
 fontname = 'Helvetica';
 fontsize = 28;
 
-load(sprintf('graphdata_%s_pli.mat',listname));
+load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
 
 if ~exist('measure','var') || isempty(measure)
     for m = 1:size(graph,1)
@@ -24,8 +26,8 @@ end
 
 weiorbin = 3;
 
-if exist(sprintf('graphdata_%s_rand_pli.mat',listname),'file')
-    randgraph = load(sprintf('graphdata_%s_rand_pli.mat',listname));
+if exist(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype),'file')
+    randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));
     graph{end+1,1} = 'small-worldness';
     graph{end,2} = ( mean(graph{1,2},4) ./ mean(randgraph.graph{1,2},4) ) ./ ( graph{2,2} ./ randgraph.graph{2,2}) ;
     graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;

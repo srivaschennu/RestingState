@@ -25,7 +25,7 @@ pval=zeros(size(freqlist,1),EEG.nbchan,EEG.nbchan);
 % matrixcoherence of each pair of electrodes
 for chann1=1:EEG.nbchan
     fprintf('%d',chann1);
-    for chann2=1:EEG.nbchan
+    for chann2=50:EEG.nbchan
         fprintf(' %d',chann2);
         if chann1 < chann2
             [cohall, cohbootall, freqsout] = calcpli(EEG,chann1,chann2);
