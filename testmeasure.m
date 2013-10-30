@@ -128,12 +128,17 @@ legendoff(scatter(datatable(datatable(:,4) == 1 & datatable(:,3) == 1,2), ...
     datatable(datatable(:,4) == 1 & datatable(:,3) == 1,1),'blue','filled'));
 % legendoff(scatter(datatable(datatable(:,4) == 1,2),datatable(datatable(:,4) == 1,1),'blue','filled'));
 
+% [~,maxidx] = max(testdata);
+maxidx = 3;
+legendoff(scatter(testdata(maxidx),crs(maxidx),100,'black','LineWidth',2));
+% fprintf('Max at %s.\n',subjlist{maxidx,1});
+
 b = mdl.Coefficients.Estimate;
 plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'-','Color','black',...
     'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
-b = exmdl.Coefficients.Estimate;
-plot(datatable(datatable(:,4) == 1,2),b(1)+b(2)*datatable(datatable(:,4) == 1,2),'--','Color','black',...
-    'Display',sprintf('R^2 = %.2f, p = %.3f',exmdl.Rsquared.Adjusted,doftest(exmdl)));
+% b = exmdl.Coefficients.Estimate;
+% plot(datatable(datatable(:,4) == 1,2),b(1)+b(2)*datatable(datatable(:,4) == 1,2),'--','Color','black',...
+%     'Display',sprintf('R^2 = %.2f, p = %.3f',exmdl.Rsquared.Adjusted,doftest(exmdl)));
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
 if ~isempty(param.ylim)
@@ -160,6 +165,7 @@ if strcmp(param.legend,'on')
     set(txt_h,'FontSize',fontsize-6,'FontWeight','bold')
     legend('boxoff');
 end
+
 export_fig(sprintf('figures/crscorr_%s_%s.eps',measure,bands{bandidx}));
 close(gcf);
 

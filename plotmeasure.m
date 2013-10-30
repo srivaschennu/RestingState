@@ -8,6 +8,7 @@ param = finputcheck(varargin, {
     'plotinfo', 'string', {'on','off'}, 'on'; ...
     'plotticks', 'string', {'on','off'}, 'on'; ...
     'ylabel', 'string', {}, measure; ...
+    'randratio', 'string', {'on','off'}, 'off'; ...
     });
 
 % load graphdata_allsubj_icoh
@@ -66,6 +67,10 @@ plottvals = tvals(trange);
 
 m = find(strcmpi(measure,graph(:,1)));
 
+if strcmp(param.randratio,'on')
+    graph{m,weiorbin} = graph{m,weiorbin} ./ randgraph.graph{m,weiorbin};
+end
+
 barvals = zeros(3,length(groups));
 errvals = zeros(3,length(groups));
 
@@ -83,9 +88,9 @@ for bandidx = 1:3
             groupvals = squeeze(mean(graph{m,weiorbin}(grp == groups(g) & ~v2idx,bandidx,:,:),4));
         end
         groupmean = mean(groupvals,1);
-        groupstd = std(groupvals,[],1)/sqrt(size(groupvals,1));
+        groupste = std(groupvals,[],1)/sqrt(size(groupvals,1));
         set(gca,'XDir','reverse');
-        errorbar(plottvals,groupmean(trange),groupstd(trange),'LineWidth',1);
+        errorbar(plottvals,groupmean(trange),groupste(trange),'LineWidth',1);
         set(gca,'XLim',[plottvals(end) plottvals(1)],'FontName',fontname,'FontSize',fontsize);
         if ~isempty(param.ylim)
             set(gca,'YLim',param.ylim);
@@ -107,7 +112,7 @@ for bandidx = 1:3
             xlabel(' ','FontName',fontname,'FontSize',fontsize);
         end
         if bandidx == 1 && strcmp(param.legend,'on')
-            legend(groupnames,'Location','NorthWest');
+            legend(groupnames,'Location','NorthEast');
         end
         
     else

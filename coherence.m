@@ -5,8 +5,8 @@ loadpaths
 
 alpha = 0.05;
 
-%     if exist([filepath basename 'plifdr.mat'],'file')
-%         fprintf('%s exists. Skipping...\n',[basename 'plifdr.mat']);
+%     if exist([filepath basename 'wplifdr.mat'],'file')
+%         fprintf('%s exists. Skipping...\n',[basename 'wplifdr.mat']);
 %         continue;
 %     end
 
@@ -28,7 +28,7 @@ for chann1=1:EEG.nbchan
     for chann2=50:EEG.nbchan
         fprintf(' %d',chann2);
         if chann1 < chann2
-            [cohall, cohbootall, freqsout] = calcpli(EEG,chann1,chann2);
+            [cohall, cohbootall, freqsout] = calcwpli(EEG,chann1,chann2);
             
             for fidx = 1:size(freqlist,1)
                 [matrix(fidx,chann1,chann2), pval(fidx,chann1,chann2)] = ...
@@ -43,7 +43,7 @@ for chann1=1:EEG.nbchan
     fprintf('\n');
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    save([filepath basename 'pliboot.mat'],'matrix','pval','chanlocs');
+    save([filepath basename 'wpliboot.mat'],'matrix','pval','chanlocs');
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 fprintf('\n');
@@ -71,4 +71,4 @@ for f = 1:size(freqlist,1)
     matrix(f,:,:) = coh;
     pval(f,:,:) = pvals;
 end
-save([filepath basename 'plifdr.mat'],'matrix','pval','chanlocs');
+save([filepath basename 'wplifdr.mat'],'matrix','pval','chanlocs');
