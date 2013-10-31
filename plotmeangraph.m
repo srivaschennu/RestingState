@@ -36,7 +36,7 @@ groups = unique(grp);
     for g = 1:length(groups)
 %         groupcoh = squeeze(mean(mean(allcoh(grp == groups(g),bandidx,:,:,:),3),1));
         groupcoh = squeeze(mean(allcoh(grp == groups(g),bandidx,:,:),1));
-        plotgraph(groupcoh,sortedlocs,'plotqt',0.95,'legend','off','plotinter','off');
+        plotgraph(groupcoh,sortedlocs,'plotqt',0.7,'legend','off','plotinter','off');
         set(gcf,'Name',sprintf('group %s: %s band',grouplist{g},bands{bandidx}));
         export_fig(gcf,sprintf('figures/meangraph_%s_%s.tif',grouplist{g},bands{bandidx}));
         close(gcf);

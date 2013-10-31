@@ -136,9 +136,9 @@ legendoff(scatter(testdata(maxidx),crs(maxidx),100,'black','LineWidth',2));
 b = mdl.Coefficients.Estimate;
 plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'-','Color','black',...
     'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
-% b = exmdl.Coefficients.Estimate;
-% plot(datatable(datatable(:,4) == 1,2),b(1)+b(2)*datatable(datatable(:,4) == 1,2),'--','Color','black',...
-%     'Display',sprintf('R^2 = %.2f, p = %.3f',exmdl.Rsquared.Adjusted,doftest(exmdl)));
+b = exmdl.Coefficients.Estimate;
+plot(datatable(datatable(:,4) == 1,2),b(1)+b(2)*datatable(datatable(:,4) == 1,2),'--','Color','black',...
+    'Display',sprintf('R^2 = %.2f, p = %.3f',exmdl.Rsquared.Adjusted,doftest(exmdl)));
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
 if ~isempty(param.ylim)

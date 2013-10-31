@@ -14,6 +14,11 @@ subjlist = {
     'p0613_restingstate'
     };
 
+testlist = {
+	'p0311_restingstate1'	0	7	0	''	0
+    'NW_restingstate'   2  25   2     ''    2
+    };
+
 patlist = {
     %
     % patients

@@ -8,7 +8,7 @@ if ~exist('randomise','var') || isempty(randomise)
 end
 
 load chanlist
-chandist = chandist / max(chandist(:));
+% chandist = chandist / max(chandist(:));
 
 subjlist = eval(listname);
 
@@ -31,6 +31,7 @@ graph{8,1} = 'participation coefficient';
 graph{9,1} = 'connection density';
 graph{10,1} = 'mutual information';
 
+load(savename);
             
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
@@ -99,14 +100,14 @@ for s = 1:size(subjlist,1)
 %             graph{6,2}(s,f,thresh,1:length(chanlocs)) = betweenness_wei(1./threshcoh);
 %             
 %             %modular span
-%             dist(s,f,thresh) = 0;
+%             dist = 0;
 %             for m = 1:max(Ci)
 %                 if sum(Ci == m) > 1
 %                     distmat = chandist(Ci == m,Ci == m) .* threshcoh(Ci == m,Ci == m);
-%                     dist(s,f,thresh) = dist(s,f,thresh) + mean(distmat(logical(triu(distmat,1))));
+%                     dist = dist + mean(distmat(logical(triu(distmat,1))));
 %                 end
 %             end
-%             graph{7,2}(s,f,thresh) = dist(s,f,thresh) / max(Ci);
+%             graph{7,2}(s,f,thresh) = dist / max(Ci);
 % 
 %             %participation coefficient
 %             graph{8,2}(s,f,thresh,1:length(chanlocs)) = participation_coef(threshcoh,Ci);
@@ -115,39 +116,41 @@ for s = 1:size(subjlist,1)
             
             %BINARY
             
-            %clustering coefficient
-            graph{1,3}(s,f,thresh,1:length(chanlocs)) = mean(clustering_coef_bu(bincohmat));
-            
-            %characteristic path length
-            graph{2,3}(s,f,thresh) = charpath(distance_bin(bincohmat));
-
-            %global efficiency
-            graph{3,3}(s,f,thresh) = efficiency_bin(bincohmat);
-
-            [Ci, Q] = modularity_louvain_und(bincohmat);
-            %modularity
-            graph{4,3}(s,f,thresh) = Q;
-            %community structure
-            graph{5,3}(s,f,thresh,1:length(chanlocs)) = Ci;
-
-            %betweenness centrality
-            graph{6,3}(s,f,thresh,1:length(chanlocs)) = betweenness_bin(bincohmat);
+%             %clustering coefficient
+%             graph{1,3}(s,f,thresh,1:length(chanlocs)) = mean(clustering_coef_bu(bincohmat));
+%             
+%             %characteristic path length
+%             graph{2,3}(s,f,thresh) = charpath(distance_bin(bincohmat));
+% 
+%             %global efficiency
+%             graph{3,3}(s,f,thresh) = efficiency_bin(bincohmat);
+% 
+%             [Ci, Q] = modularity_louvain_und(bincohmat);
+%             %modularity
+%             graph{4,3}(s,f,thresh) = Q;
+%             %community structure
+%             graph{5,3}(s,f,thresh,1:length(chanlocs)) = Ci;
+% 
+%             %betweenness centrality
+%             graph{6,3}(s,f,thresh,1:length(chanlocs)) = betweenness_bin(bincohmat);
             
             %modular span
-            dist(s,f,thresh) = 0;
+            Ci = squeeze(graph{5,3}(s,f,thresh,1:length(chanlocs)));
+            modspan = zeros(1,max(Ci));
             for m = 1:max(Ci)
-                if sum(Ci == m) > 1
+                if sum(Ci == m) > 1 && any(any(bincohmat(Ci == m,Ci == m)))
                     distmat = chandist(Ci == m,Ci == m) .* bincohmat(Ci == m,Ci == m);
-                    dist(s,f,thresh) = dist(s,f,thresh) + mean(distmat(logical(triu(distmat,1))));
+                    distmat = nonzeros(triu(distmat,1));
+                    modspan(m) = mean(distmat);
                 end
             end
-            graph{7,3}(s,f,thresh) = dist(s,f,thresh) / max(Ci);
+            graph{7,3}(s,f,thresh) = max(nonzeros(modspan));
             
-            %participation coefficient
-            graph{8,3}(s,f,thresh,1:length(chanlocs)) = participation_coef(bincohmat,Ci);
-            
-            %connection density
-            graph{9,3}(s,f,thresh) = density_und(bincohmat);
+%             %participation coefficient
+%             graph{8,3}(s,f,thresh,1:length(chanlocs)) = participation_coef(bincohmat,Ci);
+%             
+%             %connection density
+%             graph{9,3}(s,f,thresh) = density_und(bincohmat);
 
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
