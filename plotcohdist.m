@@ -43,12 +43,20 @@ bands = {
     'Gamma'
     };
 
-chandist = chandist ./ max(chandist(:));
+nbins = 15;
 
-chandist = chandist(:);
-uniqcd = sort(unique(chandist));
-uniqcd = linspace(uniqcd(1),uniqcd(end),10);
+chandist = chandist(logical(triu(ones(size(chandist)),1)));
+sorteddist = sort(chandist);
+[numcd,uniqcd] = hist(sorteddist,nbins);
 
+figure('Color','white');
+bar(uniqcd,numcd);
+set(gca,'FontSize',fontsize,'XLim',[uniqcd(1)-1 uniqcd(end)+1],'YLim',[0 800]);
+xlabel('Inter-channel distance (cm)','FontName',fontname,'FontSize',fontsize);
+ylabel('Number of channel pairs','FontName',fontname,'FontSize',fontsize);
+export_fig(gcf,sprintf('figures/chandist.eps'));
+
+uniqcd = [sorteddist(1) uniqcd sorteddist(end)];
 
 figure('Color','white'); hold all
 for g = groups
@@ -59,18 +67,17 @@ for g = groups
         selvals = (chandist > uniqcd(u) & chandist <= uniqcd(u+1));
         for s = 1:size(groupcoh,1)
             cohmat = squeeze(groupcoh(s,:,:));
-            cohmat = cohmat(:);
-            cohmat = cohmat(selvals);
-            plotvals(u,s) = mean(cohmat);
+            cohmat = cohmat(logical(triu(ones(size(cohmat)),1)));
+            plotvals(u,s) = mean(cohmat(selvals));
         end
     end
     errorbar(uniqcd(2:end),mean(plotvals,2),std(plotvals,[],2)/sqrt(size(plotvals,2)),'LineWidth',1);
 end
-set(gca,'XLim',[uniqcd(1) uniqcd(end)],'FontSize',fontsize);
+set(gca,'XLim',[uniqcd(1) uniqcd(end)],'FontName',fontname,'FontSize',fontsize);
 if strcmp(param.plotinfo,'on')
-    xlabel('Normalised inter-channel distance','FontName',fontname,'FontSize',fontsize);
-    ylabel('PLI z-scores','FontName',fontname,'FontSize',fontsize);
-    legend(groupnames);
+    xlabel('Inter-channel distance (cm)','FontName',fontname,'FontSize',fontsize);
+    ylabel('dwPLI z-scores','FontName',fontname,'FontSize',fontsize);
+    legend(groupnames,'Location','NorthEast');
 else
     xlabel(' ','FontName',fontname,'FontSize',fontsize);
     ylabel(' ','FontName',fontname,'FontSize',fontsize);
