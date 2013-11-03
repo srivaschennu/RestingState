@@ -50,10 +50,13 @@ sorteddist = sort(chandist);
 [numcd,uniqcd] = hist(sorteddist,nbins);
 
 figure('Color','white');
+figpos = get(gcf,'Position');
+figpos(4) = figpos(4)/2;
+set(gcf,'Position',figpos);
 bar(uniqcd,numcd);
-set(gca,'FontSize',fontsize,'XLim',[uniqcd(1)-1 uniqcd(end)+1],'YLim',[0 800]);
-xlabel('Inter-channel distance (cm)','FontName',fontname,'FontSize',fontsize);
-ylabel('Number of channel pairs','FontName',fontname,'FontSize',fontsize);
+set(gca,'FontSize',fontsize+4,'FontName',fontname,'XLim',[uniqcd(1)-1 uniqcd(end)+1],'YLim',[0 500]);
+xlabel('Inter-channel distance (cm)','FontName',fontname,'FontSize',fontsize+4);
+ylabel('Chan. pairs','FontName',fontname,'FontSize',fontsize+4);
 export_fig(gcf,sprintf('figures/chandist.eps'));
 
 uniqcd = [sorteddist(1) uniqcd sorteddist(end)];
