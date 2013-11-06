@@ -47,7 +47,7 @@ vsize = vsize - min(vsize);
 vsize = vsize/max(vsize);
 
 hScat = scatter3(cell2mat({chanlocs.X}), cell2mat({chanlocs.Y}), cell2mat({chanlocs.Z}),...
-    ptrange(1)+(vsize*(ptrange(2)-ptrange(1))), vcol, 'filled', 'MarkerEdgeColor', [0.1 0.1 0.1]);
+    ptrange(1)+(vsize*(ptrange(2)-ptrange(1))), vcol, 'filled', 'MarkerEdgeColor', [0 0 0],'LineWidth',2);
 hAnnotation = get(hScat,'Annotation');
 hLegendEntry = get(hAnnotation,'LegendInformation');
 set(hLegendEntry,'IconDisplayStyle','off')
