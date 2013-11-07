@@ -128,10 +128,10 @@ legendoff(scatter(datatable(datatable(:,4) == 1 & datatable(:,3) == 1,2), ...
     datatable(datatable(:,4) == 1 & datatable(:,3) == 1,1),'blue','filled'));
 % legendoff(scatter(datatable(datatable(:,4) == 1,2),datatable(datatable(:,4) == 1,1),'blue','filled'));
 
-% [~,maxidx] = max(testdata);
-maxidx = 3;
-legendoff(scatter(testdata(maxidx),crs(maxidx),100,'black','LineWidth',2));
-% fprintf('Max at %s.\n',subjlist{maxidx,1});
+p0311idx = 1;
+legendoff(scatter(testdata(p0311idx),crs(p0311idx),100,'black','LineWidth',2));
+p1611idx = 3;
+legendoff(scatter(testdata(p1611idx),crs(p1611idx),100,'black','LineWidth',2));
 
 b = mdl.Coefficients.Estimate;
 plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'-','Color','black',...

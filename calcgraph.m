@@ -31,7 +31,7 @@ graph{8,1} = 'participation coefficient';
 graph{9,1} = 'connection density';
 graph{10,1} = 'mutual information';
 
-load(savename);
+% load(savename);
             
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
@@ -117,7 +117,7 @@ for s = 1:size(subjlist,1)
             %BINARY
             
             %clustering coefficient
-            graph{1,3}(s,f,thresh,1:length(chanlocs)) = mean(clustering_coef_bu(bincohmat));
+            graph{1,3}(s,f,thresh,1:length(chanlocs)) = clustering_coef_bu(bincohmat);
             
             %characteristic path length
             graph{2,3}(s,f,thresh) = charpath(distance_bin(bincohmat));
@@ -152,12 +152,12 @@ for s = 1:size(subjlist,1)
             %connection density
             graph{9,3}(s,f,thresh) = density_und(bincohmat);
             
-%             %rentian scaling
-%             [N, E] = rentian_scaling(bincohmat,chanXYZ,5000);
-%             E = E(N<size(bincohmat,1)/2);
-%             N = N(N<size(bincohmat,1)/2);
-%             b = robustfit(log10(N),log10(E));
-%             graph{9,3}(s,f,thresh) = b(2);
+            %rentian scaling
+            [N, E] = rentian_scaling(bincohmat,chanXYZ,5000);
+            E = E(N<size(bincohmat,1)/2);
+            N = N(N<size(bincohmat,1)/2);
+            b = robustfit(log10(N),log10(E));
+            graph{9,3}(s,f,thresh) = b(2);
 
 
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
