@@ -40,15 +40,23 @@ imagesc(plotdata);
 
 for g = 1:length(groups)-1
     groupedge(g) = find(grp == groups(g),1,'last');
-    line([groupedge(g)+0.5 groupedge(g)+0.5],ylim,'Color','black','Linewidth',4);
-    line(xlim,[groupedge(g)+0.5 groupedge(g)+0.5],'Color','black','Linewidth',4);
+    line([groupedge(g)+0.5 groupedge(g)+0.5],ylim,'Color','black','LineWidth',6);
+    line(xlim,[groupedge(g)+0.5 groupedge(g)+0.5],'Color','black','LineWidth',6);
 end
 groupedge = [0 groupedge size(plotdata,1)];
 for g = 1:length(groupedge)-1
-    line([groupedge(g)+0.5 groupedge(g)+0.5],[groupedge(g)+0.5 groupedge(g+1)+0.5],'Color','red','Linewidth',4);
-    line([groupedge(g+1)+0.5 groupedge(g+1)+0.5],[groupedge(g)+0.5 groupedge(g+1)+0.5],'Color','red','Linewidth',4);
-    line([groupedge(g)+0.5 groupedge(g+1)+0.5],[groupedge(g)+0.5 groupedge(g)+0.5],'Color','red','Linewidth',4);
-    line([groupedge(g)+0.5 groupedge(g+1)+0.5],[groupedge(g+1)+0.5 groupedge(g+1)+0.5],'Color','red','Linewidth',4);
+%     line([groupedge(g)+0.5 groupedge(g)+0.5],[groupedge(g)+0.5 groupedge(g+1)+0.5],'Color','red','LineWidth',6);
+%     line([groupedge(g)+0.5 groupedge(g+1)+0.5],[groupedge(g+1)+0.5 groupedge(g+1)+0.5],'Color','red','LineWidth',6);
+    line([groupedge(g+1)+0.5 groupedge(g+1)+0.5],[groupedge(g)+0.5 groupedge(g+1)+0.5],'Color','red','LineWidth',6);
+    line([groupedge(g)+0.5 groupedge(g+1)+0.5],[groupedge(g)+0.5 groupedge(g)+0.5],'Color','red','LineWidth',6);
+    line([groupedge(g)+0.5 groupedge(g+1)+0.5],[groupedge(g)+0.5 groupedge(g+1)+0.5],'Color','red','LineWidth',6);
+    
+    if bandidx == 3 && g < 3
+        line([groupedge(g)+0.5 groupedge(g+1)+0.5],[groupedge(end)+0.5 groupedge(end)+0.5],'Color','magenta','LineWidth',6);
+        line([groupedge(g)+0.5 groupedge(g+1)+0.5],[groupedge(end-1)+0.5 groupedge(end-1)+0.5],'Color','magenta','LineWidth',6);
+        line([groupedge(g)+0.5 groupedge(g)+0.5],[groupedge(end-1)+0.5 groupedge(end)+0.5],'Color','magenta','LineWidth',6);
+        line([groupedge(g+1)+0.5 groupedge(g+1)+0.5],[groupedge(end-1)+0.5 groupedge(end)+0.5],'Color','magenta','LineWidth',6);
+    end
 end
 
 % colorbar
