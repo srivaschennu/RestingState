@@ -1,11 +1,13 @@
-function calcgraph(listname,conntype,randomise)
+function calcgraph(listname,conntype,varargin)
 
 loadpaths
 loadsubj
 
-if ~exist('randomise','var') || isempty(randomise)
-    randomise = false;
-end
+param = finputcheck(varargin, {
+    'randomise', 'string', {'on','off'}, 'off'; ...
+    'latticise', 'string', {'on','off'}, 'off'; ...
+    'rewire', 'integer', [], 20; ...
+    });
 
 load chanlist
 chandist = chandist / max(chandist(:));
@@ -14,8 +16,15 @@ subjlist = eval(listname);
 
 tvals = 0.5:-0.025:0.1;%0.025;
 
-if randomise
+if strcmp(param.randomise,'on')
     savename = sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype);
+elseif strcmp(param.latticise,'on')
+    distdiag = repmat(1:length(sortedlocs),[length(sortedlocs) 1]);
+    for d = 1:size(distdiag,1)
+        distdiag(d,:) = abs(distdiag(d,:) - d);
+    end
+    distdiag = distdiag ./ max(distdiag(:));
+    savename = sprintf('%s/%s/graphdata_%s_latt_%s.mat',filepath,conntype,listname,conntype);
 else
     savename = sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype);
 end
@@ -73,12 +82,13 @@ for s = 1:size(subjlist,1)
 %             threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh));
             bincohmat = double(threshold_proportional(cohmat,tvals(thresh)) ~= 0);
             
-            if randomise
+            if strcmp(param.randomise,'on')
                 %randomisation
-%                 threshcoh = randmio_und(threshcoh,50);
-                bincohmat = randmio_und(bincohmat,50);
+%                 threshcoh = randmio_und_connected(threshcoh,param.rewire);
+                bincohmat = randmio_und_connected(bincohmat,param.rewire);
+            elseif strcmp(param.latticise,'on')
+                bincohmat = latmio_und_connected(bincohmat,param.rewire,distdiag);
             end
-            
 %             %%%%%%  WEIGHTED %%%%%%%%%
 % 
 %             %clustering coeffcient
@@ -152,12 +162,12 @@ for s = 1:size(subjlist,1)
             %connection density
             graph{9,3}(s,f,thresh) = density_und(bincohmat);
             
-            %rentian scaling
-            [N, E] = rentian_scaling(bincohmat,chanXYZ,5000);
-            E = E(N<size(bincohmat,1)/2);
-            N = N(N<size(bincohmat,1)/2);
-            b = robustfit(log10(N),log10(E));
-            graph{9,3}(s,f,thresh) = b(2);
+%             %rentian scaling
+%             [N, E] = rentian_scaling(bincohmat,chanXYZ,5000);
+%             E = E(N<size(bincohmat,1)/2);
+%             N = N(N<size(bincohmat,1)/2);
+%             b = robustfit(log10(N),log10(E));
+%             graph{9,3}(s,f,thresh) = b(2);
 
 
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
