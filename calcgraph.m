@@ -54,7 +54,7 @@ for s = 1:size(subjlist,1)
         error('Channel names do not match!');
     end
     matrix = matrix(:,sortidx,sortidx);
-    pval = pval(:,sortidx,sortidx);
+%     pval = pval(:,sortidx,sortidx);
     
     chanlocs = chanlocs(sortidx);
 %     chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];

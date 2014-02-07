@@ -12,6 +12,9 @@ for s = 1:length(subjlist)
     
     fprintf('Processing %s.\n',basename);
     
+%     calcftspec(basename);
+    ftcoherence(basename);
+    
 %     copyfile([filepath basename '.set'],[filepath 'commonfreq/' basename '.set']);
 %     copyfile([filepath basename '.fdt'],[filepath 'commonfreq/' basename '.fdt']);
 %     copyfile([filepath basename 'pliboot.mat'],[filepath 'commonfreq/' basename 'pliboot.mat']);
@@ -44,7 +47,7 @@ for s = 1:length(subjlist)
 % %     
     %         fix1020(basename);
     
-    coherence(basename);
+%     coherence(basename);
     
 %         load([filepath basename 'plifdr.mat']);
 %         plotgraph(squeeze(matrix(3,:,:)),chanlocs,'plotqt',0.75,'legend','off');

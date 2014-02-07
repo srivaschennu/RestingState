@@ -14,16 +14,14 @@ for s = 1:size(subjlist,1)
     fprintf('Processing %s.\n',basename);
     
     specinfo = load([filepath basename 'spectra.mat']);
-    [sortedchan,sortidx] = sort({specinfo.chann.labels});
+    [sortedchan,sortidx] = sort({specinfo.chanlocs.labels});
     if ~strcmp(chanlist,cell2mat(sortedchan))
         error('Channel names do not match!');
     end
     specinfo.spectra = specinfo.spectra(sortidx,:);
     specinfo.spectra = 10.^(specinfo.spectra/10);
-    specinfo.specstd = specinfo.specstd(sortidx,:);
-    specinfo.specstd = 10.^(specinfo.specstd/10);
     
-    load([filepath conntype '/' basename conntype 'fdr.mat']);
+    load([filepath conntype filesep basename conntype 'fdr.mat']);
     [sortedchan,sortidx] = sort({chanlocs.labels});
     if ~strcmp(chanlist,cell2mat(sortedchan))
         error('Channel names do not match!');
