@@ -16,13 +16,13 @@ xlim = [0 45];
 ylim = [-30 15];
 
 if exist('freqlist','var') && ~isempty(freqlist)
-    save([filepath basename 'ftspec.mat'],'freqlist','-append');
+    save([filepath basename 'spectra.mat'],'freqlist','-append');
 else
-    specinfo = load([filepath basename 'ftspec.mat']);
+    specinfo = load([filepath basename 'spectra.mat']);
     fprintf('freqlist = %s\n',mat2str(specinfo.freqlist));
 end
 
-specinfo = load([filepath basename 'ftspec.mat']);
+specinfo = load([filepath basename 'spectra.mat']);
 figure('Name',basename,'Color','white'); hold all
 plot(specinfo.freqs,10*log10(specinfo.spectra'),'LineWidth',1);
 set(gca,'XLim',xlim,'YLim',ylim,'FontSize',fontsize,'FontName',fontname);
