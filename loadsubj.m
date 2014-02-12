@@ -1,17 +1,9 @@
 subjlist = {
-%     'p0612_restingstate'
-%     'p0812_restingstate1'
-%     'p0812_restingstate2'
-%     'p0912_restingstate'
-%     'p0113_restingstate'
-%     'p0213_restingstate'
-%     'p0612v2_restingstate'
-%     'p0611v2_restingstate' %noisy
-%     'p0313_restingstate' %noisy
-%     'p0512v2_restingstate' %noisy
-    'p0712v2_restingstate'
-    'p0413_restingstate'
-    'p0613_restingstate'
+'p0713_restingstate'
+'p0813_restingstate'
+'p0913_restingstate'
+'p1013_restingstate'
+'p0114_restingstate'
     };
 
 testlist = {
