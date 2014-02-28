@@ -1,5 +1,14 @@
 function plotgraph(matrix,chanlocs,varargin)
 
+% matrix - NxN symmetric connectivity matrix, where N is the number of channels
+% chanlocs - 1xN EEGLAB chanlocs structure specifying channel locations
+
+% OPTIONAL ARGUMENTS
+% plotqt - proportion of strongest edges to plot
+% minfo - 1xN module affiliation vector. Will be calculated if unspecified
+% legend - whether or not to plot legend with max and min edge weights
+% plotinter - whether or not to plot inter-modular edges
+
 param = finputcheck(varargin, {
     'plotqt', 'real', [], 0.9; ...
     'minfo', 'integer', [], []; ...
