@@ -13,8 +13,8 @@ for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
     fprintf('Processing %s.\n',basename);
     
-    specinfo = load([filepath basename 'spectra.mat']);
-    [sortedchan,sortidx] = sort({specinfo.chanlocs.labels});
+    specinfo = load([filepath conntype filesep basename 'spectra.mat']);
+    [sortedchan,sortidx] = sort({specinfo.chann.labels});
     if ~strcmp(chanlist,cell2mat(sortedchan))
         error('Channel names do not match!');
     end

@@ -47,36 +47,45 @@ end
 v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
 
-testdata = mean(mean(allcoh(:,bandidx,:,:),3),4);
+testdata = squeeze(mean(allcoh(:,bandidx,:,:),4));
+% testdata = squeeze(bandpower(:,bandidx,:));
 
-%% test patients vs controls group difference
-% [pval1,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
-[~,pval1,~,stats1] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
-fprintf('%s band: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...
-    bands{bandidx},mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats1.tstat,pval1);
-
-%% compare vs to mcs patients
-[~,pval2,~,stats2] = ttest2(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx),[],[],'unequal');
-fprintf('MCS vs. VS: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
-
-%% compare measure between VS imagers and non-imagers
-% [pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx & ~tennis),testdata((grp == 0 | grp == 1) & ~v2idx & tennis));
-[~,pval2,~,stats2] = ttest2(testdata(grp == 0 & ~v2idx & ~tennis),testdata(grp == 0 & ~v2idx & tennis),[],[],'unequal');
-fprintf('VS Imagers vs non-imagers: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
+% %% test patients vs controls group difference
+% % [pval1,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
+% [~,pval1,~,stats1] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
+% fprintf('%s band: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...
+%     bands{bandidx},mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats1.tstat,pval1);
+% 
+% %% compare vs to mcs patients
+% [~,pval2,~,stats2] = ttest2(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx),[],[],'unequal');
+% fprintf('MCS vs. VS: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
+% 
+% %% compare measure between VS imagers and non-imagers
+% % [pval,~,stats] = ranksum(testdata((grp == 0 | grp == 1) & ~v2idx & ~tennis),testdata((grp == 0 | grp == 1) & ~v2idx & tennis));
+% [~,pval2,~,stats2] = ttest2(testdata(grp == 0 & ~v2idx & ~tennis),testdata(grp == 0 & ~v2idx & tennis),[],[],'unequal');
+% fprintf('VS Imagers vs non-imagers: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
 
 %% correlate patients with crs scores
 
 datatable = sortrows(cat(2,...
     crs((grp == 0 | grp == 1) & ~v2idx),...
-    testdata((grp == 0 | grp == 1) & ~v2idx),...
+    testdata((grp == 0 | grp == 1) & ~v2idx,:),...
     tennis((grp == 0 | grp == 1) & ~v2idx),...
     grp((grp == 0 | grp == 1) & ~v2idx)),...
     2);
 %     powerdata((grp == 0 | grp == 1) & ~v2idx)),...
-mdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on');
-fprintf('%s: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
-exmdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0));
-fprintf('%s (excl): R2 = %.2f, p = %.3f.\n',bands{bandidx},exmdl.Rsquared.Adjusted,doftest(exmdl));
+for c = 1:91
+mdl = LinearModel.fit(testdata((grp == 0 | grp == 1) & ~v2idx,c),crs((grp == 0 | grp == 1) & ~v2idx),'RobustOpts','on');
+b(c,:) = mdl.Coefficients.Estimate;
+pval(c) = doftest(mdl);
+end
+
+load chanlist
+figure; topoplot(b(:,2),sortedlocs);
+
+% fprintf('%s: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
+% exmdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0));
+% fprintf('%s (excl): R2 = %.2f, p = %.3f.\n',bands{bandidx},exmdl.Rsquared.Adjusted,doftest(exmdl));
 
 % test with power covariate
 % exmdl = LinearModel.fit(datatable(:,[2 5]),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0 & datatable(:,3) == 1))
