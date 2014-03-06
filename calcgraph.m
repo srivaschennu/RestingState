@@ -47,7 +47,7 @@ for s = 1:size(subjlist,1)
     
     fprintf('Processing %s.',basename);
     
-    load([filepath 'wpli/' basename 'wplifdr.mat']);
+    load([filepath conntype filesep basename conntype 'fdr.mat']);
     
     [sortedchan,sortidx] = sort({chanlocs.labels});
     if ~strcmp(chanlist,cell2mat(sortedchan))
