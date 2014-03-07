@@ -20,9 +20,9 @@ cfg = [];
 cfg.output     = 'powandcsd';
 cfg.method     = 'mtmfft';
 cfg.foilim        = [0.1 40];
-% cfg.taper = 'rectwin';
-cfg.taper = 'dpss';
-cfg.tapsmofrq = 0.5;
+cfg.taper = 'hanning';
+% cfg.taper = 'dpss';
+% cfg.tapsmofrq = 0.5;
 cfg.keeptrials = 'yes';
 
 EEG = ft_freqanalysis(cfg,EEG);
