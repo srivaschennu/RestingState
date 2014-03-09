@@ -1,4 +1,4 @@
-function plotgraph(matrix,chanlocs,varargin)
+function minfo = plotgraph(matrix,chanlocs,varargin)
 
 % matrix - NxN symmetric connectivity matrix, where N is the number of channels
 % chanlocs - 1xN EEGLAB chanlocs structure specifying channel locations
@@ -39,15 +39,17 @@ matrix = matrix / max(max(matrix));
 
 % calculate modules *after* thresholding edges
 if isempty(param.minfo)
-    param.minfo = modularity_louvain_und(matrix);
+    minfo = modularity_louvain_und(matrix);
+else
+    minfo = param.minfo;
 end
 
 figure('Color','white','Name',mfilename);
 
 colormap(hsv);
 cmap = colormap;
-num_mod = max(param.minfo);
-vcol = cmap(ceil((param.minfo/num_mod)*size(cmap,1)),:);
+num_mod = max(minfo);
+vcol = cmap(ceil((minfo/num_mod)*size(cmap,1)),:);
 
 for c = 1:length(chanlocs)
     vsize(c) = length(nonzeros(matrix(c,:)));
@@ -69,8 +71,8 @@ plotmin = true;
 for r = 1:size(matrix,1)
     for c = 1:size(matrix,2)
         if r < c && matrix(r,c) > 0
-            if param.minfo(r) == param.minfo(c)
-                ecol = cmap(ceil((param.minfo(r)/num_mod)*size(cmap,1)),:);
+            if minfo(r) == minfo(c)
+                ecol = cmap(ceil((minfo(r)/num_mod)*size(cmap,1)),:);
                 hLine = line([chanlocs(r).X chanlocs(c).X],[chanlocs(r).Y chanlocs(c).Y],...
                     [chanlocs(r).Z chanlocs(c).Z],'Color',ecol,'LineWidth',...
                     lwrange(1)+(matrix(r,c)*(lwrange(2)-lwrange(1))),'LineStyle','-');
