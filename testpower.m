@@ -1,4 +1,6 @@
-function testpower(listname,bandidx,varargin)
+function testpower(listname,conntype,bandidx,varargin)
+
+loadpaths
 
 param = finputcheck(varargin, {
     'xlim', 'real', [], []; ...
@@ -11,7 +13,7 @@ param = finputcheck(varargin, {
 fontname = 'Helvetica';
 fontsize = 28;
 
-load(sprintf('alldata_%s.mat',listname));
+load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
 load chanlist
 
 bands = {
@@ -76,6 +78,10 @@ v1idx = nonzeros(v1idx);
 
 %% compare power between patients and controls
 testdata = mean(bandpower(:,bandidx,:),3)*100;
+
+%% compare connectivity between patients and controls
+testdata = mean(mean(allcoh(:,bandidx,:,:),3),4);
+
 tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 
 % [pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
@@ -95,21 +101,21 @@ fprintf('%s band power: Ctrl - Pat = %.2f, t = %.2f, p = %.3f.\n',...
 % [pval,~,stats] = ranksum(testdata(~tennisidx),testdata(tennisidx));
 % fprintf('Imagers vs non-imagers %s band power: Mann-Whitney U = %.2f, p = %.3f.\n',bands{bandidx},stats.ranksum,pval);
 
-%% correlate peak freq with crs
-peakdata = mean(bandpeak((grp == 0 | grp == 1) & ~v2idx,bandidx,occipital),3);
-% [rho,pval] = corr(crs((grp == 0 | grp == 1) & ~v2idx),testdata,'type','spearman');
-% fprintf('%s band peak: Spearman rho = %.2f, p = %.3f.\n',bands{bandidx},rho,pval);
-
-datatable = sortrows(cat(2,...
-    crs((grp == 0 | grp == 1) & ~v2idx),...
-    peakdata((grp == 0 | grp == 1) & ~v2idx),...
-    tennisidx,...
-    grp((grp == 0 | grp == 1) & ~v2idx)),...
-    2);
-mdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on');
-fprintf('%s band peak: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
-exmdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0 & datatable(:,3) == 1));
-fprintf('%s band peak (excl): R2 = %.2f, p = %.3f.\n',bands{bandidx},exmdl.Rsquared.Adjusted,doftest(exmdl));
+% %% correlate peak freq with crs
+% peakdata = mean(bandpeak((grp == 0 | grp == 1) & ~v2idx,bandidx,occipital),3);
+% % [rho,pval] = corr(crs((grp == 0 | grp == 1) & ~v2idx),testdata,'type','spearman');
+% % fprintf('%s band peak: Spearman rho = %.2f, p = %.3f.\n',bands{bandidx},rho,pval);
+% 
+% datatable = sortrows(cat(2,...
+%     crs((grp == 0 | grp == 1) & ~v2idx),...
+%     peakdata((grp == 0 | grp == 1) & ~v2idx),...
+%     tennisidx,...
+%     grp((grp == 0 | grp == 1) & ~v2idx)),...
+%     2);
+% mdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on');
+% fprintf('%s band peak: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
+% exmdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0));
+% fprintf('%s band peak (excl): R2 = %.2f, p = %.3f.\n',bands{bandidx},exmdl.Rsquared.Adjusted,doftest(exmdl));
 
 % figure('Color','white'); hold all
 % %VS
