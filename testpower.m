@@ -79,9 +79,6 @@ v1idx = nonzeros(v1idx);
 %% compare power between patients and controls
 testdata = mean(bandpower(:,bandidx,:),3)*100;
 
-%% compare connectivity between patients and controls
-testdata = mean(mean(allcoh(:,bandidx,:,:),3),4);
-
 tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 
 % [pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
