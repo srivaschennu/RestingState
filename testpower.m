@@ -64,7 +64,10 @@ for e = 1:length(occipital)
 end
 occipital = cell2mat(occipital);
 
-crs = cell2mat(subjlist(:,3));
+loadsubj
+subjlist = allsubj;
+crs = cell2mat(subjlist(:,7));
+% crs = cell2mat(subjlist(:,3));
 tennis = cell2mat(subjlist(:,4));
 
 v1idx = zeros(size(subjlist,1),1);
@@ -77,6 +80,7 @@ v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
 
 %% compare power between patients and controls
+% testdata = mean(mean(allcoh(:,bandidx,:,:),4),3);
 testdata = mean(bandpower(:,bandidx,:),3)*100;
 
 tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));

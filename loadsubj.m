@@ -15,39 +15,38 @@ patlist = {
     %
     % patients
     
-    'p0311_restingstate1'	0	7	0	''	0	0.117967
-    'p0411_restingstate1'	0	7	0	''	1	0.153460
-    'p1611_restingstate'	0	7	1	''	1	0.091762
-    'p0510V2_restingstate'	0	7	0	''	1	0.093890
-    'p1311_restingstate'	0	8	0	''	1	0.075433
-    'p2011_restingstate'	0	7	0	''	0	0.090078
-    'p0612_restingstate'	0	8	0	''	1	0.086983
-    'p71v3_restingstate'	0	8	0	''	1	0.106934
-    'p0712_restingstate'	0	7	0	''	0	0.087559
-    'p0113_restingstate'	0	7	1	''	1	0.108512
-    'p0313_restingstate'	0	7	1	''	1	0.083591
-    'p0613_restingstate'	0	8	0	''	1	0.101270
-    'p0812_restingstate1'	0	7	1	''	1	0.089513
-    'p0611_restingstate'	1	10	1	''	0	0.104962
-    'p0312_restingstate'	1	8	1	''	0	0.052222
-    'p0211_restingstate1'	1	12	1	''	1	0.115601
-    'p0511_restingstate'	1	9	1	''	0	0.090693
-    'p0811_restingstate'	1	10	0	''	0	0.074285
-    'p0911_restingstate'	1	11	1	''	1	0.112739
-    'p1011_restingstate'	1	10	0	''	1	0.115158
-    'p1511_restingstate'	1	10	1	''	1	0.077297
-    'p1811_restingstate'	1	12	0	''	1	0.099947
-    'p1911_restingstate'	1	9	0	''	1	0.084377
-    'p0112_restingstate'	1	9	1	''	0	0.088890
-    'p0212_restingstate'	1	12	0	''	1	0.110015
-    'p0512_restingstate'	1	8	1	''	1	0.106777
-    'p0710V2_restingstate'	1	14	1	''	1	0.144079
-    'p0711_restingstate'	1	15	0	''	1	0.102792
-    'p1711_restingstate'	1	17	0	''	0	0.103720
-    'p1012_restingstate'	1	13	1	''	1	0.108883
-    'p0213_restingstate'	1	19	1	''	1	0.111607
-    'p0413_restingstate'	1	14	0	''	1	0.106301
-    
+'p0311_restingstate1'	0		7		0		''		0		0.228442
+'p0411_restingstate1'	0		7		0		''		1		0.259748
+'p1611_restingstate'	0		7		1		''		1		0.212447
+'p0510V2_restingstate'	0		7		0		''		1		0.221375
+'p1311_restingstate'	0		8		0		''		1		0.188267
+'p2011_restingstate'	0		7		0		''		0		0.198175
+'p0612_restingstate'	0		8		0		''		1		0.199048
+'p71v3_restingstate'	0		8		0		''		1		0.218903
+'p0712_restingstate'	0		7		0		''		0		0.215873
+'p0113_restingstate'	0		7		1		''		1		0.225189
+'p0313_restingstate'	0		7		1		''		1		0.185676
+'p0613_restingstate'	0		8		0		''		1		0.203341
+'p0812_restingstate1'	0		7		1		''		1		0.210286
+'p0611_restingstate'	1		10		1		''		0		0.190276
+'p0312_restingstate'	1		8		1		''		0		0.169976
+'p0211_restingstate1'	1		12		1		''		1		0.260806
+'p0511_restingstate'	1		9		1		''		0		0.220698
+'p0811_restingstate'	1		10		0		''		0		0.182966
+'p0911_restingstate'	1		11		1		''		1		0.230025
+'p1011_restingstate'	1		10		0		''		1		0.250833
+'p1511_restingstate'	1		10		1		''		1		0.202039
+'p1811_restingstate'	1		12		0		''		1		0.202443
+'p1911_restingstate'	1		9		0		''		1		0.212305
+'p0112_restingstate'	1		9		1		''		0		0.214766
+'p0212_restingstate'	1		12		0		''		1		0.219258
+'p0512_restingstate'	1		8		1		''		1		0.237562
+'p0710V2_restingstate'	1		14		1		''		1		0.235221
+'p0711_restingstate'	1		15		0		''		1		0.245130
+'p1711_restingstate'	1		17		0		''		0		0.239529
+'p1012_restingstate'	1		13		1		''		1		0.202452
+'p0213_restingstate'	1		19		1		''		1		0.207541
+'p0413_restingstate'	1		14		0		''		1		0.216509    
     %     %follow-ups
     %     'p0311V2_restingstate'  0   8   0   'p0311_restingstate1'   0
     %     'p1311v2_restingstate'  0   8   0   'p1311_restingstate'    1
