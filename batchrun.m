@@ -3,7 +3,7 @@ function batchrun(listname)
 loadsubj
 loadpaths
 subjlist = eval(listname);
-load freqlist
+% load freqlist
 
 for s = 1:length(subjlist)
     basename = subjlist{s};
@@ -13,7 +13,7 @@ for s = 1:length(subjlist)
     fprintf('Processing %s.\n',basename);
     
 %     calcftspec(basename);
-    ftcoherence(basename);
+%     ftcoherence(basename);
     
 %     copyfile([filepath basename '.set'],[filepath 'commonfreq/' basename '.set']);
 %     copyfile([filepath basename '.fdt'],[filepath 'commonfreq/' basename '.fdt']);
@@ -41,9 +41,9 @@ for s = 1:length(subjlist)
 %             calcspectra(basename);
 
 
-%             plotspec(basename);
-%             export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
-%             close(gcf);
+            plotspec(basename);
+            export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
+            close(gcf);
 % %     
     %         fix1020(basename);
     

@@ -13,7 +13,7 @@ for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
     fprintf('Processing %s.\n',basename);
     
-    specinfo = load([filepath conntype filesep basename 'spectra.mat']);
+    specinfo = load([filepath basename 'spectra.mat']);
     [sortedchan,sortidx] = sort({specinfo.chann.labels});
     if ~strcmp(chanlist,cell2mat(sortedchan))
         error('Channel names do not match!');
@@ -32,7 +32,7 @@ for s = 1:size(subjlist,1)
         freqbins = specinfo.freqs;
         spectra = zeros(size(subjlist,1),length(chanlocs),length(specinfo.freqs));
         bandpower = zeros(size(subjlist,1),size(matrix,1),length(chanlocs));
-        bandpeak = zeros(size(subjlist,1),size(matrix,1),length(chanlocs));
+        bandpeak = zeros(size(subjlist,1),size(matrix,1));
 %         allcoh = zeros(length(subjlist),size(matrix,1),length(tvals),length(chanlocs),length(chanlocs));
 %         degree = zeros(length(subjlist),size(matrix,1),length(tvals),length(chanlocs));
     end
@@ -47,8 +47,14 @@ for s = 1:size(subjlist,1)
         [~, bstop] = min(abs(specinfo.freqs-specinfo.freqlist(f,2)));
         bandpower(s,f,:) = mean(specinfo.spectra(:,bstart:bstop),2);
         
-        [~, maxfreq] = max(specinfo.spectra(:,bstart:bstop),[],2);
-        bandpeak(s,f,:) = specinfo.freqs(bstart-1+maxfreq);
+        maxpeakheight = 0;
+        for c = 1:size(specinfo.spectra,1)
+            [peakheight, peakfreq] = findpeaks(specinfo.spectra(c,bstart:bstop),'npeaks',1);
+            if ~isempty(peakheight) && peakheight > maxpeakheight
+                bandpeak(s,f) = specinfo.freqs(bstart-1+peakfreq);
+                maxpeakheight = peakheight;
+            end                
+        end
         
 %         %collate connectivity info
 %         for thresh = 1:length(tvals)

@@ -64,10 +64,7 @@ for e = 1:length(occipital)
 end
 occipital = cell2mat(occipital);
 
-loadsubj
-subjlist = allsubj;
-crs = cell2mat(subjlist(:,7));
-% crs = cell2mat(subjlist(:,3));
+crs = cell2mat(subjlist(:,3));
 tennis = cell2mat(subjlist(:,4));
 
 v1idx = zeros(size(subjlist,1),1);

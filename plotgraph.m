@@ -14,6 +14,8 @@ param = finputcheck(varargin, {
     'minfo', 'integer', [], []; ...
     'legend', 'string', {'on','off'}, 'on'; ...
     'plotinter', 'string', {'on','off'}, 'on'; ...
+    'escale', 'real', [], []; ...
+    'vscale', 'real', [], []; ...
     });
 
 %%%%% VISUAL FEATURES
@@ -24,38 +26,48 @@ fontsize = 16;
 fontweight = 'bold';
 
 % range of line widths
-lwrange = [0.1 6];
+lwrange = [0.1 4];
 
 % range of point sizes
-ptrange = [10 1000];
+ptrange = [10 700];
 
-% keep only top <plotqt>% of weights and rescale them to be between 0 and 1
 origmatrix = matrix;
-allval = sort(nonzeros(matrix),'descend');
-plotthresh = quantile(allval,param.plotqt);
-matrix = matrix - plotthresh;
-matrix(matrix < 0) = 0;
-matrix = matrix / max(max(matrix));
 
-% calculate modules *after* thresholding edges
+% keep only top <plotqt>% of weights
+matrix = threshold_proportional(matrix,1-param.plotqt);
+
+for c = 1:size(matrix,1)
+    vsize(c) = sum(matrix(c,:))/(size(matrix,2)-1);
+end
+
+% calculate modules after thresholding edges
 if isempty(param.minfo)
     minfo = modularity_louvain_und(matrix);
 else
     minfo = param.minfo;
 end
 
+% rescale weights
+if isempty(param.escale)
+    param.escale(1) = min(matrix(logical(triu(matrix,1))));
+    param.escale(2) = max(matrix(logical(triu(matrix,1))));
+end
+matrix = (matrix - param.escale(1))/(param.escale(2) - param.escale(1));
+matrix(matrix < 0) = 0;
+
+% rescale degrees
+if isempty(param.vscale)
+    param.vscale(1) = min(vsize);
+    param.vscale(2) = max(vsize);
+end
+vsize = (vsize - param.vscale(1))/(param.vscale(2) - param.vscale(1));
+
 figure('Color','white','Name',mfilename);
 
-colormap(hsv);
+colormap(jet);
 cmap = colormap;
 num_mod = max(minfo);
 vcol = cmap(ceil((minfo/num_mod)*size(cmap,1)),:);
-
-for c = 1:length(chanlocs)
-    vsize(c) = length(nonzeros(matrix(c,:)));
-end
-vsize = vsize - min(vsize);
-vsize = vsize/max(vsize);
 
 hScat = scatter3(cell2mat({chanlocs.X}), cell2mat({chanlocs.Y}), cell2mat({chanlocs.Z}),...
     ptrange(1)+(vsize*(ptrange(2)-ptrange(1))), vcol, 'filled', 'MarkerEdgeColor', [0 0 0],'LineWidth',2);

@@ -49,5 +49,5 @@ for p = 1:size(patlist,1)
     %     data = niftitomat(sprintf('%sMRI/%s',filepath,fileinfo.name));
     
     load(sprintf('%sMRI/FA_%d.mat',filepath,patlist{p,end}),'data');
-    fa(p) = mean(nonzeros(data(:)));
+    fa(p) = std(nonzeros(data(:)));
 end
