@@ -84,9 +84,9 @@ tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 
 % [pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
 [~,pval,~,stats] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
-fprintf('%s band power: Ctrl - Pat = %.2f, t = %.2f, p = %.3f.\n',...
+fprintf('%s band power: Ctrl - Pat = %.2f, t(%.1f) = %.2f, p = %.3f.\n',...
     bands{bandidx},mean(testdata(grp == 2))-mean(testdata((grp == 0 | grp == 1) & ~v2idx)),...
-    stats.tstat,pval);
+    stats.df,stats.tstat,pval);
 
 %% compare vs to mcs patients
 % [pval,~,stats] = ranksum(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx));

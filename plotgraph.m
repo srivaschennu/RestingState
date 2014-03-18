@@ -26,10 +26,10 @@ fontsize = 16;
 fontweight = 'bold';
 
 % range of line widths
-lwrange = [0.1 4];
+lwrange = [0.1 3];
 
 % range of point sizes
-ptrange = [10 700];
+ptrange = [10 800];
 
 origmatrix = matrix;
 
@@ -64,9 +64,23 @@ vsize = (vsize - param.vscale(1))/(param.vscale(2) - param.vscale(1));
 
 figure('Color','white','Name',mfilename);
 
+% assign all modules with only one vertex the same colour
+modsize = hist(minfo,unique(minfo));
+num_mod = sum(modsize > 1);
+modidx = 1;
+for m = 1:length(modsize)
+    if modsize(m) == 1
+        minfo(minfo == m) = num_mod + 1;
+    else
+        minfo(minfo == m) = modidx;
+        modidx = modidx + 1;
+    end
+end
+num_mod = length(unique(minfo));
+
 colormap(jet);
 cmap = colormap;
-num_mod = max(minfo);
+
 vcol = cmap(ceil((minfo/num_mod)*size(cmap,1)),:);
 
 hScat = scatter3(cell2mat({chanlocs.X}), cell2mat({chanlocs.Y}), cell2mat({chanlocs.Z}),...

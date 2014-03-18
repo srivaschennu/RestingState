@@ -130,6 +130,8 @@ legendoff(scatter(datatable(datatable(:,4) == 1 & datatable(:,3) == 1,2), ...
 
 p0311idx = 1;
 legendoff(scatter(testdata(p0311idx),crs(p0311idx),100,'black','LineWidth',2));
+p0411idx = 2;
+legendoff(scatter(testdata(p0411idx),crs(p0411idx),100,'black','LineWidth',2));
 p1611idx = 3;
 legendoff(scatter(testdata(p1611idx),crs(p1611idx),100,'black','LineWidth',2));
 
