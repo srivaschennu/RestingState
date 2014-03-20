@@ -77,8 +77,8 @@ v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
 
 %% compare power between patients and controls
-testdata = mean(mean(allcoh(:,bandidx,:,:),4),3);
-% testdata = mean(bandpower(:,bandidx,:),3)*100;
+% testdata = mean(mean(allcoh(:,bandidx,:,:),4),3);
+testdata = mean(bandpower(:,bandidx,:),3)*100;
 
 tennisidx = logical(tennis((grp == 0 | grp == 1) & ~v2idx));
 
