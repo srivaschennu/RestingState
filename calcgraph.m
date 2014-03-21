@@ -15,7 +15,7 @@ chandist = chandist / max(chandist(:));
 
 subjlist = eval(listname);
 
-tvals = 0.5:-0.025:0.1;%0.025;
+tvals = 0.5:-0.025:0.1;
 
 if strcmp(param.randomise,'on')
     savename = sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype);
@@ -62,6 +62,7 @@ for s = 1:size(subjlist,1)
     
     for f = 1:size(matrix,1)
         cohmat = squeeze(matrix(f,:,:));
+        cohmat(isnan(cohmat)) = 0;
         
         %SMALL WORLD THRESHOLDING
         % %         for thresh = 1:length(tvals)
@@ -80,7 +81,7 @@ for s = 1:size(subjlist,1)
         
         for thresh = 1:length(tvals)
 %             fprintf(' %.2f',tvals(thresh));
-            threshcoh = threshold_proportional(zeromean(cohmat),tvals(thresh));
+            threshcoh = threshold_proportional(cohmat,tvals(thresh));
 %             bincohmat = double(threshold_proportional(cohmat,tvals(thresh)) ~= 0);
             
             if strcmp(param.randomise,'on')

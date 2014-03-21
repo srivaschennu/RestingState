@@ -11,8 +11,6 @@ param = finputcheck(varargin, {
     'randratio', 'string', {'on','off'}, 'off'; ...
     });
 
-% load graphdata_allsubj_icoh
-
 fontname = 'Helvetica';
 fontsize = 28;
 
@@ -25,7 +23,7 @@ if ~exist('measure','var') || isempty(measure)
     return;
 end
 
-weiorbin = 3;
+weiorbin = 2;
 
 if exist(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype),'file')
     randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));

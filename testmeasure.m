@@ -28,7 +28,7 @@ fontsize = 28;
 % powerdata = load(sprintf('alldata_%s.mat',listname));
 % load chanlist
 
-weiorbin = 3;
+weiorbin = 2;
 trange = [0.5 0.1];
 
 crs = cell2mat(subjlist(:,3));

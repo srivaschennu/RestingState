@@ -11,7 +11,7 @@ else
     midx = size(graph,1);
 end
 
-for weiorbin = 3
+for weiorbin = 2
     modinfo = graph{strcmp('modules',graph(:,1)),weiorbin};
     mutinfo = zeros(size(modinfo,1),size(modinfo,1),size(modinfo,2),size(modinfo,3));
     
