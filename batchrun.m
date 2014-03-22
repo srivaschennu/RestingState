@@ -41,18 +41,22 @@ for s = 1:length(subjlist)
 %             calcspectra(basename);
 
 
-            plotspec(basename);
-            export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
-            close(gcf);
+%             plotspec(basename);
+%             export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
+%             close(gcf);
 % %     
     %         fix1020(basename);
     
 %     coherence(basename);
     
-%         load([filepath basename 'plifdr.mat']);
-%         plotgraph(squeeze(matrix(3,:,:)),chanlocs,'plotqt',0.75,'legend','off');
-%         export_fig(gcf,['figures/' basename 'pligraph.tif']);
-%         close(gcf);
+        load([filepath 'wpli/' basename 'wplifdr.mat']);
+        cohmat = squeeze(matrix(3,:,:));
+        cohmat(isnan(cohmat)) = 0;
+        cohmat = threshold_proportional(cohmat,0.3);
+%         plotgraph(cohmat,chanlocs,'plotqt',0.7,'legend','off');
+        figure; imagesc(cohmat); set(gca,'XTick',[],'YTick',[]); colorbar
+        export_fig(gcf,['figures/' basename 'wplicohmat.eps'],'-opengl');
+        close(gcf);
 
 %                 javaaddpath('/Users/chennu/Work/mffimport/MFF-1.0.d0004.jar');
 %                 filenames = dir(sprintf('%s%s*', filepath, basename));

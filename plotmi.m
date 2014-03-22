@@ -1,13 +1,20 @@
-function plotmi(listname,conntype,bandidx)
+function plotmi(listname,conntype,bandidx,varargin)
 
 loadpaths
+
+
+param = finputcheck(varargin, {
+    'caxis', 'real', [], []; ...
+    'renderer', 'string', {'painters','opengl'}, 'painters'; ...
+    'colorbar', 'string', {'on','off'}, 'on'; ...
+    });
 
 fontname = 'Helvetica';
 fontsize = 28;
 
 load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
 
-weiorbin = 3;
+weiorbin = 2;
 trange = [0.5 0.1];
 trange = (tvals <= trange(1) & tvals >= trange(2));
 
@@ -38,6 +45,10 @@ figure('Color','white'); hold all
 plotdata = mean(mutinfo(:,:,bandidx,trange),4);
 imagesc(plotdata);
 
+if ~isempty(param.caxis)
+    caxis(param.caxis);
+end
+
 for g = 1:length(groups)-1
     groupedge(g) = find(grp == groups(g),1,'last');
     line([groupedge(g)+0.5 groupedge(g)+0.5],ylim,'Color','black','LineWidth',6);
@@ -59,13 +70,13 @@ for g = 1:length(groupedge)-1
     end
 end
 
-% colorbar
+if strcmp(param.colorbar,'on')
+    colorbar
+end
 
 set(gca,'FontName',fontname,'FontSize',fontsize,'XTick',[],'YTick',[],...
     'XLim',[0.5 size(plotdata,1)+0.5],'YLim',[0.5 size(plotdata,2)+0.5],'YDir','reverse');
 
-export_fig(gcf,sprintf('figures/NMImap_%s.eps',bands{bandidx}));
-
-export_fig(gcf,sprintf('figures/NMImap_%s.eps',bands{bandidx}),'-opengl');
+export_fig(gcf,sprintf('figures/NMImap_%s.eps',bands{bandidx}),sprintf('-%s',param.renderer));
 
 close(gcf);
