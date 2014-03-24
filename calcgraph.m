@@ -68,7 +68,7 @@ for s = 1:size(subjlist,1)
     chanlocs = chanlocs(sortidx);
     %     chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];
     
-    for f = 1:size(matrix,1)
+    for f = 1:3%size(matrix,1)
         cohmat = squeeze(matrix(f,:,:));
         cohmat(isnan(cohmat)) = 0;
         
@@ -157,31 +157,31 @@ for s = 1:size(subjlist,1)
                 end
                 
                 %clustering coefficient
-                graph{1,3}(s,f,thresh,1:length(chanlocs)) = clustering_coef_bu(randbincoh);
+                graph{1,3}(s,f,thresh,iter,1:length(chanlocs)) = clustering_coef_bu(randbincoh);
                 
                 %characteristic path length
-                graph{2,3}(s,f,thresh) = charpath(distance_bin(randbincoh));
+                graph{2,3}(s,f,thresh,iter) = charpath(distance_bin(randbincoh));
                 
                 %global efficiency
-                graph{3,3}(s,f,thresh) = efficiency_bin(randbincoh);
+                graph{3,3}(s,f,thresh,iter) = efficiency_bin(randbincoh);
                 
                 %modularity
-                graph{4,3}(s,f,thresh) = mean(allQ);
+                graph{4,3}(s,f,thresh,iter) = mean(allQ);
                 
                 %community structure
-                graph{5,3}(s,f,thresh,1:length(chanlocs)) = Ci;
+                graph{5,3}(s,f,thresh,iter,1:length(chanlocs)) = Ci;
                 
                 %betweenness centrality
-                graph{6,3}(s,f,thresh,1:length(chanlocs)) = betweenness_bin(randbincoh);
+                graph{6,3}(s,f,thresh,iter,1:length(chanlocs)) = betweenness_bin(randbincoh);
                 
                 %modular span
-                graph{7,3}(s,f,thresh) = mean(allms);
+                graph{7,3}(s,f,thresh,iter) = mean(allms);
                 
                 %participation coefficient
-                graph{8,3}(s,f,thresh,1:length(chanlocs)) = mean(allpc);
+                graph{8,3}(s,f,thresh,iter,1:length(chanlocs)) = mean(allpc);
                 
                 %connection density
-                graph{9,3}(s,f,thresh) = density_und(randbincoh);
+                graph{9,3}(s,f,thresh,iter) = density_und(randbincoh);
                 
                 %             %rentian scaling
                 %             [N, E] = rentian_scaling(randbincoh,chanXYZ,5000);
