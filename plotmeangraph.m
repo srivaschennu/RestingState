@@ -55,7 +55,7 @@ erange = [min(groupcoh(:)) max(groupcoh(:))];
 vrange = [min(groupdeg(:)) max(groupdeg(:))];
 
 for g = group
-    minfo = plotgraph(squeeze(groupcoh(g,:,:)),sortedlocs,'plotqt',plotqt,'escale',erange,'vscale',vrange,'legend','off','plotinter','off');
+    minfo = plotgraph(squeeze(groupcoh(g,:,:)),sortedlocs,'plotqt',plotqt,'escale',erange,'vscale',vrange,'legend','off','plotinter','on');
     fprintf('group %s: %s band - number of modules: %d\n',grouplist{g},bands{bandidx},length(unique(minfo)));
     set(gcf,'Name',sprintf('group %s: %s band',grouplist{g},bands{bandidx}));
     export_fig(gcf,sprintf('figures/meangraph_%s_%s.tif',grouplist{g},bands{bandidx}));

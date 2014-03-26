@@ -25,11 +25,25 @@ end
 
 weiorbin = 2;
 
-if exist(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype),'file')
-    randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));
+if strcmpi(measure,'small-worldness') || strcmp(param.randratio,'on')
+    if exist(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype),'file')
+        randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));
+    else
+        error('%s/%s/graphdata_%s_rand_%s.mat not found!');
+    end
+end
+
+if strcmpi(measure,'small-worldness')
     graph{end+1,1} = 'small-worldness';
-    graph{end,2} = ( mean(graph{1,2},4) ./ mean(randgraph.graph{1,2},4) ) ./ ( graph{2,2} ./ randgraph.graph{2,2}) ;
-    graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
+    graph{1,2} = graph{1,2}(:,1:3,:,:);
+    graph{2,2} = graph{2,2}(:,1:3,:);
+    graph{end,2} = ( mean(graph{1,2},4) ./ mean(mean(randgraph.graph{1,2},5),4) ) ./ ( graph{2,2} ./ mean(randgraph.graph{2,2},4) ) ;
+    %         graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
+    
+elseif strcmp(param.randratio,'on')
+    m = find(strcmpi(measure,graph(:,1)));
+    graph{m,2} = graph{m,2}(:,1:3,:,:,:);
+    graph{m,2} = graph{m,2} ./ mean(randgraph.graph{m,2},ndims(randgraph.graph{m,2}));
 end
 
 v1idx = zeros(size(subjlist,1),1);
@@ -64,10 +78,6 @@ trange = (tvals <= trange(1) & tvals >= trange(2));
 plottvals = tvals(trange);
 
 m = find(strcmpi(measure,graph(:,1)));
-
-if strcmp(param.randratio,'on')
-    graph{m,weiorbin} = graph{m,weiorbin} ./ randgraph.graph{m,weiorbin};
-end
 
 barvals = zeros(3,length(groups));
 errvals = zeros(3,length(groups));

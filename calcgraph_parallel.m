@@ -45,11 +45,7 @@ graph{8,1} = 'participation coefficient';
 graph{9,1} = 'connection density';
 graph{10,1} = 'mutual information';
 
-load(savename);
-
-allQ = zeros(param.heuristic,1);
-allms = zeros(param.heuristic,1);
-allpc = zeros(param.heuristic,length(sortedlocs));
+% load(savename);
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
@@ -68,7 +64,7 @@ for s = 1:size(subjlist,1)
     chanlocs = chanlocs(sortidx);
     %     chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];
     
-    for f = 1:size(matrix,1)
+    for f = 1:3%size(matrix,1)
         cohmat = squeeze(matrix(f,:,:));
         cohmat(isnan(cohmat)) = 0;
         
@@ -76,68 +72,77 @@ for s = 1:size(subjlist,1)
             fprintf('.');
             %             fprintf(' %.2f',tvals(thresh));
             weicoh = threshold_proportional(cohmat,tvals(thresh));
-            bincoh = double(threshold_proportional(cohmat,tvals(thresh)) ~= 0);
+%             bincoh = double(threshold_proportional(cohmat,tvals(thresh)) ~= 0);
             
-            for iter = 1:numruns
-                if strcmp(param.randomise,'on')
+            parfor iter = 1:numruns
+%                 if strcmp(param.randomise,'on')
                     %randomisation
                     randweicoh = null_model_und_sign(weicoh);
-                    randbincoh = null_model_und_sign(bincoh);
-                elseif strcmp(param.latticise,'on')
-                    randweicoh = latmio_und_connected(weicoh,param.rewire,distdiag);
-                    randbincoh = latmio_und_connected(bincoh,param.rewire,distdiag);
-                else
-                    randweicoh = weicoh;
-                    randbincoh = bincoh;
-                end
+%                     randbincoh = null_model_und_sign(bincoh);
+%                 elseif strcmp(param.latticise,'on')
+%                     randweicoh = latmio_und_connected(weicoh,param.rewire,distdiag);
+%                     randbincoh = latmio_und_connected(bincoh,param.rewire,distdiag);
+%                 else
+%                     randweicoh = weicoh;
+%                     randbincoh = bincoh;
                 
                 %%%%%%  WEIGHTED %%%%%%%%%
                 
-%                 for i = 1:param.heuristic
-%                     [Ci, allQ(i)] = modularity_louvain_und(randweicoh);
-%                     
-%                     modspan = zeros(1,max(Ci));
-%                     for m = 1:max(Ci)
-%                         if sum(Ci == m) > 1
-%                             distmat = chandist(Ci == m,Ci == m) .* randweicoh(Ci == m,Ci == m);
-%                             distmat = nonzeros(triu(distmat,1));
-%                             modspan(m) = sum(distmat)/sum(Ci == m);
-%                         end
-%                     end
-%                     allms(i) = max(nonzeros(modspan));
-%                     
-%                     allpc(i,:) = participation_coef(randweicoh,Ci);
-%                 end
-%                 
-                %clustering coeffcient
-%                 graph{1,2}(s,f,thresh,1:length(chanlocs)) = clustering_coef_wu(randweicoh);
+                allcc(iter,:) = clustering_coef_wu(randweicoh);
+                allcp(iter) = charpath(distance_wei(1./randweicoh));
+                alleff(iter) = efficiency_wei(randweicoh);
+                allbet(iter,:) = betweenness_wei(1./randweicoh);
+                allden(iter) = density_und(randweicoh);
                 
-%                 %characteristic path length
-                graph{2,2}(s,f,thresh) = charpath(distance_wei(weight_conversion(randweicoh,'lengths')));
-%                 
-%                 %global efficiency
-%                 graph{3,2}(s,f,thresh,iter) = efficiency_wei(randweicoh);
-%                 
-%                 % modularity
-%                 graph{4,2}(s,f,thresh,iter) = mean(allQ);
-%                 
-%                 % community structure
-%                 graph{5,2}(s,f,thresh,iter,1:length(chanlocs)) = Ci;
-%                 
-%                 %betweenness centrality
-                graph{6,2}(s,f,thresh,1:length(chanlocs)) = betweenness_wei(weight_conversion(randweicoh,'lengths'));
-%                 
-%                 %modular span
-%                 graph{7,2}(s,f,thresh,iter) = mean(allms);
-%                 
-%                 %participation coefficient
-%                 graph{8,2}(s,f,thresh,iter,1:length(chanlocs)) = mean(allpc);
-%                 
-%                 %connection density
-%                 graph{9,2}(s,f,thresh,iter) = density_und(randweicoh);
-%                 
-%                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                 
+                for i = 1:50%param.heuristic
+                    [Ci, allQ(iter,i)] = modularity_louvain_und(randweicoh);
+                    
+                    allCi(iter,i,:) = Ci;
+                    
+                    modspan = zeros(1,max(Ci));
+                    for m = 1:max(Ci)
+                        if sum(Ci == m) > 1
+                            distmat = chandist(Ci == m,Ci == m) .* randweicoh(Ci == m,Ci == m);
+                            distmat = nonzeros(triu(distmat,1));
+                            modspan(m) = sum(distmat)/sum(Ci == m);
+                        end
+                    end
+                    allms(iter,i) = max(nonzeros(modspan));
+                    
+                    allpc(iter,i,:) = participation_coef(randweicoh,Ci);
+                end
+            end
+            
+            for iter = 1:numruns
+                %clustering coeffcient
+                graph{1,2}(s,f,thresh,1:length(chanlocs),iter) = allcc(iter,:);
+                
+                %characteristic path length
+                graph{2,2}(s,f,thresh,iter) = allcp(iter);
+                
+                %global efficiency
+                graph{3,2}(s,f,thresh,iter) = alleff(iter);
+                
+                % modularity
+                graph{4,2}(s,f,thresh,iter) = mean(allQ(iter,:));
+                
+                % community structure
+                graph{5,2}(s,f,thresh,1:length(chanlocs),iter) = squeeze(allCi(iter,1,:));
+                
+                %betweenness centrality
+                graph{6,2}(s,f,thresh,1:length(chanlocs),iter) = allbet(iter,:);
+                
+                %modular span
+                graph{7,2}(s,f,thresh,iter) = mean(allms(iter,:));
+                
+                %participation coefficient
+                graph{8,2}(s,f,thresh,1:length(chanlocs),iter) = mean(squeeze(allpc(iter,:,:)));
+                
+                %connection density
+                graph{9,2}(s,f,thresh,iter) = allden(iter);
+                
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                
 %                 %BINARY
 %                 
 %                 for i = 1:param.heuristic
@@ -157,7 +162,7 @@ for s = 1:size(subjlist,1)
 %                 end
 %                 
 %                 %clustering coefficient
-%                 graph{1,3}(s,f,thresh,iter,1:length(chanlocs)) = clustering_coef_bu(randbincoh);
+%                 graph{1,3}(s,f,thresh,1:length(chanlocs),iter) = clustering_coef_bu(randbincoh);
 %                 
 %                 %characteristic path length
 %                 graph{2,3}(s,f,thresh,iter) = charpath(distance_bin(randbincoh));
@@ -169,16 +174,16 @@ for s = 1:size(subjlist,1)
 %                 graph{4,3}(s,f,thresh,iter) = mean(allQ);
 %                 
 %                 %community structure
-%                 graph{5,3}(s,f,thresh,iter,1:length(chanlocs)) = Ci;
+%                 graph{5,3}(s,f,thresh,1:length(chanlocs),iter) = Ci;
 %                 
 %                 %betweenness centrality
-%                 graph{6,3}(s,f,thresh,iter,1:length(chanlocs)) = betweenness_bin(randbincoh);
+%                 graph{6,3}(s,f,thresh,1:length(chanlocs),iter) = betweenness_bin(randbincoh);
 %                 
 %                 %modular span
 %                 graph{7,3}(s,f,thresh,iter) = mean(allms);
 %                 
 %                 %participation coefficient
-%                 graph{8,3}(s,f,thresh,iter,1:length(chanlocs)) = mean(allpc);
+%                 graph{8,3}(s,f,thresh,1:length(chanlocs),iter) = mean(allpc);
 %                 
 %                 %connection density
 %                 graph{9,3}(s,f,thresh,iter) = density_und(randbincoh);
