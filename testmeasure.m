@@ -20,6 +20,7 @@ param = finputcheck(varargin, {
     'legendposition', 'string', {}, ''; ...
     'xlabel', 'string', {}, measure; ...
     'exclude', 'string', {'on','off'}, 'off'; ...
+    'randratio', 'string', {'on','off'}, 'off'; ...
     });
 
 fontname = 'Helvetica';
@@ -42,11 +43,25 @@ bands = {
     'Gamma'
     };
 
-if exist(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype),'file')
-    randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));
+if strcmpi(measure,'small-worldness') || strcmp(param.randratio,'on')
+    if exist(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype),'file')
+        randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));
+    else
+        error('%s/%s/graphdata_%s_rand_%s.mat not found!');
+    end
+end
+
+if strcmpi(measure,'small-worldness')
     graph{end+1,1} = 'small-worldness';
-    graph{end,2} = ( mean(graph{1,2},4) ./ mean(randgraph.graph{1,2},4) ) ./ ( graph{2,2} ./ randgraph.graph{2,2}) ;
-    graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
+    graph{1,2} = graph{1,2}(:,1:3,:,:);
+    graph{2,2} = graph{2,2}(:,1:3,:);
+    graph{end,2} = ( mean(graph{1,2},4) ./ mean(mean(randgraph.graph{1,2},5),4) ) ./ ( graph{2,2} ./ mean(randgraph.graph{2,2},4) ) ;
+    %         graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
+    
+elseif strcmp(param.randratio,'on')
+    m = find(strcmpi(measure,graph(:,1)));
+    graph{m,2} = graph{m,2}(:,1:3,:,:,:);
+    graph{m,2} = graph{m,2} ./ mean(randgraph.graph{m,2},ndims(randgraph.graph{m,2}));
 end
 
 mid = find(strcmpi(measure,graph(:,1)));
@@ -68,7 +83,7 @@ trange = (tvals <= trange(1) & tvals >= trange(2));
 if strcmpi(measure,'mutual information')
     for s = 1:size(subjlist,1)
         %within group
-%         testdata(s,1) = squeeze(mean(mean(graph{mid,weiorbin}(s,grp == grp(s) & ~v2idx,bandidx,trange),4),2));
+        %         testdata(s,1) = squeeze(mean(mean(graph{mid,weiorbin}(s,grp == grp(s) & ~v2idx,bandidx,trange),4),2));
         %relative to controls
         testdata(s,1) = squeeze(mean(mean(graph{mid,weiorbin}(s,grp == 2 & ~v2idx,bandidx,trange),4),2));
     end
@@ -183,23 +198,23 @@ futable = sortrows(cat(2,...
 % %% correlate follow-ups
 % % [rho, pval] = corr(futable(:,1),futable(:,2),'type','spearman');
 % % fprintf('Follow-up: Spearman rho = %.2f, p = %.3f.\n',rho,pval);
-% 
+%
 % mdl = LinearModel.fit(futable(:,2),futable(:,1),'RobustOpts','off');
 % fprintf('%s follow-up: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
 % % powmdl = LinearModel.fit(futable(:,[2 3]),futable(:,1),'RobustOpts','off');
 % % fprintf('%s follow-up with power: R2 = %.2f, p = %.3f.\n',bands{bandidx},powmdl.Rsquared.Adjusted,doftest(powmdl));
-% 
+%
 % figure('Color','white');
 % hold all
 % legendoff(scatter(futable(:,2),futable(:,1),'filled'));
-% 
+%
 % b = mdl.Coefficients.Estimate;
 % plot(futable(:,2),b(1)+b(2)*futable(:,2),'-','Color','black',...
 %     'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
 % % b = powmdl.Coefficients.Estimate;
 % % plot(futable(:,2),b(1)+b(2)*futable(:,2),'--','Color','black',...
 % %     'Display',sprintf('R^2 = %.2f, p = %.3f',powmdl.Rsquared.Adjusted,doftest(powmdl)));
-% 
+%
 % set(gca,'FontName',fontname,'FontSize',fontsize);
 % if ~isempty(param.xlim)
 %     set(gca,'XLim',param.xlim);
@@ -224,8 +239,8 @@ futable = sortrows(cat(2,...
 %     set(txt_h,'FontSize',fontsize-6,'FontWeight','bold')
 %     legend('boxoff');
 % end
-% 
+%
 % export_fig(sprintf('figures/measurefu_%s_%s.eps',measure,bands{bandidx}));
 % close(gcf);
-% 
+%
 end
