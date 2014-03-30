@@ -165,11 +165,11 @@ legendoff(scatter(datatable(datatable(:,4) == 0,2),datatable(datatable(:,4) == 0
 legendoff(scatter(datatable(datatable(:,4) == 1,2),datatable(datatable(:,4) == 1,1),'blue','filled'));
 
 p0311idx = 1;
-legendoff(scatter(testdata(p0311idx),crs(p0311idx),100,'red','LineWidth',2));
+legendoff(scatter(testdata(p0311idx),crs(p0311idx),100,'black','LineWidth',2));
 p0411idx = 2;
-legendoff(scatter(testdata(p0411idx),crs(p0411idx),100,'blue','LineWidth',2));
+legendoff(scatter(testdata(p0411idx),crs(p0411idx),100,'black','LineWidth',2));
 p1611idx = 3;
-legendoff(scatter(testdata(p1611idx),crs(p1611idx),100,'green','LineWidth',2));
+legendoff(scatter(testdata(p1611idx),crs(p1611idx),100,'black','LineWidth',2));
 
 b = mdl.Coefficients.Estimate;
 plot(datatable(:,2),b(1)+b(2)*datatable(:,2),'-','Color','black',...
