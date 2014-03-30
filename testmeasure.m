@@ -11,6 +11,8 @@ if ~exist('measure','var') || isempty(measure)
     return;
 end
 
+load mriscores
+
 param = finputcheck(varargin, {
     'xlim', 'real', [], []; ...
     'xtick', 'real', [], []; ...
@@ -31,6 +33,7 @@ fontsize = 28;
 
 weiorbin = 2;
 trange = [0.5 0.1];
+
 
 crs = cell2mat(subjlist(:,3));
 tennis = logical(cell2mat(subjlist(:,4)));
@@ -129,7 +132,7 @@ fprintf('%s %s (excl): R2 = %.2f, p = %.3f.\n',bands{bandidx},measure,exmdl.Rsqu
 
 % [rho, pval] = corr(datatable(:,1),datatable(:,2),'type','spearman');
 % fprintf('Spearman rho = %.2f, p = %.3f.\n',rho,pval);
-
+[rho,pval] = corr(testdata((grp == 0 | grp == 1) & ~v2idx),mriscores(:,2),'type','spearman')
 
 figure('Color','white');
 hold all
