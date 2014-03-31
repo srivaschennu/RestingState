@@ -31,19 +31,19 @@ for s = 1:length(subjlist)
     
 %         computeic([basename '_epochs']);
     
-            rejectic(basename);
+%             rejectic(basename);
     
 %     EEG = pop_loadset('filepath',filepath,'filename',[basename '_epochs.set'],'loadmode','info');
 %     batchrun{s,3} = sum(EEG.reject.gcompreject);
     
-            rejartifacts2(basename,2,1);
+%             rejartifacts2(basename,2,1);
     
-%             calcspectra(basename);
+            calcspectra(basename);
 
 
-%             plotspec(basename);
-%             export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
-%             close(gcf);
+            plotspec(basename);
+            export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
+            close(gcf);
 % %     
     %         fix1020(basename);
     

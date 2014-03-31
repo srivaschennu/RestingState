@@ -1,8 +1,8 @@
 newsubj = {
-%     'p0713_restingstate'
-%     'p0813_restingstate'
-    'p0913_restingstate'
+%    'p0713_restingstate'  %not enough data
 %     'p1013_restingstate' % noisy
+    'p0813_restingstate'
+    'p0913_restingstate'
     'p0114_restingstate'
     };
 

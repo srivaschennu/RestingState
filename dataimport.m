@@ -62,7 +62,7 @@ end
 if EEG.xmax > 600
     EEG = pop_select(EEG,'time',[0 600]);
 elseif EEG.xmax < 600
-    %error('Not enough data.');
+    error('Not enough data.');
 end
 
 %Filter
