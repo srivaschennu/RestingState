@@ -1,7 +1,6 @@
 function testpower(listname,conntype,bandidx,varargin)
 
 loadpaths
-load mriscores
 
 param = finputcheck(varargin, {
     'xlim', 'real', [], []; ...
@@ -148,7 +147,6 @@ datatable = sortrows(cat(2,...
     2);
 mdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on');
 fprintf('%s band power: R2 = %.2f, p = %.3f.\n',bands{bandidx},mdl.Rsquared.Adjusted,doftest(mdl));
-[rho,pval] = corr(testdata((grp == 0 | grp == 1) & ~v2idx),mriscores(:,4),'type','spearman')
 % exmdl = LinearModel.fit(datatable(:,2),datatable(:,1),'RobustOpts','on','Exclude',find(datatable(:,4) == 0 & datatable(:,3) == 1));
 % fprintf('%s band power (excl): R2 = %.2f, p = %.3f.\n',bands{bandidx},exmdl.Rsquared.Adjusted,doftest(exmdl));
 

@@ -11,8 +11,6 @@ if ~exist('measure','var') || isempty(measure)
     return;
 end
 
-load mriscores
-
 param = finputcheck(varargin, {
     'xlim', 'real', [], []; ...
     'xtick', 'real', [], []; ...
@@ -132,7 +130,6 @@ fprintf('%s %s (excl): R2 = %.2f, p = %.3f.\n',bands{bandidx},measure,exmdl.Rsqu
 
 % [rho, pval] = corr(datatable(:,1),datatable(:,2),'type','spearman');
 % fprintf('Spearman rho = %.2f, p = %.3f.\n',rho,pval);
-[rho,pval] = corr(testdata((grp == 0 | grp == 1) & ~v2idx),mriscores(:,2),'type','spearman')
 
 figure('Color','white');
 hold all

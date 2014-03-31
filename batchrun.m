@@ -31,12 +31,12 @@ for s = 1:length(subjlist)
     
 %         computeic([basename '_epochs']);
     
-%             rejectic(basename);
+            rejectic(basename);
     
 %     EEG = pop_loadset('filepath',filepath,'filename',[basename '_epochs.set'],'loadmode','info');
 %     batchrun{s,3} = sum(EEG.reject.gcompreject);
     
-%             rejartifacts2(basename,2,1);
+            rejartifacts2(basename,2,1);
     
 %             calcspectra(basename);
 
@@ -49,14 +49,14 @@ for s = 1:length(subjlist)
     
 %     coherence(basename);
     
-        load([filepath 'wpli/' basename 'wplifdr.mat']);
-        cohmat = squeeze(matrix(3,:,:));
-        cohmat(isnan(cohmat)) = 0;
-        cohmat = threshold_proportional(cohmat,0.3);
-%         plotgraph(cohmat,chanlocs,'plotqt',0.7,'legend','off');
-        figure; imagesc(cohmat); set(gca,'XTick',[],'YTick',[]); colorbar
-        export_fig(gcf,['figures/' basename 'wplicohmat.eps'],'-opengl');
-        close(gcf);
+%         load([filepath 'wpli/' basename 'wplifdr.mat']);
+%         cohmat = squeeze(matrix(3,:,:));
+%         cohmat(isnan(cohmat)) = 0;
+%         cohmat = threshold_proportional(cohmat,0.3);
+% %         plotgraph(cohmat,chanlocs,'plotqt',0.7,'legend','off');
+%         figure; imagesc(cohmat); set(gca,'XTick',[],'YTick',[]); colorbar
+%         export_fig(gcf,['figures/' basename 'wplicohmat.eps'],'-opengl');
+%         close(gcf);
 
 %                 javaaddpath('/Users/chennu/Work/mffimport/MFF-1.0.d0004.jar');
 %                 filenames = dir(sprintf('%s%s*', filepath, basename));

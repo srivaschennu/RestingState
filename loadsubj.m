@@ -1,10 +1,10 @@
-% subjlist = {
+newsubj = {
 %     'p0713_restingstate'
 %     'p0813_restingstate'
-%     'p0913_restingstate'
-%     'p1013_restingstate'
-%     'p0114_restingstate'
-%     };
+    'p0913_restingstate'
+%     'p1013_restingstate' % noisy
+    'p0114_restingstate'
+    };
 
 testlist = {
     % 	'p0311_restingstate1'	0	7	0	''	0
