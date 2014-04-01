@@ -84,7 +84,7 @@ trange = (tvals <= trange(1) & tvals >= trange(2));
 if strcmpi(measure,'mutual information')
     for s = 1:size(subjlist,1)
         %within group
-        %         testdata(s,1) = squeeze(mean(mean(graph{mid,weiorbin}(s,grp == grp(s) & ~v2idx,bandidx,trange),4),2));
+%         testdata(s,1) = squeeze(mean(mean(graph{mid,weiorbin}(s,grp == grp(s) & ~v2idx,bandidx,trange),4),2));
         %relative to controls
         testdata(s,1) = squeeze(mean(mean(graph{mid,weiorbin}(s,grp == 2 & ~v2idx,bandidx,trange),4),2));
     end

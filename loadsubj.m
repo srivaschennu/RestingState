@@ -3,7 +3,7 @@ newsubj = {
 %     'p1013_restingstate' % noisy
     'p0813_restingstate'
     'p0913_restingstate'
-    'p0114_restingstate'
+%    'p0114_restingstate' % patient with hydrocephalus
     };
 
 testlist = {
@@ -16,38 +16,43 @@ patlist = {
     %
     % patients
     
-'p0311_restingstate1'	0		7		0		''		0		0.228442	19262
-'p0411_restingstate1'	0		7		0		''		1		0.259748	19277
-'p1611_restingstate'	0		7		1		''		1		0.212447	19829
-'p0510V2_restingstate'	0		7		0		''		1		0.221375	18744
-'p1311_restingstate'	0		8		0		''		1		0.188267	19655
-'p2011_restingstate'	0		7		0		''		0		0.198175	20112
-'p0612_restingstate'	0		8		0		''		1		0.199048	20174
-'p71v3_restingstate'	0		8		0		''		1		0.218903	17680
-'p0712_restingstate'	0		7		0		''		0		0.215873	21348
-'p0113_restingstate'	0		7		1		''		1		0.225189	21636
-'p0313_restingstate'	0		7		1		''		1		0.185676	21675
-'p0613_restingstate'	0		8		0		''		1		0.203341	22248
-'p0812_restingstate1'	0		7		1		''		1		0.210286	21415
-'p0611_restingstate'	1		10		1		''		0		0.190276	19348
-'p0312_restingstate'	1		8		1		''		0		0.169976	20466
-'p0211_restingstate1'	1		12		1		''		1		0.260806	19219
-'p0511_restingstate'	1		9		1		''		0		0.220698	19306
-'p0811_restingstate'	1		10		0		''		0		0.182966	19447
-'p0911_restingstate'	1		11		1		''		1		0.230025	19475
-'p1011_restingstate'	1		10		0		''		1		0.250833	19551
-'p1511_restingstate'	1		10		1		''		1		0.202039	19757
-'p1811_restingstate'	1		12		0		''		1		0.202443	19953
-'p1911_restingstate'	1		9		0		''		1		0.212305	20054
-'p0112_restingstate'	1		9		1		''		0		0.214766	20255
-'p0212_restingstate'	1		12		0		''		1		0.219258	13676
-'p0512_restingstate'	1		8		1		''		1		0.237562	20800
-'p0710V2_restingstate'	1		14		1		''		1		0.235221	18872
-'p0711_restingstate'	1		15		0		''		1		0.245130	17853
-'p1711_restingstate'	1		17		0		''		0		0.239529	16656
-'p1012_restingstate'	1		13		1		''		1		0.202452	21482
-'p0213_restingstate'	1		19		1		''		1		0.207541	21677
-'p0413_restingstate'	1		14		0		''		1		0.216509	22117   
+'p0311_restingstate1'		0		7		0		''		0		19262
+'p0411_restingstate1'		0		7		0		''		1		19277
+'p1611_restingstate'		0		7		1		''		1		19829
+'p0510V2_restingstate'		0		7		0		''		1		18744
+'p1311_restingstate'		0		8		0		''		1		19655
+'p2011_restingstate'		0		7		0		''		0		20112
+'p0612_restingstate'		0		8		0		''		1		20174
+'p71v3_restingstate'		0		8		0		''		1		17680
+'p0712_restingstate'		0		7		0		''		0		21348
+'p0113_restingstate'		0		7		1		''		1		21636
+'p0313_restingstate'		0		7		1		''		1		21675
+'p0613_restingstate'		0		8		0		''		1		22248
+'p0812_restingstate1'		0		7		1		''		1		21415
+'p0611_restingstate'		1		10		1		''		0		19348
+'p0312_restingstate'		1		8		1		''		0		20466
+'p0211_restingstate1'		1		12		1		''		1		19219
+'p0511_restingstate'		1		9		1		''		0		19306
+'p0811_restingstate'		1		10		0		''		0		19447
+'p0911_restingstate'		1		11		1		''		1		19475
+'p1011_restingstate'		1		10		0		''		1		19551
+'p1511_restingstate'		1		10		1		''		1		19757
+'p1811_restingstate'		1		12		0		''		1		19953
+'p1911_restingstate'		1		9		0		''		1		20054
+'p0112_restingstate'		1		9		1		''		0		20255
+'p0212_restingstate'		1		12		0		''		1		13676
+'p0512_restingstate'		1		8		1		''		1		20800
+'p0710V2_restingstate'		1		14		1		''		1		18872
+'p0711_restingstate'		1		15		0		''		1		17853
+'p1711_restingstate'		1		17		0		''		0		16656
+'p1012_restingstate'		1		13		1		''		1		21482
+'p0213_restingstate'		1		19		1		''		1		21677
+'p0413_restingstate'		1		14		0		''		1		22117
+
+% %new patients
+% 'p0813_restingstate'		0		7		0		''		0		22665
+% 'p0913_restingstate'		0		6		0		''		0		22717
+
     %     %follow-ups
     %     'p0311V2_restingstate'  0   8   0   'p0311_restingstate1'   0
     %     'p1311v2_restingstate'  0   8   0   'p1311_restingstate'    1
@@ -80,32 +85,33 @@ patlist = {
 ctrllist = {
     %     controls
     
-'NW_restingstate'		2		25		2		''		2		1.000000	0
-'p37_restingstate'		2		25		2		''		2		1.000000	0
-'p38_restingstate'		2		25		2		''		2		1.000000	0
-'p40_restingstate'		2		25		2		''		2		1.000000	0
-'p41_restingstate'		2		25		2		''		2		1.000000	0
-'p42_restingstate'		2		25		2		''		2		1.000000	0
-'p43_restingstate'		2		25		2		''		2		1.000000	0
-'p44_restingstate'		2		25		2		''		2		1.000000	0
-'p45_restingstate'		2		25		2		''		2		1.000000	0
-'p46_restingstate'		2		25		2		''		2		1.000000	0
-'p47_restingstate'		2		25		2		''		2		1.000000	0
-'p48_restingstate'		2		25		2		''		2		1.000000	0
-'p49_restingstate'		2		25		2		''		2		1.000000	0
-'subj01_restingstate'	2		25		2		''		2		1.000000	0
-'subj02_restingstate'	2		25		2		''		2		1.000000	0
-'VS_restingstate'		2		25		2		''		2		1.000000	0
-'SS_restingstate'		2		25		2		''		2		1.000000	0
-'SB_restingstate'		2		25		2		''		2		1.000000	0
-'ML_restingstate'		2		25		2		''		2		1.000000	0
-'MC_restingstate'		2		25		2		''		2		1.000000	0
-'JS_restingstate'		2		25		2		''		2		1.000000	0
-'ET_restingstate'		2		25		2		''		2		1.000000	0
-'EP_restingstate'		2		25		2		''		2		1.000000	0
-'CL_restingstate'		2		25		2		''		2		1.000000	0
-'CD_restingstate'		2		25		2		''		2		1.000000	0
-'AC_restingstate'		2		25		2		''		2		1.000000	0
+'NW_restingstate'		2		25		2		''		2		0
+'p37_restingstate'		2		25		2		''		2		0
+'p38_restingstate'		2		25		2		''		2		0
+'p40_restingstate'		2		25		2		''		2		0
+'p41_restingstate'		2		25		2		''		2		0
+'p42_restingstate'		2		25		2		''		2		0
+'p43_restingstate'		2		25		2		''		2		0
+'p44_restingstate'		2		25		2		''		2		0
+'p45_restingstate'		2		25		2		''		2		0
+'p46_restingstate'		2		25		2		''		2		0
+'p47_restingstate'		2		25		2		''		2		0
+'p48_restingstate'		2		25		2		''		2		0
+'p49_restingstate'		2		25		2		''		2		0
+'subj01_restingstate'	2		25		2		''		2		0
+'subj02_restingstate'	2		25		2		''		2		0
+'VS_restingstate'		2		25		2		''		2		0
+'SS_restingstate'		2		25		2		''		2		0
+'SB_restingstate'		2		25		2		''		2		0
+'ML_restingstate'		2		25		2		''		2		0
+'MC_restingstate'		2		25		2		''		2		0
+'JS_restingstate'		2		25		2		''		2		0
+'ET_restingstate'		2		25		2		''		2		0
+'EP_restingstate'		2		25		2		''		2		0
+'CL_restingstate'		2		25		2		''		2		0
+'CD_restingstate'		2		25		2		''		2		0
+'AC_restingstate'		2		25		2		''		2		0
+
     %     'jenny_restingstate'
     %     %'SaltyWater_restingstate'
     % 'p50_restingstate'
