@@ -1,4 +1,4 @@
-function [cohval sigval] = bandcoh(freq1,freq2,cohall,cohbootall,freqsout)
+function [cohval, sigval, bootcoh] = bandcoh(freq1,freq2,cohall,cohbootall,freqsout)
 
 [~, minidx] = min(abs(freqsout-freq1));
 a=minidx;
@@ -8,8 +8,8 @@ b=minidx;
 cohall = cohall(a:b,:);
 cohbootall = cohbootall(:,a:b,:);
 
-[maxcoh maxidx] = max(max(cohall,[],2));
-[mincoh minidx] = min(min(cohall,[],2));
+[maxcoh, maxidx] = max(max(cohall,[],2));
+[mincoh, minidx] = min(min(cohall,[],2));
 
 if abs(maxcoh) > abs(mincoh)
     cohval = maxcoh;
@@ -23,10 +23,3 @@ else
     bootcoh = bootcoh(:);
     sigval = sum(bootcoh <= cohval)/length(bootcoh);
 end
-
-
-
-
-
-
-% obtention des frequences dans la matrice coh

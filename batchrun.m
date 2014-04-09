@@ -11,7 +11,9 @@ for s = 1:length(subjlist)
 %     batchrun{s,2} = subjlist{s,2};
     
     fprintf('Processing %s.\n',basename);
-    
+%     copyfile([filepath basename '.set'],[filepath 'copy/' basename '.set']);
+%     copyfile([filepath basename '.fdt'],[filepath 'copy/' basename '.fdt']);
+    copyfile([filepath basename 'spectra.mat'],[filepath 'copy/' basename 'spectra.mat']);
 %     calcftspec(basename);
 %     ftcoherence(basename);
     
@@ -38,12 +40,12 @@ for s = 1:length(subjlist)
     
 %             rejartifacts2(basename,2,1);
     
-            calcspectra(basename);
-
-
-            plotspec(basename);
-            export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
-            close(gcf);
+%             calcspectra(basename);
+% 
+% 
+%             plotspec(basename);
+%             export_fig(gcf,sprintf('figures/%sspectra.eps',basename));
+%             close(gcf);
 % %     
     %         fix1020(basename);
     

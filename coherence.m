@@ -4,6 +4,7 @@ function coherence(basename)
 loadpaths
 
 alpha = 0.05;
+nboot = 2000;
 
 %     if exist([filepath basename 'wplifdr.mat'],'file')
 %         fprintf('%s exists. Skipping...\n',[basename 'wplifdr.mat']);
@@ -21,7 +22,7 @@ freqlist=specinfo.freqlist;
 
 matrix=zeros(size(freqlist,1),EEG.nbchan,EEG.nbchan); % size(freqlist,1) lines ; EEG.nbchan columns ; EEG.nbchan time this table
 pval=zeros(size(freqlist,1),EEG.nbchan,EEG.nbchan);
-
+bootmat=zeros(size(freqlist,1),EEG.nbchan,EEG.nbchan,nboot);
 % matrixcoherence of each pair of electrodes
 for chann1=1:EEG.nbchan
     fprintf('%d',chann1);
@@ -31,13 +32,13 @@ for chann1=1:EEG.nbchan
             [cohall, cohbootall, freqsout] = calcwpli(EEG,chann1,chann2);
             
             for fidx = 1:size(freqlist,1)
-                [matrix(fidx,chann1,chann2), pval(fidx,chann1,chann2)] = ...
+                [matrix(fidx,chann1,chann2), pval(fidx,chann1,chann2), bootmat(fidx,chann1,chann2,:)] = ...
                     bandcoh(freqlist(fidx,1),freqlist(fidx,2),cohall,cohbootall,freqsout);
             end
         elseif chann1 > chann2
-            matrix(:,chann1,chann2)=matrix(:,chann2,chann1);
+            matrix(:,chann1,chann2) = matrix(:,chann2,chann1);
             pval(:,chann1,chann2) = pval(:,chann2,chann1);
-            
+            bootmat(:,chann1,chann2,:) = bootmat(:,chann2,chann1,:);
         end
     end
     fprintf('\n');
@@ -71,4 +72,4 @@ for f = 1:size(freqlist,1)
     matrix(f,:,:) = coh;
     pval(f,:,:) = pvals;
 end
-save([filepath basename 'wplifdr.mat'],'matrix','pval','chanlocs');
+save([filepath basename 'wplifdr.mat'],'matrix','pval','bootmat','chanlocs');
