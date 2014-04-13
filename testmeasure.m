@@ -20,7 +20,7 @@ param = finputcheck(varargin, {
     'legendposition', 'string', {}, ''; ...
     'xlabel', 'string', {}, measure; ...
     'exclude', 'string', {'on','off'}, 'off'; ...
-    'randratio', 'string', {'on','off'}, 'off'; ...
+    'randratio', 'string', {'on','off'}, 'on'; ...
     });
 
 fontname = 'Helvetica';
@@ -54,14 +54,10 @@ end
 
 if strcmpi(measure,'small-worldness')
     graph{end+1,1} = 'small-worldness';
-    graph{1,2} = graph{1,2}(:,1:3,:,:);
-    graph{2,2} = graph{2,2}(:,1:3,:);
     graph{end,2} = ( mean(graph{1,2},4) ./ mean(mean(randgraph.graph{1,2},5),4) ) ./ ( graph{2,2} ./ mean(randgraph.graph{2,2},4) ) ;
     %         graph{end,3} = ( mean(graph{1,3},4) ./ mean(randgraph.graph{1,3},4) ) ./ ( graph{2,3} ./ randgraph.graph{2,3}) ;
-    
 elseif strcmp(param.randratio,'on')
     m = find(strcmpi(measure,graph(:,1)));
-    graph{m,2} = graph{m,2}(:,1:3,:,:,:);
     graph{m,2} = graph{m,2} ./ mean(randgraph.graph{m,2},ndims(randgraph.graph{m,2}));
 end
 
