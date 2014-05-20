@@ -45,11 +45,14 @@ graph{8,1} = 'participation coefficient';
 graph{9,1} = 'connection density';
 graph{10,1} = 'mutual information';
 
-% load(savename);
+load(savename);
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
     
+    if s < 53
+        continue;
+    end
     fprintf('Processing %s',basename);
     
     load([filepath conntype filesep basename conntype 'fdr.mat']);
@@ -90,7 +93,7 @@ for s = 1:size(subjlist,1)
                 allbet{iter}(thresh,:) = betweenness_wei(weight_conversion(weicoh,'lengths'));
                 allden{iter}(thresh) = density_und(weicoh);
                 
-                for i = 1:50%param.heuristic
+                for i = 1:param.heuristic
                     [Ci, allQ{iter}(thresh,i)] = modularity_louvain_und(weicoh);
                     
                     allCi{iter}(thresh,i,:) = Ci;

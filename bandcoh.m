@@ -13,13 +13,11 @@ cohbootall = cohbootall(:,a:b,:);
 
 if abs(maxcoh) > abs(mincoh)
     cohval = maxcoh;
-    bootcoh = cohbootall(:,maxidx,:);
-    bootcoh = bootcoh(:);
+    bootcoh = max(max(cohbootall,[],3),[],2);
     sigval = sum(bootcoh >= cohval)/length(bootcoh);
     
 else
     cohval = mincoh;
-    bootcoh = cohbootall(:,minidx,:);
-    bootcoh = bootcoh(:);
+    bootcoh = min(min(cohbootall,[],3),[],2);
     sigval = sum(bootcoh <= cohval)/length(bootcoh);
 end

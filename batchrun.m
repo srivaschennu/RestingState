@@ -7,13 +7,13 @@ subjlist = eval(listname);
 
 for s = 1:length(subjlist)
     basename = subjlist{s};
-%     batchrun{s,1} = basename;
-%     batchrun{s,2} = subjlist{s,2};
+    batchres{s,1} = basename;
+    batchres{s,2} = subjlist{s,2};
     
     fprintf('Processing %s.\n',basename);
 %     copyfile([filepath basename '.set'],[filepath 'copy/' basename '.set']);
 %     copyfile([filepath basename '.fdt'],[filepath 'copy/' basename '.fdt']);
-    copyfile([filepath basename 'spectra.mat'],[filepath 'copy/' basename 'spectra.mat']);
+%     copyfile([filepath basename 'spectra.mat'],[filepath 'copy/' basename 'spectra.mat']);
 %     calcftspec(basename);
 %     ftcoherence(basename);
     
@@ -22,7 +22,9 @@ for s = 1:length(subjlist)
 %     copyfile([filepath basename 'pliboot.mat'],[filepath 'commonfreq/' basename 'pliboot.mat']);
 %     copyfile([filepath basename 'plifdr.mat'],[filepath 'commonfreq/' basename 'plifdr.mat']);
     
-%     EEG = pop_loadset('filepath',filepath,'filename',[basename '.set']);
+    EEG = pop_loadset('filepath',filepath,'filename',[basename '.set'],'loadmode','info');
+    batchres{s,3} = EEG.trials;
+    
 %     EEG = rereference(EEG,2);
 %     pop_saveset(EEG,'savemode','resave');
 
@@ -36,7 +38,7 @@ for s = 1:length(subjlist)
 %             rejectic(basename);
     
 %     EEG = pop_loadset('filepath',filepath,'filename',[basename '_epochs.set'],'loadmode','info');
-%     batchrun{s,3} = sum(EEG.reject.gcompreject);
+%     batchres{s,3} = sum(EEG.reject.gcompreject);
     
 %             rejartifacts2(basename,2,1);
     
@@ -95,4 +97,4 @@ end
 %     fprintf('\n');
 % end
 
-% save batchres.mat batchres
+save batchres.mat batchres

@@ -1,47 +1,38 @@
-subjlist = {
-%     'subj01_restingstate'
-%     'subj02_restingstate'
-%     'p37_restingstate'
-%     'p38_restingstate'
-%     'p40_restingstate'
-%     'p41_restingstate'
-%     'p42_restingstate'
-%     'p43_restingstate'
-%     'p44_restingstate'
-%     'p45_restingstate'
-%     'p46_restingstate'
-%     'p47_restingstate'
-%     'p48_restingstate'
-%     'p49_restingstate'
-%     'p50_restingstate'
-%     'p0211_restingstate1'
-%     'p0211_restingstate2'
-%     'p0211_restingstate1'
-%     'p0311_restingstate2'
-%     'p0411_restingstate1'
-%     'p0411_restingstate2'
-%     'p0511_restingstate'
-%     'p0611_restingstate'
-%     'p0711_restingstate'
-%     'p0811_restingstate'
-%     'p0911_restingstate'
-%     'p1011_restingstate'
-%     'p1511_restingstate'
-%     'p1611_restingstate'
-%     'p0510v2_restingstate'
-%     'p0710v2_restingstate'
-    
-    'p1711_restingstate'
-    'p1811_restingstate'
-    'p1911_restingstate'
-    'p0411V2_restingstate'
-    'p0710v2_restingstate'
+function batchjob(listname)
+
+loadsubj
+
+loadpaths
+
+subjlist = eval(listname);
+
+curpath = path;
+matlabpath = strrep(curpath,':',''';''');
+matlabpath = eval(['{''' matlabpath '''}']);
+workerpath = cat(1,{pwd},matlabpath(1:end-1));
+
+tasklist = {
+    'coherence' 'subjlist(subjidx,1)'
     };
 
-for subjidx = 1:length(subjlist)
-    subjname = subjlist{subjidx};
-    
-    dataimport(subjname);
-    preprocess(subjname);
-    computeic(subjname);
+j = 1;
+for subjidx = 1:size(subjlist,1)
+    for t = 1:size(tasklist,1)
+        jobs(j).task = str2func(tasklist{t,1});
+        jobs(j).input_args = eval(tasklist{t,2});
+        jobs(j).n_return_values = 0;
+        jobs(j).depends_on = 0;
+        j = j+1;
+    end
 end
+
+% P=cbupool(24);
+% P.ResourceTemplate='-l nodes=^N^,mem=12GB,walltime=4:00:00';
+% matlabpool(P);
+% 
+% parfor j = 1:length(jobs)
+%     jobs(j).task(jobs(j).input_args{:});
+% end
+
+scheduler = cbu_scheduler('custom',{'compute',12,8,3600*16,[filepath 'Jobs']});
+cbu_qsub(jobs,scheduler,workerpath);
