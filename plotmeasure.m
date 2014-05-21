@@ -9,6 +9,7 @@ param = finputcheck(varargin, {
     'plotticks', 'string', {'on','off'}, 'on'; ...
     'ylabel', 'string', {}, measure; ...
     'randratio', 'string', {'on','off'}, 'off'; ...
+    'legendposition', 'string', {}, 'NorthEast'; ...
     });
 
 fontname = 'Helvetica';
@@ -116,7 +117,7 @@ for bandidx = 1:3
             xlabel(' ','FontName',fontname,'FontSize',fontsize);
         end
         if bandidx == 1 && strcmp(param.legend,'on')
-            legend(groupnames,'Location','NorthEast');
+            legend(groupnames,'Location',param.legendposition);
         end
         
     else

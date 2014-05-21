@@ -1,4 +1,4 @@
-function [testdata,grp,v2idx,v1idx,pval,stats] = testmeasure(listname,conntype,measure,bandidx,varargin)
+function [testdata,grp,v2idx,v1idx,pval1,stats1] = testmeasure(listname,conntype,measure,bandidx,varargin)
 
 loadpaths
 
@@ -93,17 +93,17 @@ end
 
 %% test patients vs controls group difference
 % [pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
-[~,pval,~,stats] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
+[~,pval1,~,stats1] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
 fprintf('%s band %s: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...
-    bands{bandidx},measure,mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats.tstat,pval);
+    bands{bandidx},measure,mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats1.tstat,pval1);
 
 %% compare vs to mcs patients
-[~,pval,~,stats] = ttest2(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx),[],[],'unequal');
-fprintf('MCS vs. VS: t = %.2f, p = %.3f.\n',stats.tstat,pval);
+[~,pval2,~,stats2] = ttest2(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx),[],[],'unequal');
+fprintf('MCS vs. VS: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
 
 %% compare measure between VS imagers and non-imagers
-[~,pval,~,stats] = ttest2(testdata((grp == 0) & ~v2idx & tennis),testdata((grp == 1) & ~v2idx & tennis),[],[],'unequal');
-fprintf('VS imagers vs MCS imagers: t = %.2f, p = %.3f.\n',stats.tstat,pval);
+[~,pval2,~,stats2] = ttest2(testdata((grp == 0) & ~v2idx & tennis),testdata((grp == 1) & ~v2idx & tennis),[],[],'unequal');
+fprintf('VS imagers vs MCS imagers: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
 
 %% correlate patients with crs scores
 
