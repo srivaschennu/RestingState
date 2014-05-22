@@ -45,14 +45,11 @@ graph{8,1} = 'participation coefficient';
 graph{9,1} = 'connection density';
 graph{10,1} = 'mutual information';
 
-load(savename);
+%load(savename);
 
 for s = 1:size(subjlist,1)
     basename = subjlist{s,1};
-    
-    if s < 53
-        continue;
-    end
+
     fprintf('Processing %s',basename);
     
     load([filepath conntype filesep basename conntype 'fdr.mat']);
@@ -62,14 +59,16 @@ for s = 1:size(subjlist,1)
         error('Channel names do not match!');
     end
     matrix = matrix(:,sortidx,sortidx);
-    bootmat = bootmat(:,sortidx,sortidx,:);
+    if strcmp(param.randomise,'on')
+        bootmat = bootmat(:,sortidx,sortidx,:);
+    end
     %     pval = pval(:,sortidx,sortidx);
     
     chanlocs = chanlocs(sortidx);
     %     chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];
     
     for f = 1:size(matrix,1)
-        parfor iter = 1:numruns
+        for iter = 1:numruns
             fprintf(' %d',iter);
             if strcmp(param.randomise,'on')
                 %randomisation
