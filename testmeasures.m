@@ -11,7 +11,7 @@ bands = {
 selectbands = [1 2 3];
 
 for bandidx = 1:length(selectbands)
-    [~,~,~,~,pvals(bandidx),stats(bandidx)] = testmeasure(listname,conntype,measure,selectbands(bandidx));
+    [~,~,~,~,~,~,pvals(bandidx),stats(bandidx)] = testmeasure(listname,conntype,measure,selectbands(bandidx));
     fprintf('\n');
 end
 

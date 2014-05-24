@@ -1,4 +1,4 @@
-function [testdata,grp,v2idx,v1idx,pval1,stats1] = testmeasure(listname,conntype,measure,bandidx,varargin)
+function [testdata,grp,crs,tennis,v2idx,v1idx,pval1,stats1] = testmeasure(listname,conntype,measure,bandidx,varargin)
 
 loadpaths
 
@@ -101,9 +101,9 @@ fprintf('%s band %s: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...
 [~,pval2,~,stats2] = ttest2(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx),[],[],'unequal');
 fprintf('MCS vs. VS: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
 
-%% compare measure between VS imagers and non-imagers
-[~,pval2,~,stats2] = ttest2(testdata((grp == 0) & ~v2idx & tennis),testdata((grp == 1) & ~v2idx & tennis),[],[],'unequal');
-fprintf('VS imagers vs MCS imagers: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
+%% compare measure between imagers and non-imagers
+[~,pval2,~,stats2] = ttest2(testdata((grp == 1) & ~v2idx & tennis),testdata((grp == 1) & ~v2idx & ~tennis),[],[],'unequal');
+fprintf('Imagers vs non-imagers: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
 
 %% correlate patients with crs scores
 
