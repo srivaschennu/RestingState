@@ -103,7 +103,7 @@ fprintf('MCS vs. VS: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
 
 %% compare measure between imagers and non-imagers
 [~,pval2,~,stats2] = ttest2(testdata((grp == 1) & ~v2idx & tennis),testdata((grp == 1) & ~v2idx & ~tennis),[],[],'unequal');
-fprintf('Imagers vs non-imagers: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
+fprintf('Imagers vs non-imagers: t(%.1f) = %.2f, p = %.3f.\n',stats2.df,stats2.tstat,pval2);
 
 %% correlate patients with crs scores
 
