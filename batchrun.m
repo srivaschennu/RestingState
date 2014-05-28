@@ -22,8 +22,8 @@ for s = 1:length(subjlist)
 %     copyfile([filepath basename 'pliboot.mat'],[filepath 'commonfreq/' basename 'pliboot.mat']);
 %     copyfile([filepath basename 'plifdr.mat'],[filepath 'commonfreq/' basename 'plifdr.mat']);
     
-    EEG = pop_loadset('filepath',filepath,'filename',[basename '.set'],'loadmode','info');
-    batchres{s,3} = EEG.trials;
+%     EEG = pop_loadset('filepath',filepath,'filename',[basename '.set'],'loadmode','info');
+%     batchres{s,3} = EEG.trials;
     
 %     EEG = rereference(EEG,2);
 %     pop_saveset(EEG,'savemode','resave');
@@ -42,7 +42,7 @@ for s = 1:length(subjlist)
     
 %             rejartifacts2(basename,2,1);
     
-%             calcspectra(basename);
+            calcallspec(basename);
 % 
 % 
 %             plotspec(basename);
@@ -97,4 +97,4 @@ end
 %     fprintf('\n');
 % end
 
-save batchres.mat batchres
+% save batchres.mat batchres

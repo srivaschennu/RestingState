@@ -1,6 +1,6 @@
-function plotpower(listname)
+function plotpower(listname,conntype)
 
-load(sprintf('alldata_%s.mat',listname));
+load(sprintf('%s/%s/alldata_%s.mat',filepath,conntype,listname,conntype));
 load chanlist
 load freqlist
 
