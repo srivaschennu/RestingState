@@ -99,11 +99,14 @@ fprintf('%s band %s: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...
 
 %% compare vs to mcs patients
 [~,pval2,~,stats2] = ttest2(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx),[],[],'unequal');
-fprintf('MCS vs. VS: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
+fprintf('MCS vs. VS: t(%.1f) = %.2f, p = %.3f.\n',stats2.df,stats2.tstat,pval2);
 
 %% compare measure between imagers and non-imagers
 [~,pval2,~,stats2] = ttest2(testdata((grp == 1) & ~v2idx & tennis),testdata((grp == 1) & ~v2idx & ~tennis),[],[],'unequal');
 fprintf('Imagers vs non-imagers: t(%.1f) = %.2f, p = %.3f.\n',stats2.df,stats2.tstat,pval2);
+
+[~,pval2,~,stats2] = ttest2(testdata((grp == 1 | (grp == 0 & tennis)) & ~v2idx),testdata((grp == 0 & ~tennis) & ~v2idx),[],[],'unequal');
+fprintf('MCSany vs VS: t(%.1f) = %.2f, p = %.3f.\n',stats2.df,stats2.tstat,pval2);
 
 %% correlate patients with crs scores
 
