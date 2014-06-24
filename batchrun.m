@@ -29,6 +29,10 @@ for s = 1:length(subjlist)
 %     pop_saveset(EEG,'savemode','resave');
 
 %         dataimport(basename);
+
+% eogimport(basename);
+ploteog(basename);
+
 %         epochdata(basename);
     
 %            rejartifacts2([basename '_epochs'],1,4,[],[],1000,500);
@@ -42,7 +46,7 @@ for s = 1:length(subjlist)
     
 %             rejartifacts2(basename,2,1);
     
-            calcallspec(basename);
+%             calcallspec(basename);
 % 
 % 
 %             plotspec(basename);
