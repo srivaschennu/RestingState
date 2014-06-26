@@ -1,4 +1,4 @@
-function ploteog(basename)
+function eogrsd = ploteog(basename)
 
 loadpaths
 
@@ -13,24 +13,24 @@ for c = 1:EEG.nbchan
 end
 eogrsd = mean(eogrsd,1);
 
-figure('Color','white');
-figpos = get(gcf,'Position');
-
-% figpos(4) = figpos(4)/3.8;
-figpos(4) = figpos(4)/5;
-
-set(gcf,'Position',figpos);
-
-plot(eogrsd,'LineWidth',1);
-
-set(gca,'YLim',ylimits);
-
-set(gca,'XTick',[],'YTick',[]);
-% set(gca,'YTick',ylimits,'FontName',fontname,'FontSize',fontsize-2);
-% xlabel('Time (sec)','FontName',fontname,'FontSize',fontsize);
-% ylabel('Norm. SD','FontName',fontname,'FontSize',fontsize);
-
-box off
-
-export_fig(gcf,sprintf('figures/%s_eog.eps',basename));
-close(gcf);
+% figure('Color','white');
+% figpos = get(gcf,'Position');
+% 
+% % figpos(4) = figpos(4)/3.8;
+% figpos(4) = figpos(4)/5;
+% 
+% set(gcf,'Position',figpos);
+% 
+% plot(eogrsd,'LineWidth',1);
+% 
+% set(gca,'YLim',ylimits);
+% 
+% set(gca,'XTick',[],'YTick',[]);
+% % set(gca,'YTick',ylimits,'FontName',fontname,'FontSize',fontsize-2);
+% % xlabel('Time (sec)','FontName',fontname,'FontSize',fontsize);
+% % ylabel('Norm. SD','FontName',fontname,'FontSize',fontsize);
+% 
+% box off
+% 
+% export_fig(gcf,sprintf('figures/%s_eog.eps',basename));
+% close(gcf);

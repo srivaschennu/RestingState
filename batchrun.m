@@ -31,7 +31,10 @@ for s = 1:length(subjlist)
 %         dataimport(basename);
 
 % eogimport(basename);
-ploteog(basename);
+
+eogrsd = ploteog(basename);
+anovdata(s,1) = mean(eogrsd(1:round(length(eogrsd)/2)))
+anovdata(s,2) = mean(eogrsd(round(length(eogrsd)/2)+1:end));
 
 %         epochdata(basename);
     
@@ -93,6 +96,7 @@ ploteog(basename);
 %                 end
 
 end
+rmanova(anovdata);
 % for s = 1:length(subjinfo)
 %     fprintf('%s\t',subjinfo{s}.basename);
 %     if isfield(subjinfo{s},'Age')
