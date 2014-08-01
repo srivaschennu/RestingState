@@ -26,7 +26,7 @@ fontsize = 16;
 fontweight = 'bold';
 
 % range of line widths
-lwrange = [0.1 3];
+lwrange = [0.5 3];
 
 % range of point sizes
 ptrange = [10 800];
@@ -61,6 +61,7 @@ if isempty(param.vscale)
     param.vscale(2) = max(vsize);
 end
 vsize = (vsize - param.vscale(1))/(param.vscale(2) - param.vscale(1));
+vsize(vsize < 0) = 0;
 
 figure('Color','white','Name',mfilename);
 
