@@ -32,9 +32,9 @@ for s = 1:length(subjlist)
 
 % eogimport(basename);
 
-eogrsd = ploteog(basename);
-anovdata(s,1) = mean(eogrsd(1:round(length(eogrsd)/2)));
-anovdata(s,2) = mean(eogrsd(round(length(eogrsd)/2)+1:end));
+% eogrsd = ploteog(basename);
+% anovdata(s,1) = mean(eogrsd(1:round(length(eogrsd)/2)));
+% anovdata(s,2) = mean(eogrsd(round(length(eogrsd)/2)+1:end));
 
 %         epochdata(basename);
     
@@ -46,7 +46,10 @@ anovdata(s,2) = mean(eogrsd(round(length(eogrsd)/2)+1:end));
     
 %     EEG = pop_loadset('filepath',filepath,'filename',[basename '_epochs.set'],'loadmode','info');
 %     batchres{s,3} = sum(EEG.reject.gcompreject);
-    
+
+EEG = pop_loadset('filepath',filepath,'filename',[basename '.set'],'loadmode','info');
+batchres{s,3} = sum(EEG.reject.gcompreject);
+
 %             rejartifacts2(basename,2,1);
     
 %             calcallspec(basename);
