@@ -22,8 +22,8 @@ for s = 1:length(subjlist)
 %     copyfile([filepath basename 'pliboot.mat'],[filepath 'commonfreq/' basename 'pliboot.mat']);
 %     copyfile([filepath basename 'plifdr.mat'],[filepath 'commonfreq/' basename 'plifdr.mat']);
     
-%     EEG = pop_loadset('filepath',filepath,'filename',[basename '.set'],'loadmode','info');
-%     batchres{s,3} = EEG.trials;
+    EEG = pop_loadset('filepath',filepath,'filename',[basename '.set'],'loadmode','info');
+    batchres{s,3} = EEG.trials;
     
 %     EEG = rereference(EEG,2);
 %     pop_saveset(EEG,'savemode','resave');
@@ -46,10 +46,7 @@ for s = 1:length(subjlist)
     
 %     EEG = pop_loadset('filepath',filepath,'filename',[basename '_epochs.set'],'loadmode','info');
 %     batchres{s,3} = sum(EEG.reject.gcompreject);
-
-EEG = pop_loadset('filepath',filepath,'filename',[basename '.set'],'loadmode','info');
-batchres{s,3} = sum(EEG.reject.gcompreject);
-
+    
 %             rejartifacts2(basename,2,1);
     
 %             calcallspec(basename);
@@ -99,7 +96,7 @@ batchres{s,3} = sum(EEG.reject.gcompreject);
 %                 end
 
 end
-rmanova(anovdata);
+% rmanova(anovdata);
 % for s = 1:length(subjinfo)
 %     fprintf('%s\t',subjinfo{s}.basename);
 %     if isfield(subjinfo{s},'Age')
@@ -108,4 +105,4 @@ rmanova(anovdata);
 %     fprintf('\n');
 % end
 
-% save batchres.mat batchres
+save batchres.mat batchres
