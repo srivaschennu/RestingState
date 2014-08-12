@@ -92,7 +92,6 @@ end
 % powerdata = mean(powerdata.bandpower(:,bandidx,:),3);
 
 %% test patients vs controls group difference
-grp(32+[4,9,10,14,23,30]) = -1;
 % [pval,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
 [~,pval1,~,stats1] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
 fprintf('%s band %s: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...

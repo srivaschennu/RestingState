@@ -54,7 +54,7 @@ end
 erange = [min(nonzeros(threshcoh(:))) max(threshcoh(:))];
 vrange = [min(nonzeros(groupdeg(:))) max(groupdeg(:))];
 
-for g = group
+for g = 3%group
     minfo = plotgraph(squeeze(groupcoh(g,:,:)),sortedlocs,'plotqt',plotqt,'escale',erange,'vscale',vrange,'legend','off','plotinter','off');
     fprintf('group %s: %s band - number of modules: %d\n',grouplist{g},bands{bandidx},length(unique(minfo)));
     set(gcf,'Name',sprintf('group %s: %s band',grouplist{g},bands{bandidx}));

@@ -30,7 +30,7 @@ if strcmpi(measure,'small-worldness') || strcmp(param.randratio,'on')
     if exist(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype),'file')
         randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));
     else
-        error('%s/%s/graphdata_%s_rand_%s.mat not found!');
+        error('%s/%s/graphdata_%s_rand_%s.mat not found!',filepath,conntype,listname,conntype);
     end
 end
 

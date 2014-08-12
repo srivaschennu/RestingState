@@ -43,7 +43,7 @@ bands = {
     'Gamma'
     };
 
-nbins = 15;
+nbins = 30;
 
 chandist = chandist(logical(triu(ones(size(chandist)),1)));
 sorteddist = sort(chandist);
@@ -88,5 +88,5 @@ end
 if ~isempty(param.ylim)
     ylim(param.ylim);
 end
-export_fig(gcf,sprintf('figures/plidist_%s.eps',bands{bandidx}));
-% close(gcf);
+export_fig(gcf,sprintf('figures/cohdist_%s.eps',bands{bandidx}));
+close(gcf);

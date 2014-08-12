@@ -15,7 +15,7 @@ for bandidx = 1:length(selectbands)
     fprintf('\n');
 end
 
-pvals = bonf_holm(pvals);
+pvals = bonf_holm(pvals,0.01);
 
 fprintf('After correction:\n');
 for bandidx = 1:length(selectbands)

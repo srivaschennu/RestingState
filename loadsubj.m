@@ -1,21 +1,47 @@
-newsubj = {
+newdata = {
 %    'p0713_restingstate'  %not enough data
 %     'p1013_restingstate' % noisy
-    'p0813_restingstate'
-    'p0913_restingstate'
+%     'p0813_restingstate'
+%     'p0913_restingstate'
 %    'p0114_restingstate' % patient with hydrocephalus
-    };
 
-testlist = {
-    % 	'p0311_restingstate1'	0	7	0	''	0
-%     'NW_restingstate'   2  25   2     ''    2
-    'AC_restingstate'   2  25   2     ''    2
-    };
+% 'Srivas_resting_DI'
+% 'Srivas_resting_RM'
+% 'DanielSoto'
+% 'AlvaroJimenez'
+'CamiloHernandez'
+% 'FranciscoRissetti'
+% 'ClaudioLavin'
+'CristianCabezas'
+% 'MarcoLillo'
+% 'EmilioGuzman'
+% 'Srivas_resting_WP'
+% 'Srivas_resting_TG'
+% 'Srivas_Resting_TE'
+% 'Srivas_Resting_SRJ'
+% 'Srivas_resting_ES' %%noisy
+% 'Srivas_resting_ACR'%% no alpha
+% 'Srivas_Resting_AA'
+% 'Srivas_resting_NMH'
+% 'TeresitaSilva'
+% 'HelenaCarvacho' %too noisy rejected
+% 'GorkaNavarrete'
+% 'StefanieHarbt'
+% 'JuanPablo'
+% 'JesusVidal'
+% 'EmilioVera'
+% % 'IvanCorrea' %missing
+% 'CarinaPuccio'
+% 'ClaudiaUrrea'
+% 'BeatrizGarreton'
+% 'FranciscoPerez'
+};
+
 
 patlist = {
     %
     % patients
-                                        %tennis         %etiology
+    
 'p0311_restingstate1'		0		7		0		''		0		19262
 'p0411_restingstate1'		0		7		0		''		1		19277
 'p1611_restingstate'		0		7		1		''		1		19829
@@ -119,6 +145,41 @@ ctrllist = {
     % 'CS_restingstate'  ''
     };
 
+newctrllist = {
+'DanielaCabezas'		2		25		2		''		2		0
+'FranciscoOlivares'		2		25		2		''		2		0
+'AlisonSaldana'         2		25		2		''		2		0
+% 'FiorellaZaneta'		2		25		2		''		2		0 % no ALPHA! maybe reject
+'RobertoGarcia' 		2		25		2		''		2		0
+'DanielSoto'    		2		25		2		''		2		0
+'AlvaroJimenez' 		2		25		2		''		2		0
+% 'CamiloHernandez'		2		25		2		''		2		0 %large blinks
+'FranciscoRissetti'		2		25		2		''		2		0
+% 'ClaudioLavin'  		2		25		2		''		2		0 % noisy v small alpha
+'CristianCabezas'		2		25		2		''		2		0
+'MarcoLillo'    		2		25		2		''		2		0
+'EmilioGuzman'  		2		25		2		''		2		0
+'TeresitaSilva'         2		25		2		''		2		0
+% 'GorkaNavarrete'        2		25		2		''		2		0 %no alpha
+'StefanieHarbt'         2		25		2		''		2		0
+'JuanPablo'             2		25		2		''		2		0
+'JesusVidal'            2		25		2		''		2		0
+'EmilioVera'            2		25		2		''		2		0
+'CarinaPuccio'          2		25		2		''		2		0
+'ClaudiaUrrea'          2		25		2		''		2		0
+'BeatrizGarreton'       2		25		2		''		2		0
+'FranciscoPerez'        2		25		2		''		2		0
+% 'Srivas_resting_DI'		2		25		2		''		2		0 %theta peak
+'Srivas_resting_RM'		2		25		2		''		2		0
+'Srivas_resting_WP'     2		25		2		''		2		0
+'Srivas_resting_TG'     2		25		2		''		2		0
+% 'Srivas_Resting_TE'     2		25		2		''		2		0
+'Srivas_Resting_SRJ'    2		25		2		''		2		0
+'Srivas_resting_ES'     2		25		2		''		2		0 %%noisy
+% 'Srivas_resting_ACR'    2		25		2		''		2		0 %% no alpha
+'Srivas_Resting_AA'     2		25		2		''		2		0
+'Srivas_resting_NMH'    2		25		2		''		2		0
+};
 
 % fmrilist = {
 %     'p0211_restingstate2'   2   14
@@ -158,3 +219,4 @@ ctrllist = {
 %     };
 
 allsubj = cat(1,patlist,ctrllist);
+newsubj = cat(1,patlist,newctrllist);

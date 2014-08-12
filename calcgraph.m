@@ -200,3 +200,11 @@ for s = 1:size(subjlist,1)
     grp(s,1) = subjlist{s,2};
     save(savename, 'graph', 'grp', 'tvals', 'subjlist');
 end
+          %                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            
+        end
+    end
+end
+fprintf('\n');
+
+save(savename, 'graphdata', 'tvals');

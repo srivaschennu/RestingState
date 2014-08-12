@@ -35,4 +35,24 @@ end
 % end
 
 scheduler = cbu_scheduler('custom',{'compute',12,8,3600*16,[filepath 'Jobs']});
+cbu_qsub(jobs,scheduler,workerpath);return_values = 0;
+        jobs(j).depends_on = 0;
+        j = j+1;
+    end
+end
+
+for j = 1:length(jobs)
+    disp(jobs(j));
+%     jobs(j).task(jobs(j).input_args{:});
+end
+
+% P=cbupool(24);
+% P.ResourceTemplate='-l nodes=^N^,mem=12GB,walltime=4:00:00';
+% matlabpool(P);
+% 
+% parfor j = 1:length(jobs)
+%     jobs(j).task(jobs(j).input_args{:});
+% end
+
+scheduler = cbu_scheduler('custom',{jobqueue,numworkers,memory,walltime,jobspath});
 cbu_qsub(jobs,scheduler,workerpath);

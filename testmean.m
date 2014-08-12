@@ -47,15 +47,15 @@ end
 v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
 
-testdata = squeeze(mean(allcoh(:,bandidx,:,:),4));
+testdata = squeeze(mean(mean(allcoh(:,bandidx,:,:),4),3));
 % testdata = squeeze(bandpower(:,bandidx,:));
 
-% %% test patients vs controls group difference
-% % [pval1,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
-% [~,pval1,~,stats1] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
-% fprintf('%s band: Ctrl %.2f, Pat %.2f, t = %.2f, p = %.3f.\n',...
-%     bands{bandidx},mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats1.tstat,pval1);
-% 
+%% test patients vs controls group difference
+% [pval1,~,stats] = ranksum(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx));
+[~,pval1,~,stats1] = ttest2(testdata(grp == 2),testdata((grp == 0 | grp == 1) & ~v2idx),[],[],'unequal');
+fprintf('%s band: Ctrl %.2f, Pat %.2f, t(%.1f) = %.2f, p = %.3f.\n',...
+    bands{bandidx},mean(testdata(grp == 2)),mean(testdata((grp == 0 | grp == 1) & ~v2idx)),stats1.df,stats1.tstat,pval1);
+
 % %% compare vs to mcs patients
 % [~,pval2,~,stats2] = ttest2(testdata(grp == 1 & ~v2idx),testdata(grp == 0 & ~v2idx),[],[],'unequal');
 % fprintf('MCS vs. VS: t = %.2f, p = %.3f.\n',stats2.tstat,pval2);
