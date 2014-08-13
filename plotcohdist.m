@@ -43,7 +43,7 @@ bands = {
     'Gamma'
     };
 
-nbins = 30;
+nbins = 10;
 
 chandist = chandist(logical(triu(ones(size(chandist)),1)));
 sorteddist = sort(chandist);
@@ -54,10 +54,11 @@ figpos = get(gcf,'Position');
 figpos(4) = figpos(4)/2;
 set(gcf,'Position',figpos);
 bar(uniqcd,numcd);
-set(gca,'FontSize',fontsize+4,'FontName',fontname,'XLim',[uniqcd(1)-1 uniqcd(end)+1],'YLim',[0 500]);
+set(gca,'FontSize',fontsize+4,'FontName',fontname,'XLim',[uniqcd(1)-1 uniqcd(end)+1],'YLim',[0 700]);
 xlabel('Inter-channel distance (cm)','FontName',fontname,'FontSize',fontsize+4);
 ylabel('Chan. pairs','FontName',fontname,'FontSize',fontsize+4);
 export_fig(gcf,sprintf('figures/chandist.eps'));
+close(gcf);
 
 uniqcd = [sorteddist(1) uniqcd sorteddist(end)];
 

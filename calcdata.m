@@ -41,7 +41,8 @@ for s = 1:size(subjlist,1)
     for f = 1:size(matrix,1)
         cohmat = squeeze(matrix(f,:,:));
         cohmat(isnan(cohmat)) = 0;
-%         cohmat = zeromean(cohmat);
+        cohmat = abs(cohmat);
+        cohmat = zeromean(cohmat);
         
         %collate spectral info
         [~, bstart] = min(abs(specinfo.freqs-specinfo.freqlist(f,1)));
