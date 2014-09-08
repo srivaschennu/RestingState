@@ -200,7 +200,7 @@ if strcmp(param.legend,'on')
         set(leg_h,'Location',param.legendposition);
     end
     txt_h = findobj(leg_h,'type','text');
-    set(txt_h,'FontSize',fontsize-6,'FontWeight','bold')
+    set(txt_h,'FontSize',fontsize-2,'FontWeight','bold')
     legend('boxoff');
 end
 export_fig(gcf,sprintf('figures/crscorr_power_%s.eps',bands{bandidx}));
