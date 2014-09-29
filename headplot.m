@@ -134,7 +134,7 @@
 % 01-25-02 reformated help & license, added links -ad 
 % 03-21-02 added readlocs and the use of eloc input structure -ad 
 
-function [HeadAxes, ColorbarHandle] = headplot(values, arg1, varargin)
+function [HeadAxes, newElect, ColorbarHandle] = headplot(values, arg1, varargin)
 
 if nargin < 1
     help headplot

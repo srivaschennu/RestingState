@@ -1,4 +1,8 @@
-function plotarc3d(pts)
+function line_h = plotarc3d(pts,ht)
+%plots arc from p(1) to p(2) at height h
+
+pts = cat(1,mean(pts([1 2],:),1), pts);
+pts(1,:) = pts(1,:) .* ht;
 
 t = pts(3,:)-pts(1,:); u = pts(2,:)-pts(1,:); v = pts(2,:)-pts(3,:);
 w = cross(t,u);
@@ -12,4 +16,4 @@ ang = linspace(0,mod(atan2(dot(pts(3,:)-c,b),dot(pts(3,:)-c,a)),2*pi),n).';
 T = bsxfun(@plus,r*(cos(ang)*a+sin(ang)*b),c);
 
 % The plot of the circular arc from p(2) to p(3)
-plot3(T(:,1),T(:,2),T(:,3))
+line_h = plot3(T(:,1),T(:,2),T(:,3));
