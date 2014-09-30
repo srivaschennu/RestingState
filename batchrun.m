@@ -49,7 +49,7 @@ for s = 1:length(subjlist)
     
 %             rejartifacts2(basename,2,1);
     
-            calcallspec(basename);
+%             calcallspec(basename);
 % 
 % 
 %             plotspec(basename);
@@ -60,11 +60,15 @@ for s = 1:length(subjlist)
     
 %     coherence(basename);
     
-%         load([filepath 'wpli/' basename 'wplifdr.mat']);
-%         cohmat = squeeze(matrix(3,:,:));
-%         cohmat(isnan(cohmat)) = 0;
+        load([filepath 'wpli/' basename 'wplifdr.mat']);
+        cohmat = squeeze(matrix(3,:,:));
+        cohmat(isnan(cohmat)) = 0;
+        cohmat = abs(cohmat);
+        plotgraph3d(cohmat,chanlocs,'plotqt',0.7);
+        export_fig(gcf,['figures/' basename 'wplicohmat.tif']);
+        close(gcf);
 %         cohmat = threshold_proportional(cohmat,0.3);
-% %         plotgraph(cohmat,chanlocs,'plotqt',0.7,'legend','off');
+%         export_fig(gcf,['figures/' basename 'wplicohmat.eps'],'-opengl');
 %         figure; imagesc(cohmat); set(gca,'XTick',[],'YTick',[]); colorbar
 %         export_fig(gcf,['figures/' basename 'wplicohmat.eps'],'-opengl');
 %         close(gcf);
