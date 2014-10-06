@@ -56,7 +56,7 @@ for bandidx = 1:size(bandpower,2)
 %         end
         figure;
 %         subplot(size(bandpower,2),length(groups),p); hold all;
-        topoplot(plotdata,sortedlocs,'maplimits','maxmin');
+        topoplot(plotdata,sortedlocs,'maplimits','maxmin','electrodes','labels');
         set(colorbar,'FontName',fontname,'FontSize',fontsize);
         set(gcf,'Color','white');
         export_fig(gcf,sprintf('figures/powertopo_%s_%s.eps',bands{bandidx},groupnames{g}));
