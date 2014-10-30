@@ -24,11 +24,11 @@ bands = {
     'gamma'
     };
 
-grouplist = {
-    'VS'
-    'MCS'
-    'Control'
-    };
+% grouplist = {
+%     'VS'
+%     'MCS'
+%     'Control'
+%     };
 
 grp = grp(~v2idx);
 allcoh = allcoh(~v2idx,:,:,:,:);
