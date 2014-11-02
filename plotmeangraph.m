@@ -57,6 +57,11 @@ vrange = [min(nonzeros(groupdeg(:))) max(groupdeg(:))];
 
 for g = group
     minfo = plotgraph3d(squeeze(groupcoh(g,:,:)),sortedlocs,'plotqt',plotqt,'escale',erange,'vscale',vrange,'plotinter','off');
+    ViewZ = [0 0; 360 0];
+%     ViewZ = cat(2,ViewZ,zeros(size(ViewZ,1),1));
+    set(gca,'CameraViewAngleMode','manual')
+    OptionZ.Duration=5;OptionZ.Periodic=true;
+    CaptureFigVid(ViewZ,sprintf('figures/headmovie_%s_%s',grouplist{g},bands{bandidx}),OptionZ)
     fprintf('group %s: %s band - number of modules: %d\n',grouplist{g},bands{bandidx},length(unique(minfo)));
     set(gcf,'Name',sprintf('group %s: %s band',grouplist{g},bands{bandidx}));
     export_fig(gcf,sprintf('figures/meangraph_%s_%s.tif',grouplist{g},bands{bandidx}),'-m2');
