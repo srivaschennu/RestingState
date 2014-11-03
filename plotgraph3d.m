@@ -20,7 +20,7 @@ param = finputcheck(varargin, {
 %%%%% VISUAL FEATURES
 
 %spline file
-splinefile = '91_spline.spl';
+splinefile = 'sortedspline.spl';
 
 % range of line heights
 lhfactor = 2;
