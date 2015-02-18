@@ -82,7 +82,7 @@ figure('Color','black','Name',mfilename);
 colormap(jet);
 cmap = colormap;
 
-[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[param.vscale(1)-0.4 param.vscale(2)+0.4],'view','frontleft');
+[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[param.vscale(1)-0.3 param.vscale(2)+0.3],'view','frontleft');
 hold all
 xlim('auto'); ylim('auto'); zlim('auto');
 
