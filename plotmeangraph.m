@@ -64,6 +64,11 @@ for g = group
 %     CaptureFigVid(ViewZ,sprintf('figures/headmovie_%s_%s',grouplist{g},bands{bandidx}),OptionZ)
     fprintf('group %s: %s band - number of modules: %d\n',grouplist{g},bands{bandidx},length(unique(minfo)));
     set(gcf,'Name',sprintf('group %s: %s band',grouplist{g},bands{bandidx}));
-    export_fig(gcf,sprintf('figures/meangraph_%s_%s.tif',grouplist{g},bands{bandidx}),'-m2.5');
+%     export_fig(gcf,sprintf('figures/meangraph_%s_%s.tif',grouplist{g},bands{bandidx}),'-m2.5');
+    camva(8);
+    camtarget([-9.7975  -28.8277   41.8981]);
+    campos([-1.7547    1.7161    1.4666]*1000);
+    set(gcf,'InvertHardCopy','off');
+    print(gcf,sprintf('figures/meangraph_%s_%s.tif',grouplist{g},bands{bandidx}),'-dtiff','-r400');
     close(gcf);
 end

@@ -82,7 +82,7 @@ figure('Color','black','Name',mfilename);
 colormap(jet);
 cmap = colormap;
 
-[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[param.vscale(1)-0.3 param.vscale(2)+0.3],'view','frontleft');
+[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[param.vscale(1)-0.1 param.vscale(2)+0.1],'view','frontleft');
 hold all
 xlim('auto'); ylim('auto'); zlim('auto');
 
@@ -93,7 +93,7 @@ for r = 1:size(matrix,1)
             if minfo(r) == minfo(c)
                 hLine = plotarc3d(chanlocs3d([r,c],:),eheight);
                 ecol = cmap(ceil((minfo(r)/num_mod)*size(cmap,1)),:);
-                set(hLine,'Color',ecol,'LineWidth',0.5);
+                set(hLine,'Color',ecol,'LineWidth',0.2);
             elseif strcmp(param.plotinter,'on')
                 hLine = plotarc3d(chanlocs3d([r,c],:),eheight);
                 ecol = [0 0 0];
