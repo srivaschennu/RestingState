@@ -28,15 +28,15 @@ EEG = eeg_checkset(EEG);
 
 %%%% PREPROCESSING
 
-% RENAME 10/20 CHANNELS
-load([chanlocpath chanlocmat]);
-for c = 1:length(idx1020)
-    chanidx = strcmp(sprintf('E%d',idx1020(c)),{EEG.chanlocs.labels});
-    if sum(chanidx) == 1
-        fprintf('Replaced %s with %s.\n',EEG.chanlocs(chanidx).labels,name1020{c});
-        EEG.chanlocs(chanidx).labels = name1020{c};
-    end
-end
+% % RENAME 10/20 CHANNELS
+% load([chanlocpath chanlocmat]);
+% for c = 1:length(idx1020)
+%     chanidx = strcmp(sprintf('E%d',idx1020(c)),{EEG.chanlocs.labels});
+%     if sum(chanidx) == 1
+%         fprintf('Replaced %s with %s.\n',EEG.chanlocs(chanidx).labels,name1020{c});
+%         EEG.chanlocs(chanidx).labels = name1020{c};
+%     end
+% end
 
 % KEEP ONLY 10/20 CHANNELS
 %[~,~,chanidx] = intersect(name1020,{EEG.chanlocs.labels});
@@ -69,9 +69,9 @@ end
 hpfreq = 0.5;
 lpfreq = 45;
 fprintf('Low-pass filtering below %.1fHz...\n',lpfreq);
-EEG = pop_eegfilt(EEG, 0, lpfreq, [], [0], 0, 0, 'fir1', 0);
+EEG = pop_eegfiltnew(EEG, 0, lpfreq);
 fprintf('High-pass filtering above %.1fHz...\n',hpfreq);
-EEG = pop_eegfilt(EEG, hpfreq, 0, [], [0], 0, 0, 'fir1', 0);
+EEG = pop_eegfiltnew(EEG, hpfreq, 0);
 
 %Remove line noise
 fprintf('Removing line noise at 50Hz.\n');
