@@ -12,7 +12,7 @@ bands = {
 
 fontname = 'Helvetica';
 fontsize = 28;
-xlim = [0 45];
+xlim = [0.01 40];
 ylim = [-30 15];
 
 if exist('freqlist','var') && ~isempty(freqlist)

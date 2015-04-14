@@ -1,8 +1,10 @@
-function plotmeangraph(listname,conntype,bandidx)
+function plothead(basename)
+
+conntype = 'ftdwpli';
+bandidx = 3;
 
 loadpaths
 
-load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
 load chanlist
 
 plotqt = 0.7;

@@ -9,7 +9,7 @@ loadpaths
 %     end
 
 EEG = pop_loadset('filename',[basename '.set'],'filepath',filepath);
-load([filepath 'ftspectra/' basename 'spectra.mat'],'freqlist');
+load([filepath basename 'spectra.mat'],'freqlist');
 
 chanlocs = EEG.chanlocs;
 matrix=zeros(size(freqlist,1),EEG.nbchan,EEG.nbchan); % size(freqlist,1) lines ; EEG.nbchan columns ; EEG.nbchan time this table
@@ -19,10 +19,10 @@ EEG = convertoft(EEG);
 cfg = [];
 cfg.output     = 'powandcsd';
 cfg.method     = 'mtmfft';
-cfg.foilim        = [0.1 40];
+cfg.foilim        = [0.01 40];
 cfg.taper = 'hanning';
 % cfg.taper = 'dpss';
-% cfg.tapsmofrq = 0.5;
+% cfg.tapsmofrq = 0.3;
 cfg.keeptrials = 'yes';
 
 EEG = ft_freqanalysis(cfg,EEG);

@@ -34,6 +34,8 @@ if ~strcmp(chanlist,cell2mat(sortedchan))
 end
 matrix = matrix(sortidx,sortidx);
 
+matrix(isnan(matrix)) = 0;
+
 % keep only top <plotqt>% of weights
 matrix = threshold_proportional(matrix,1-param.plotqt);
 
@@ -50,19 +52,23 @@ end
 
 % rescale weights
 if isempty(param.escale)
-    param.escale(1) = min(matrix(logical(triu(matrix,1))));
-    param.escale(2) = max(matrix(logical(triu(matrix,1))));
+    escale(1) = min(matrix(logical(triu(matrix,1))));
+    escale(2) = max(matrix(logical(triu(matrix,1))));
+else
+    escale = param.escale;
 end
-matrix = (matrix - param.escale(1))/(param.escale(2) - param.escale(1));
+matrix = (matrix - escale(1))/(escale(2) - escale(1));
 matrix(matrix < 0) = 0;
 
 % rescale degrees
 if isempty(param.vscale)
-    param.vscale(1) = min(vsize);
-    param.vscale(2) = max(vsize);
+    vscale(1) = min(vsize);
+    vscale(2) = max(vsize);
+else
+    vscale = param.vscale;
 end
-vsize = (vsize - param.vscale(1))/(param.vscale(2) - param.vscale(1));
 vsize(vsize < 0) = 0;
+vsize = (vsize - vscale(1))/(vscale(2) - vscale(1));
 
 % assign all modules with only one vertex the same colour
 modsize = hist(minfo,unique(minfo));
@@ -82,7 +88,7 @@ figure('Color','black','Name',mfilename);
 colormap(jet);
 cmap = colormap;
 
-[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[param.vscale(1)-0.1 param.vscale(2)+0.1],'view','frontleft');
+[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[0 1],'view','frontleft');
 hold all
 xlim('auto'); ylim('auto'); zlim('auto');
 
