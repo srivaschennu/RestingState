@@ -1,7 +1,7 @@
-function minfo = plotgraph3d(matrix,chanlocs,varargin)
+function minfo = plotgraph3d(matrix,splinefile,varargin)
 
 % matrix - NxN symmetric connectivity matrix, where N is the number of channels
-% chanlocs - 1xN EEGLAB chanlocs structure specifying channel locations
+% splinefile - spline file pre-generated using headplot
 
 % OPTIONAL ARGUMENTS
 % plotqt - proportion of strongest edges to plot
@@ -19,20 +19,10 @@ param = finputcheck(varargin, {
 
 %%%%% VISUAL FEATURES
 
-%spline file
-splinefile = 'sortedspline.spl';
-
 % range of line heights
 lhfactor = 2;
 
 %%%%%%
-
-load chanlist
-[sortedchan,sortidx] = sort({chanlocs.labels});
-if ~strcmp(chanlist,cell2mat(sortedchan))
-    error('Channel names do not match!');
-end
-matrix = matrix(sortidx,sortidx);
 
 matrix(isnan(matrix)) = 0;
 

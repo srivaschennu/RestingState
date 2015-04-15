@@ -56,7 +56,7 @@ erange = [min(nonzeros(threshcoh(:))) max(threshcoh(:))];
 vrange = [min(nonzeros(groupdeg(:))) max(groupdeg(:))];
 
 for g = group
-    minfo = plotgraph3d(squeeze(groupcoh(g,:,:)),sortedlocs,'plotqt',plotqt,'escale',erange,'vscale',vrange,'plotinter','off');
+    minfo = plotgraph3d(squeeze(groupcoh(g,:,:)),'sortedspline.spl','plotqt',plotqt,'escale',erange,'vscale',vrange,'plotinter','off');
 %     ViewZ = [0 0; 360 0];
 %     ViewZ = cat(2,ViewZ,zeros(size(ViewZ,1),1));
 %     set(gca,'CameraViewAngleMode','manual')
