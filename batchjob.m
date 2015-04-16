@@ -12,7 +12,7 @@ matlabpath = eval(['{''' matlabpath '''}']);
 workerpath = cat(1,{pwd},matlabpath(1:end-1));
 
 tasklist = {
-    'coherence' 'subjlist(subjidx,1)'
+    'ftcoherence' 'subjlist(subjidx,1)'
     };
 
 j = 1;
