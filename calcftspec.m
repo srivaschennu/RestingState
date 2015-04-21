@@ -7,6 +7,11 @@ load freqlist.mat
 EEG = pop_loadset([filepath basename '.set']);
 chanlocs = EEG.chanlocs;
 
+mintrials = 50;
+if EEG.trials < mintrials
+    error('Need at least %d trials for analysis, only found %d.',mintrials,EEG.trials);
+end
+
 EEG = convertoft(EEG);
 
 cfg = [];

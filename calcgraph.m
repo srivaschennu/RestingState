@@ -59,6 +59,7 @@ chanlocs = chanlocs(sortidx);
 %     chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];
 
 for f = 1:size(matrix,1)
+    fprintf('iteration');
     for iter = 1:numruns
         fprintf(' %d',iter);
         if strcmp(param.randomise,'on')
@@ -103,6 +104,7 @@ for f = 1:size(matrix,1)
             end
         end
     end
+    fprintf('\n');
     
     for iter = 1:numruns
         for thresh = 1:length(tvals)

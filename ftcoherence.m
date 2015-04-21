@@ -9,6 +9,12 @@ loadpaths
 %     end
 
 EEG = pop_loadset('filename',[basename '.set'],'filepath',filepath);
+
+mintrials = 50;
+if EEG.trials < mintrials
+    error('Need at least %d trials for analysis, only found %d.',mintrials,EEG.trials);
+end
+
 load([filepath basename 'spectra.mat'],'freqlist');
 
 chanlocs = EEG.chanlocs;
