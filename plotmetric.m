@@ -1,4 +1,4 @@
-function plotmetric(basename,listname,conntype,measure,varargin)
+function plotmetric(basename,listname,conntype,measure,bandidx,varargin)
 
 loadpaths
 
@@ -8,14 +8,14 @@ param = finputcheck(varargin, {
     'plotinfo', 'string', {'on','off'}, 'on'; ...
     'plotticks', 'string', {'on','off'}, 'on'; ...
     'ylabel', 'string', {}, measure; ...
-    'randratio', 'string', {'on','off'}, 'on'; ...
+    'randratio', 'string', {'on','off'}, 'off'; ...
     'legendposition', 'string', {}, 'NorthEast'; ...
     });
 
 fontname = 'Helvetica';
 fontsize = 28;
 
-load(sprintf('%s/%s/%s%sgraph.mat',filepath,conntype,basename,conntype));
+% load(sprintf('%s/%s/%s%sgraph.mat',filepath,conntype,basename,conntype));
 load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
 
 if ~exist('measure','var') || isempty(measure)
@@ -42,7 +42,7 @@ end
 
 if strcmpi(measure,'small-worldness')
     graphdata{end+1,1} = 'small-worldness';
-    graphdata{end,2} = ( mean(graphdata{1,2},4) ./ mean(mean(randgraphdata.graph{1,2},5),4) ) ./ ( graphdata{2,2} ./ mean(randgraphdata.graph{2,2},4) ) ;
+    graphdata{end,2} = ( mean(graphdata{1,2},3) ./ mean(mean(randgraphdata.graphdata{1,2},4),3) ) ./ ( graphdata{2,2} ./ mean(randgraphdata.graphdata{2,2},3) ) ;
     graph{end+1,1} = 'small-worldness';
     graph{end,2} = ( mean(graph{1,2},4) ./ mean(mean(randgraph.graph{1,2},5),4) ) ./ ( graph{2,2} ./ mean(randgraph.graph{2,2},4) ) ;
 elseif strcmp(param.randratio,'on')
@@ -62,7 +62,7 @@ v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
 
 groups = unique(grp)';
-[groups, sortidx] = sort(groups,'descend');
+[groups, sortidx] = sort(groups,'ascend');
 groupnames = {
     'VS'
     'MCS'
@@ -81,75 +81,32 @@ bands = {
 trange = [0.5 0.1];
 trange = (tvals <= trange(1) & tvals >= trange(2));
 
-plottvals = tvals(trange);
-
 m = find(strcmpi(measure,graph(:,1)));
 
 barvals = zeros(3,length(groups));
 errvals = zeros(3,length(groups));
 
-for bandidx = 1:3
-    figure('Color','white');
-    hold all
-    for g = 1:length(groups)
-        if strcmp(graph{m,1},'modules')
-            groupvals = squeeze(max(graph{m,weiorbin}(grp == groups(g) & ~v2idx,bandidx,:,:),[],4));
-        elseif strcmp(graph{m,1},'mutual information')
-            groupvals = squeeze(mean(graph{m,weiorbin}(grp == groups(g) & ~v2idx,grp == groups(g) & ~v2idx,bandidx,:),2));
-        elseif strcmp(graph{m,1},'participation coefficient')
-            groupvals = squeeze(std(graph{m,weiorbin}(grp == groups(g) & ~v2idx,bandidx,:,:),[],4));
-        else
-            groupvals = squeeze(mean(graph{m,weiorbin}(grp == groups(g) & ~v2idx,bandidx,:,:),4));
-        end
-        groupmean = mean(groupvals,1);
-        groupste = std(groupvals,[],1)/sqrt(size(groupvals,1));
-        set(gca,'XDir','reverse');
-        errorbar(plottvals,groupmean(trange),groupste(trange),'LineWidth',1);
-        set(gca,'XLim',[plottvals(end) plottvals(1)],'FontName',fontname,'FontSize',fontsize);
-        if ~isempty(param.ylim)
-            set(gca,'YLim',param.ylim);
-        end
-        
-        barvals(bandidx,g) = mean(mean(groupvals(:,trange),2),1);
-        errvals(bandidx,g) = std(mean(groupvals(:,trange),2),[],1)/sqrt(size(groupvals,1));
-    end
-    
-    if strcmp(param.plotticks,'on')
-        if bandidx == 1
-            ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
-        else
-            ylabel(' ','FontName',fontname,'FontSize',fontsize);
-        end
-        if bandidx == 1 && strcmp(param.plotinfo,'on')
-            xlabel('Graph connection density','FontName',fontname,'FontSize',fontsize);
-        else
-            xlabel(' ','FontName',fontname,'FontSize',fontsize);
-        end
-        if bandidx == 1 && strcmp(param.legend,'on')
-            legend(groupnames,'Location',param.legendposition);
-        end
-        
-    else
-        set(gca,'XTick',[],'YTick',[]);
-    end
-    
-    if bandidx == 1
-        ylimits = ylim;
-    end
-    
-    export_fig(gcf,sprintf('figures/%s_%s_%s.eps',listname,measure,bands{bandidx}));
-    close(gcf);
-end
-
-figure('Color','white');
-if strcmp(param.plotinfo,'on')
-    hdl = barweb(barvals,errvals,[],bands,[],[],[],[],[],groupnames,[],[]);
-    set(hdl.legend,'FontName',fontname,'FontSize',fontsize,'Location','NorthWest','Orientation','Horizontal');
+if strcmp(graph{m,1},'modules')
+    groupvals = squeeze(max(graph{m,weiorbin}(~v2idx,bandidx,:,:),[],4));
+elseif strcmp(graph{m,1},'mutual information')
+    groupvals = squeeze(mean(graph{m,weiorbin}(~v2idx,grp == groups(g) & ~v2idx,bandidx,:),2));
+elseif strcmp(graph{m,1},'participation coefficient')
+    groupvals = squeeze(std(graph{m,weiorbin}(~v2idx,bandidx,:,:),[],4));
 else
-    hdl = barweb(barvals,errvals,[],repmat(' ',1,length(bands)),[],[],[],[],[],[],[],[]);
+    groupvals = squeeze(mean(graph{m,weiorbin}(~v2idx,bandidx,:,:),4));
 end
 
-set(hdl.ax,'FontName',fontname,'FontSize',fontsize,'YLim',ylimits);
-ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
-export_fig(gcf,sprintf('figures/%s_bar.eps',measure));
-close(gcf);
+plotvals = mean(groupvals(:,trange),2);
+
+figure('Color','white')
+boxplot(plotvals,grp(~v2idx));
+
+if strcmp(param.plotticks,'on')
+    set(gca,'FontName',fontname,'FontSize',fontsize);
+    xlabel('Groups','FontName',fontname,'FontSize',fontsize);
+    ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
+end
+
+%     export_fig(gcf,sprintf('figures/%s_%s_%s.eps',listname,measure,bands{bandidx}));
+%     close(gcf);
+

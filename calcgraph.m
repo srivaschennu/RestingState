@@ -59,7 +59,7 @@ chanlocs = chanlocs(sortidx);
 %     chanXYZ = [cell2mat({chanlocs.X})' cell2mat({chanlocs.Y})' cell2mat({chanlocs.Z})'];
 
 for f = 1:size(matrix,1)
-    fprintf('iteration');
+    fprintf('\nBand %d iteration',f);
     for iter = 1:numruns
         fprintf(' %d',iter);
         if strcmp(param.randomise,'on')
@@ -70,7 +70,6 @@ for f = 1:size(matrix,1)
         end
         cohmat(isnan(cohmat)) = 0;
         cohmat = abs(cohmat);
-        cohmat = zeromean(cohmat);
         
         for thresh = 1:length(tvals)
             %             fprintf(' %.2f',tvals(thresh));
@@ -104,7 +103,6 @@ for f = 1:size(matrix,1)
             end
         end
     end
-    fprintf('\n');
     
     for iter = 1:numruns
         for thresh = 1:length(tvals)
