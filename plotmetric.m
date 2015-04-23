@@ -1,4 +1,7 @@
-function plotmetric(basename,listname,conntype,measure,bandidx,varargin)
+function plotmetric(basename,measure,bandidx,varargin)
+
+listname = 'allsubj';
+conntype = 'ftdwpli';
 
 loadpaths
 
@@ -15,8 +18,11 @@ param = finputcheck(varargin, {
 fontname = 'Helvetica';
 fontsize = 28;
 
-% load(sprintf('%s/%s/%s%sgraph.mat',filepath,conntype,basename,conntype));
+load(sprintf('%s/%s/%s%sgraph.mat',filepath,conntype,basename,conntype));
+load(sprintf('%s/%s/%s%sfdr.mat',filepath,conntype,basename,conntype));
+
 load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
+load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
 
 if ~exist('measure','var') || isempty(measure)
     for m = 1:size(graph,1)
@@ -62,11 +68,11 @@ v2idx = logical(v1idx);
 v1idx = nonzeros(v1idx);
 
 groups = unique(grp)';
-[groups, sortidx] = sort(groups,'ascend');
+[groups, sortidx] = sort(groups,'descend');
 groupnames = {
     'VS'
     'MCS'
-    'Control'
+    'Healthy'
     };
 groupnames = groupnames(sortidx);
 
@@ -86,27 +92,34 @@ m = find(strcmpi(measure,graph(:,1)));
 barvals = zeros(3,length(groups));
 errvals = zeros(3,length(groups));
 
-if strcmp(graph{m,1},'modules')
-    groupvals = squeeze(max(graph{m,weiorbin}(~v2idx,bandidx,:,:),[],4));
-elseif strcmp(graph{m,1},'mutual information')
-    groupvals = squeeze(mean(graph{m,weiorbin}(~v2idx,grp == groups(g) & ~v2idx,bandidx,:),2));
-elseif strcmp(graph{m,1},'participation coefficient')
-    groupvals = squeeze(std(graph{m,weiorbin}(~v2idx,bandidx,:,:),[],4));
+if strcmp(measure,'modules')
+    groupvals = squeeze(mean(max(graph{m,weiorbin}(~v2idx,bandidx,trange,:),[],4),3));
+    patvals = squeeze(mean(max(graphdata{m,weiorbin}(bandidx,:,:),[],3),2));
+elseif strcmp(measure,'mutual information')
+    groupvals = squeeze(mean(mean(graph{m,weiorbin}(~v2idx,grp == groups(g) & ~v2idx,bandidx,trange),4),2));
+    patvals = squeeze(mean(mean(graphdata{m,weiorbin}(grp == groups(g) & ~v2idx,bandidx,trange),4),2));
+elseif strcmp(measure,'participation coefficient')
+    groupvals = squeeze(mean(std(graph{m,weiorbin}(~v2idx,bandidx,trange,:),[],4),3));
+    patvals = squeeze(mean(std(graphdata{m,weiorbin}(bandidx,trange,:),[],3),2));
+elseif strcmp(measure,'median')
+    groupvals = median(allcoh(:,bandidx,:),3);
+    patvals = median(matrix(bandidx,:),2);
 else
-    groupvals = squeeze(mean(graph{m,weiorbin}(~v2idx,bandidx,:,:),4));
+    groupvals = squeeze(mean(mean(graph{m,weiorbin}(~v2idx,bandidx,trange,:),4),3));
+    patvals = squeeze(mean(mean(graphdata{m,weiorbin}(bandidx,trange,:),3),2));
 end
 
-plotvals = mean(groupvals(:,trange),2);
+plotvals = cat(1,groupvals,patvals);
+groupnames = cat(1,groupnames,{'Patient'});
 
-figure('Color','white')
-boxplot(plotvals,grp(~v2idx));
+figure('Color','white','Name',basename)
+boxplot(plotvals,[grp(~v2idx); max(grp(~v2idx))+1],'labels',groupnames,'grouporder',{'2','1','0','3'},'symbol','r');
 
 if strcmp(param.plotticks,'on')
     set(gca,'FontName',fontname,'FontSize',fontsize);
-    xlabel('Groups','FontName',fontname,'FontSize',fontsize);
     ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
 end
 
-%     export_fig(gcf,sprintf('figures/%s_%s_%s.eps',listname,measure,bands{bandidx}));
-%     close(gcf);
+print(sprintf('figures/%s_%s_%s.tif',basename,measure,bands{bandidx}),'-dtiff');
+close(gcf);
 
