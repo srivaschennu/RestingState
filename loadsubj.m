@@ -41,7 +41,7 @@ newdata = {
 patlist = {
     %
     % patients
-    
+%name                     type   crs    com-foll? followup? etio    ris     
 'p0311_restingstate1'		0		7		0		''		0		19262
 'p0411_restingstate1'		0		7		0		''		1		19277
 'p1611_restingstate'		0		7		1		''		1		19829
