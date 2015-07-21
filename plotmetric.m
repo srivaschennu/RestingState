@@ -18,10 +18,10 @@ param = finputcheck(varargin, {
 fontname = 'Helvetica';
 fontsize = 28;
 
-load(sprintf('%s/%s/%s%sgraph.mat',filepath,conntype,basename,conntype));
+% load(sprintf('%s/%s/%s%sgraph.mat',filepath,conntype,basename,conntype));
 load(sprintf('%s/%s/%s%sfdr.mat',filepath,conntype,basename,conntype));
 
-load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
+% load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
 load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
 
 if ~exist('measure','var') || isempty(measure)
@@ -85,9 +85,9 @@ bands = {
     };
 
 trange = [0.5 0.1];
-trange = (tvals <= trange(1) & tvals >= trange(2));
+% trange = (tvals <= trange(1) & tvals >= trange(2));
 
-m = find(strcmpi(measure,graph(:,1)));
+% m = find(strcmpi(measure,graph(:,1)));
 
 barvals = zeros(3,length(groups));
 errvals = zeros(3,length(groups));
