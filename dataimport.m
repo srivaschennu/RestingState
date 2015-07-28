@@ -58,12 +58,12 @@ elseif EEG.srate < 250
     error('Sampling rate too low!');
 end
 
-%KEEP ONLY 10 MINUTES MAX OF DATA
-if EEG.xmax > 600
-    EEG = pop_select(EEG,'time',[0 600]);
-elseif EEG.xmax < 600
-    error('Not enough data.');
-end
+% %KEEP ONLY 10 MINUTES MAX OF DATA
+% if EEG.xmax > 600
+%     EEG = pop_select(EEG,'time',[0 600]);
+% elseif EEG.xmax < 600
+%     error('Not enough data.');
+% end
 
 %Filter
 hpfreq = 0.5;

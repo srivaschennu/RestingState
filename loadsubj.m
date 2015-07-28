@@ -64,8 +64,16 @@ patlist = {
 'p1011_restingstate'		1		10		0		''		1		19551
 'p1511_restingstate'		1		10		1		''		1		19757
 'p1811_restingstate'		1		12		0		''		1		19953
-'p1911_restingstate'		1		9		0	
-
+'p1911_restingstate'		1		9		0		''		1		20054
+'p0112_restingstate'		1		9		1		''		0		20255
+'p0212_restingstate'		1		12		0		''		1		13676
+'p0512_restingstate'		1		8		1		''		1		20800
+'p0710V2_restingstate'		1		14		1		''		1		18872
+'p0711_restingstate'		1		15		0		''		1		17853
+'p1711_restingstate'		1		17		0		''		0		16656
+'p1012_restingstate'		1		13		1		''		1		21482
+'p0213_restingstate'		1		19		1		''		1		21677
+'p0413_restingstate'		1		14		0		''		1		22117
 
 % %new patients
 % 'p0813_restingstate'		0		7		0		''		0		22665
