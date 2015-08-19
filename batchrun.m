@@ -11,6 +11,16 @@ for s = 1:length(subjlist)
     batchres{s,2} = subjlist{s,2};
     
     fprintf('Processing %s.\n',basename);
+    
+%     EEG = pop_loadset('filepath',filepath,'filename',[basename '.set']);
+%     tau = [8 32];
+%     wsmi = calcwsmi(EEG,tau);
+%     chanlocs = EEG.chanlocs;
+%     save([filepath 'wsmi/' basename 'wsmi.mat'],'wsmi','tau','chanlocs');
+
+    load([filepath 'wsmi/' basename 'wsmi.mat'],'wsmi','tau','chanlocs');
+    
+
 %     copyfile([filepath basename '.set'],[filepath 'copy/' basename '.set']);
 %     copyfile([filepath basename '.fdt'],[filepath 'copy/' basename '.fdt']);
 %     copyfile([filepath basename 'spectra.mat'],[filepath 'copy/' basename 'spectra.mat']);
@@ -60,13 +70,13 @@ for s = 1:length(subjlist)
     
 %     coherence(basename);
     
-        load([filepath 'wpli/' basename 'wplifdr.mat']);
-        cohmat = squeeze(matrix(3,:,:));
-        cohmat(isnan(cohmat)) = 0;
-        cohmat = abs(cohmat);
-        plotgraph3d(cohmat,chanlocs,'plotqt',0.7);
-        export_fig(gcf,['figures/' basename 'wplicohmat.tif']);
-        close(gcf);
+%         load([filepath 'wpli/' basename 'wplifdr.mat']);
+%         cohmat = squeeze(matrix(3,:,:));
+%         cohmat(isnan(cohmat)) = 0;
+%         cohmat = abs(cohmat);
+%         plotgraph3d(cohmat,chanlocs,'plotqt',0.7);
+%         export_fig(gcf,['figures/' basename 'wplicohmat.tif']);
+%         close(gcf);
 %         cohmat = threshold_proportional(cohmat,0.3);
 %         export_fig(gcf,['figures/' basename 'wplicohmat.eps'],'-opengl');
 %         figure; imagesc(cohmat); set(gca,'XTick',[],'YTick',[]); colorbar
