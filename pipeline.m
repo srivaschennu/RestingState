@@ -7,3 +7,5 @@ computeic([basename '_epochs']);
 rejectic(basename);
 rejartifacts2(basename,2,1);
 calcftspec(basename);
+ftcoherence(basename);
+
