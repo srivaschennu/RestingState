@@ -8,4 +8,5 @@ rejectic(basename);
 rejartifacts2(basename,2,1);
 calcftspec(basename);
 ftcoherence(basename);
-
+plothead(basename,3);
+plotmetric(basename,'median',3);
