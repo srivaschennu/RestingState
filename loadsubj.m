@@ -220,3 +220,15 @@ newctrllist = {
 
 allsubj = cat(1,patlist,ctrllist);
 newsubj = cat(1,patlist,newctrllist);
+
+tilttable = {
+    'p0115_pretilt'
+    'p0115_duringtilt'
+    'p0315_pretilt'
+    'p0315_duringtilt'
+    'p0515_pretilt'
+    'p0515_duringtilt'
+    'p0615_pretilt'
+    'p0615_duringtilt'
+    };
+    
