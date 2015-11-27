@@ -1,8 +1,12 @@
-function line_h = plotarc3d(pts,ht)
+function line_h = plotarc3d(pts,ht,color,linewidth)
 %plots arc from p(1) to p(2) at height h
 
 pts = cat(1,mean(pts([1 2],:),1), pts);
 pts(1,:) = pts(1,:) .* ht;
+
+% hobbysplines({pts(1,:),pts(2,:),pts(3,:)},'linestyle',{'linewidth',linewidth},'color',color,'tension',2)
+% scatter3(pts(:,1),pts(:,2),pts(:,3),50,'filled');
+% line_h = [];
 
 t = pts(3,:)-pts(1,:); u = pts(2,:)-pts(1,:); v = pts(2,:)-pts(3,:);
 w = cross(t,u);
@@ -17,3 +21,5 @@ T = bsxfun(@plus,r*(cos(ang)*a+sin(ang)*b),c);
 
 % The plot of the circular arc from p(2) to p(3)
 line_h = plot3(T(:,1),T(:,2),T(:,3));
+
+set(line_h,'Color',color,'LineWidth',linewidth);

@@ -24,13 +24,6 @@ load(sprintf('%s/%s/%s%sfdr.mat',filepath,conntype,basename,conntype));
 % load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
 load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
 
-if ~exist('measure','var') || isempty(measure)
-    for m = 1:size(graph,1)
-        fprintf('%s\n',graph{m,1});
-    end
-    return;
-end
-
 weiorbin = 2;
 
 if strcmpi(measure,'small-worldness') || strcmp(param.randratio,'on')

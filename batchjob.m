@@ -13,7 +13,9 @@ workerpath = cat(1,{pwd},matlabpath(1:end-1));
 
 tasklist = {
 %     'dataimport' 'subjlist(subjidx,1)'
-    'epochdata' 'subjlist(subjidx,1)'
+%     'epochdata' 'subjlist(subjidx,1)'
+%     'rejartifacts' '{[subjlist{subjidx,1} ''_epochs''] 1 4 0 [] 2000 1000}'
+    'computeic' '{[subjlist{subjidx,1} ''_epochs'']}'
 %     'ftcoherence' 'subjlist(subjidx,1)'
     };
 
