@@ -28,7 +28,10 @@ erange = eranges(bandidx,:);
 vrange = vranges(bandidx,:);
 cohmat = squeeze(matrix(bandidx,:,:));
 
-minfo = plotgraph3d(cohmat,'sortedspline.spl','plotqt',plotqt,'escale',erange,'vscale',vrange,'plotinter','off');
+erange = [0 1];
+vrange = [0 0.6];
+
+minfo = plotgraph3d(cohmat,sortedlocs,'sortedspline.spl','plotqt',plotqt,'escale',erange,'vscale',vrange,'plotinter','off');
 fprintf('%s: %s band - number of modules: %d\n',basename,bands{bandidx},length(unique(minfo)));
 set(gcf,'Name',sprintf('group %s: %s band',basename,bands{bandidx}));
 camva(8);

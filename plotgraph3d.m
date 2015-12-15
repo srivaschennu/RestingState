@@ -16,17 +16,19 @@ param = finputcheck(varargin, {
     'escale', 'real', [], []; ...
     'vscale', 'real', [], []; ...
     'view', 'real', [], []; ...
-    'cshift', 'real', [], 0.4; ...
-    'numcolors', 'real', [], 6; ...
+    'cshift', 'real', [], 0; ...
+    'numcolors', 'real', [], 5; ...
     });
 
 %%%%% VISUAL FEATURES
 
 % range of line heights
-lhfactor = 2;
+lhfactor = 1;
 
 
 %%%%%%
+
+matrix(isnan(matrix)) = 0;
 
 load chanlist
 [sortedchan,sortidx] = sort({chanlocs.labels});
@@ -95,7 +97,7 @@ hold all
 if isempty(param.view)
     param.view = 'frontleft';
 end
-[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[param.vscale(1)-param.cshift param.vscale(2)+param.cshift],'view',param.view);
+[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[0 1]-param.cshift,'view',param.view);
 
 xlim('auto'); ylim('auto'); zlim('auto');
 
@@ -105,7 +107,7 @@ for r = 1:size(matrix,1)
             eheight = (matrix(r,c)*lhfactor)+1;
             if minfo(r) == minfo(c)
                 ecol = colorlist(minfo(r),:);
-                hLine = plotarc3d(chanlocs3d([r,c],:),eheight,ecol,0.2);
+                hLine = plotarc3d(chanlocs3d([r,c],:),eheight,ecol,0.4);
                 %                 set(hLine,'Color',ecol,'LineWidth',0.1);
             elseif strcmp(param.plotinter,'on')
                 hLine = plotarc3d(chanlocs3d([r,c],:),eheight);

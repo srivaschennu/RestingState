@@ -1,2 +1,2 @@
-filepath = '/Users/chennu/Data/TiltTable/';
+filepath = '/Users/chennu/Data/RestingState/';
 chanlocpath = '/Users/chennu/Work/EGI/';

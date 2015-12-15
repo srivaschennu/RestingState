@@ -56,7 +56,7 @@ erange = [min(nonzeros(threshcoh(:))) max(threshcoh(:))];
 vrange = [min(nonzeros(groupdeg(:))) max(groupdeg(:))];
 
 for g = group
-    minfo = plotgraph3d(squeeze(groupcoh(g,:,:)),sortedlocs,'sortedspline.spl','plotqt',plotqt,'escale',erange,'vscale',vrange,'cshift',0.8,'numcolors',5);
+    minfo = plotgraph3d(squeeze(groupcoh(g,:,:)),sortedlocs,'sortedspline.spl','plotqt',plotqt,'escale',erange,'vscale',vrange,'cshift',0,'numcolors',5);
 %     ViewZ = [0 0; 360 0];
 %     ViewZ = cat(2,ViewZ,zeros(size(ViewZ,1),1));
 %     set(gca,'CameraViewAngleMode','manual')
@@ -69,6 +69,6 @@ for g = group
     camtarget([-9.7975  -28.8277   41.8981]);
     campos([-1.7547    1.7161    1.4666]*1000);
     set(gcf,'InvertHardCopy','off');
-    print(gcf,sprintf('figures/meangraph_%s_%s.tif',grouplist{g},bands{bandidx}),'-dtiff','-r400');
+    print(gcf,sprintf('figures/meangraph_%s_%s.tif',grouplist{g},bands{bandidx}),'-dtiff','-r300');
     close(gcf);
 end

@@ -8,12 +8,14 @@ loadpaths
 %         continue;
 %     end
 
-EEG = pop_loadset('filename',[basename '.set'],'filepath',filepath);
+savefile = [filepath 'ftdwpli/' basename 'ftdwplifdr.mat'];
 
-mintrials = 50;
-if EEG.trials < mintrials
-    error('Need at least %d trials for analysis, only found %d.',mintrials,EEG.trials);
-end
+% if exist(savefile,'file')
+%     fprintf('%s exists. Skipping.\n',savefile);
+%     return
+% end
+
+EEG = pop_loadset('filename',[basename '.set'],'filepath',filepath);
 
 load([filepath basename 'spectra.mat'],'freqlist');
 
@@ -23,10 +25,10 @@ EEG = convertoft(EEG);
 cfg = [];
 cfg.output     = 'powandcsd';
 cfg.method     = 'mtmfft';
-cfg.foilim        = [0.01 40];
-cfg.taper = 'hanning';
-% cfg.taper = 'dpss';
-% cfg.tapsmofrq = 0.3;
+cfg.foilim        = [0.5 45];
+% cfg.taper = 'hanning';
+cfg.taper = 'dpss';
+cfg.tapsmofrq = 0.3;
 cfg.keeptrials = 'yes';
 numrand = 50;
 
@@ -36,10 +38,15 @@ matrix = zeros(size(freqlist,1),length(chanlocs),length(chanlocs));
 bootmat = zeros(size(freqlist,1),length(chanlocs),length(chanlocs),numrand);
 coh = zeros(length(chanlocs),length(chanlocs));
 
-wb_h = waitbar(0,'Starting...');
+
+fprintf('Running %d randomisations',numrand);
 for r = 0:numrand
     if r > 0
-        waitbar(r/numrand,wb_h,sprintf('Randomisation %d of %d...',r,numrand));
+        if mod(r,5) == 0
+            fprintf('%d',r);
+        else
+            fprintf('.');
+        end
         randangles = (2*rand(size(EEG.crsspctrm))-1) .* pi;
         EEG.crsspctrm = complex(abscrsspctrm.*cos(randangles),abscrsspctrm.*sin(randangles));
     end
@@ -49,9 +56,10 @@ for r = 0:numrand
     for f = 1:size(freqlist,1)
         [~, bstart] = min(abs(EEG.freq-freqlist(f,1)));
         [~, bend] = min(abs(EEG.freq-freqlist(f,2)));
+        [~,freqidx] = max(mean(wpli(:,bstart:bend),1));
         
         coh(:) = 0;
-        coh(logical(tril(ones(size(coh)),-1))) = max(wpli(:,bstart:bend),[],2);
+        coh(logical(tril(ones(size(coh)),-1))) = wpli(:,bstart+freqidx-1);
         coh = tril(coh,1)+tril(coh,1)';
         
         if r > 0
@@ -61,6 +69,6 @@ for r = 0:numrand
         end
     end
 end
-close(wb_h);
-
-save([filepath 'ftdwpli/' basename 'ftdwplifdr.mat'],'matrix','bootmat','chanlocs');
+fprintf('\n');
+save(savefile,'matrix','bootmat','chanlocs');
+fprintf('\nDone.\n');
