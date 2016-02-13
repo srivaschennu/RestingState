@@ -15,8 +15,9 @@ tasklist = {
 %     'dataimport' 'subjlist(subjidx,1)'
 %     'epochdata' 'subjlist(subjidx,1)'
 %     'rejartifacts' '{[subjlist{subjidx,1} ''_epochs''] 1 4 0 [] 2000 1000}'
-    'computeic' '{[subjlist{subjidx,1} ''_epochs'']}'
+%     'computeic' '{[subjlist{subjidx,1} ''_epochs'']}'
 %     'ftcoherence' 'subjlist(subjidx,1)'
+    'calcsrcplv' 'subjlist(subjidx,1)'
     };
 
 j = 1;

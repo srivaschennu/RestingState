@@ -27,4 +27,4 @@ for s = 1:nlocs
 end
 fclose(fid);
 
-BrainNet_MapCfg('BrainMesh_ICBM152.nv','Node_Destrieux148.node','threshcoh.edge');
+BrainNet_MapCfg('BrainMesh_ICBM152.nv','Node_Destrieux148.node','threshcoh.edge','bnoptions.mat');
