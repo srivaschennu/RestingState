@@ -12,6 +12,7 @@ cohmat(idx_upper) = abs(conn.TF);
 cohmat(1:nlocs+1:nlocs*nlocs) = 0;
 cohmat = triu(cohmat,1)+triu(cohmat,1)';
 threshcoh = threshold_proportional(cohmat,0.1);
+threshcoh = cohmat;
 [Ci,Q] = community_louvain(threshcoh);
 deg = sum(threshcoh,1) ./ (size(threshcoh,1)-1);
 dlmwrite('threshcoh.edge',threshcoh,'\t');
